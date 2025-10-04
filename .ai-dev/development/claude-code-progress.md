@@ -17,13 +17,15 @@
 - [x] 修正 API 路由註冊問題
 - [x] 修正 Model 關聯外鍵
 
-### 2. 部門管理 (可選功能)
-- [ ] 建立 DepartmentController
-- [ ] 實作部門的 CRUD 操作
-- [ ] 支援層級部門結構
-- [ ] 部門管理介面
-- [ ] 建立 DepartmentFactory
-- [ ] 實作部門管理測試
+### 2. 部門管理 (可選功能) ✅
+- [x] 建立 DepartmentController
+- [x] 實作部門的 CRUD 操作
+- [x] 支援層級部門結構 (parent-child relationships)
+- [x] 建立 DepartmentRequest 表單驗證
+- [x] 建立 DepartmentFactory (含 inactive 和 withParent 狀態)
+- [x] 實作部門管理測試 (10 tests, 32 assertions)
+- [x] 部門層級關係載入功能
+- [ ] 部門管理介面 (前端)
 
 ### 3. 角色權限管理
 - [ ] 建立權限驗證中間件
@@ -56,6 +58,13 @@
   - ✅ 測試套件 (8 tests, 21 assertions, 全部通過)
   - ✅ API 路由註冊 (`/api/v1/organizations`)
   - ✅ 程式碼格式化 (Pint)
+- [x] 部門管理 CRUD 完成
+  - ✅ DepartmentController 完整實作 (含層級支援)
+  - ✅ DepartmentRequest 驗證規則 (含 parent_id 驗證)
+  - ✅ DepartmentFactory (含狀態方法)
+  - ✅ 測試套件 (10 tests, 32 assertions, 全部通過)
+  - ✅ 層級部門關係功能
+  - ✅ 程式碼格式化 (Pint)
 
 ## 問題記錄
 
@@ -64,6 +73,7 @@
 - ✅ **Sanctum Guard 未定義**: 改用 `auth` middleware (web guard)
 - ✅ **Model 關聯外鍵錯誤**: `OrganizationSetting::users()` 外鍵設定為 `organization_id`
 - ✅ **PHP 版本相容性**: 使用 Herd PHP 8.4 執行測試
+- ✅ **Faker department() 方法不存在**: 改用 `fake()->words(2, true).' Department'`
 
 ### 待解決
 - 無
@@ -72,18 +82,18 @@
 
 ### 功能完成
 - [x] 組織管理 CRUD 操作正常運作
-- [ ] 部門管理 CRUD 操作正常運作
+- [x] 部門管理 CRUD 操作正常運作
 - [ ] 用戶管理 CRUD 操作正常運作
 - [ ] 權限驗證機制完整
 - [x] 組織管理 API 端點測試通過
-- [ ] 部門管理 API 端點測試通過
+- [x] 部門管理 API 端點測試通過
 - [ ] 用戶管理 API 端點測試通過
 - [ ] 用戶介面功能正常
 
 ### 程式碼品質
 - [x] 程式碼通過 Lint 檢查
 - [x] 組織管理測試覆蓋率達標 (8 tests, 21 assertions)
-- [ ] 部門管理測試覆蓋率達標
+- [x] 部門管理測試覆蓋率達標 (10 tests, 32 assertions)
 - [ ] 用戶管理測試覆蓋率達標
 - [ ] 程式碼文件完整
 - [x] 無明顯的效能問題
@@ -97,17 +107,19 @@
 ## 提交記錄
 
 ### 最新提交
-- **Commit**: `4479158` - feat: Implement organization management CRUD functionality
+- **Commit**: `a2bda18` - feat: Implement department management CRUD functionality
 - **日期**: 2025年10月4日
 - **內容**:
-  - OrganizationController CRUD 實作
-  - OrganizationRequest 表單驗證
-  - OrganizationSettingFactory 測試工廠
-  - 完整測試套件
-  - API 路由設定
+  - DepartmentController CRUD 實作 (含層級支援)
+  - DepartmentRequest 表單驗證
+  - DepartmentFactory 測試工廠
+  - 完整測試套件 (10 tests, 32 assertions)
+  - 部門層級關係功能
 
 ### 提交歷史
 1. `4479158` - feat: Implement organization management CRUD functionality
+2. `b8d6ef8` - docs: Update development progress tracking
+3. `a2bda18` - feat: Implement department management CRUD functionality
 
 ---
-**最後更新**: 2025年10月4日 - 組織架構 CRUD 功能完成
+**最後更新**: 2025年10月4日 - 組織架構與部門管理 CRUD 功能完成
