@@ -110,7 +110,7 @@ export default function Welcome() {
                         </div>
                         
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {/* Feature 1 */}
+                            {/* Feature 1 - 表單設計器 ✅ 已實作 */}
                             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,11 +121,11 @@ export default function Welcome() {
                                     表單設計器
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    直觀的拖拽式表單設計器，支援多種欄位類型，讓您快速建立專業的表單。
+                                    視覺化表單設計器，支援多種欄位類型，讓您快速建立專業的表單模板。
                                 </p>
                             </div>
 
-                            {/* Feature 2 */}
+                            {/* Feature 2 - 工作流程引擎 ⚠️ 部分實作 */}
                             <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -136,11 +136,11 @@ export default function Welcome() {
                                     工作流程引擎
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    強大的工作流程引擎，支援條件分支、並行處理、審批流程，讓業務流程自動化。
+                                    基礎工作流程引擎，支援審批流程和狀態管理，讓業務流程更加規範。
                                 </p>
                             </div>
 
-                            {/* Feature 3 */}
+                            {/* Feature 3 - 用戶管理 ✅ 已實作 */}
                             <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,14 +148,14 @@ export default function Welcome() {
                                     </svg>
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                    用戶管理
+                                    用戶與部門管理
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    完整的用戶權限管理系統，支援角色分配、部門管理，確保資料安全。
+                                    完整的用戶管理系統，支援角色分配、部門管理，建立清晰的組織架構。
                                 </p>
                             </div>
 
-                            {/* Feature 4 */}
+                            {/* Feature 4 - 通知系統 ✅ 已實作 */}
                             <div className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,11 +166,11 @@ export default function Welcome() {
                                     通知系統
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    多管道通知系統，支援 Email、Line、Telegram 等，確保重要訊息及時送達。
+                                    多管道通知系統，支援 Email、LINE、Telegram 等管道，確保重要訊息及時送達。
                                 </p>
                             </div>
 
-                            {/* Feature 5 */}
+                            {/* Feature 5 - 數據分析 ✅ 已實作 */}
                             <div className="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-teal-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,25 +178,25 @@ export default function Welcome() {
                                     </svg>
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                    數據分析
+                                    數據分析報表
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    豐富的數據分析報表，幫助您了解工作流程效率，優化業務流程。
+                                    專業的數據分析儀表板，提供系統統計、用戶活動、流程效能等詳細報表。
                                 </p>
                             </div>
 
-                            {/* Feature 6 */}
+                            {/* Feature 6 - 組織管理 ✅ 已實作 */}
                             <div className="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-gray-700 dark:to-gray-600 p-8 rounded-2xl">
                                 <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center mb-6">
                                     <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                     </svg>
                                 </div>
                                 <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                                    安全可靠
+                                    組織管理
                                 </h3>
                                 <p className="text-gray-600 dark:text-gray-300">
-                                    企業級安全防護，資料加密傳輸，權限控制，確保您的資料安全無虞。
+                                    完整的組織架構管理，支援組織設定、偏好配置，讓企業管理更加便利。
                                 </p>
                             </div>
                         </div>
