@@ -50,6 +50,7 @@ php artisan test
 - 查看現有的 Model 關聯結構
 - 參考資料庫遷移檔案
 - 查看現有的測試案例
-- 遇到問題時記錄在 Linear Issue 中
+- 遇到問題時在 commit message 中記錄
+- 更新進度追蹤檔案記錄問題和解決方案
 
 **開始開發吧！** 🚀
