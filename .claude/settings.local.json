@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan:*)",
+      "Bash(php:*)",
+      "Bash(herd php:*)",
+      "Bash(where:*)",
+      "Bash(composer run dev:*)",
+      "Bash(C:Userschang180.configherdbinphp84php.exe artisan test --filter=OrganizationManagement)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=OrganizationManagement)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --path=api/v1)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --path=v1)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list)",
+      "Bash(cat:*)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" vendor/bin/pint --dirty)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
