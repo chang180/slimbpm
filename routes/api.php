@@ -32,6 +32,9 @@ Route::prefix('api/v1')->group(function () {
     
     // Form Management
     Route::apiResource('forms', App\Http\Controllers\Api\FormController::class);
+    Route::post('forms/{form}/duplicate', [App\Http\Controllers\Api\FormController::class, 'duplicate']);
+    Route::post('forms/{form}/submit', [App\Http\Controllers\Api\FormController::class, 'submit']);
+    Route::get('forms/{form}/submissions', [App\Http\Controllers\Api\FormController::class, 'submissions']);
     Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class);
     
     // Notification Management
