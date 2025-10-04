@@ -46,3 +46,17 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Department {
+    id: number;
+    name: string;
+    description?: string;
+    parent_id?: number;
+    is_active: boolean;
+    created_at: string;
+    updated_at: string;
+    parent?: Department;
+    children?: Department[];
+    users?: User[];
+    users_count?: number;
+}

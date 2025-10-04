@@ -11,7 +11,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-    
+
     // 表單設計器路由
     Route::get('form-builder', function () {
         return Inertia::render('FormBuilder');
@@ -38,8 +38,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'edit' => 'web.users.edit',
             'update' => 'web.users.update',
             'destroy' => 'web.users.destroy',
-        ]
+        ],
     ]);
+
+    // 部門管理路由
+    Route::resource('departments', App\Http\Controllers\DepartmentController::class);
 
     // 工作流程設計器路由
     Route::get('workflows/designer', function () {
