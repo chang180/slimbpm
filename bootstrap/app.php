@@ -24,18 +24,14 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        // 註冊組織訪問中間件
-        $middleware->alias([
-            'org.access' => EnsureOrganizationAccess::class,
-        ]);
-
         // 覆蓋默認的 RedirectIfAuthenticated 中間件
         $middleware->web(replace: [
             \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
 
-        // 覆蓋 guest 中間件別名
+        // 註冊中間件別名
         $middleware->alias([
+            'org.access' => EnsureOrganizationAccess::class,
             'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
     })
