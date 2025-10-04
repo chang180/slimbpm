@@ -41,6 +41,10 @@ Route::prefix('v1')->middleware('auth')->group(function () {
     // Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class); // Not implemented yet
 
     // Notification Management
-    // Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class); // Not implemented yet
-    // Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class); // Not implemented yet
+    Route::get('notifications/unread-count', [App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
+    Route::post('notifications/mark-all-as-read', [App\Http\Controllers\Api\NotificationController::class, 'markAllAsRead']);
+    Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class);
+    Route::post('notifications/{notification}/mark-as-read', [App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
+    Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class);
+    Route::post('notification-settings/reset', [App\Http\Controllers\Api\NotificationSettingController::class, 'reset']);
 });
