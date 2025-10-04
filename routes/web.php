@@ -12,6 +12,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
     
+    // 表單相關路由
+    Route::prefix('forms')->name('forms.')->group(function () {
+        Route::get('/', [App\Http\Controllers\FormController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\FormController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\FormController::class, 'store'])->name('store');
+        Route::get('/{form}', [App\Http\Controllers\FormController::class, 'show'])->name('show');
+        Route::get('/{form}/edit', [App\Http\Controllers\FormController::class, 'edit'])->name('edit');
+        Route::put('/{form}', [App\Http\Controllers\FormController::class, 'update'])->name('update');
+        Route::delete('/{form}', [App\Http\Controllers\FormController::class, 'destroy'])->name('destroy');
+        Route::get('/{form}/submit', [App\Http\Controllers\FormController::class, 'submit'])->name('submit');
+        Route::post('/{form}/submit', [App\Http\Controllers\FormController::class, 'processSubmit'])->name('process-submit');
+        Route::get('/{form}/results', [App\Http\Controllers\FormController::class, 'results'])->name('results');
+        Route::post('/{form}/duplicate', [App\Http\Controllers\FormController::class, 'duplicate'])->name('duplicate');
+    });
+
     // 表單設計器路由
     Route::get('form-builder', function () {
         return Inertia::render('FormBuilder');
