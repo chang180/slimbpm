@@ -11,6 +11,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::get('workflows/designer', function () {
+        return Inertia::render('workflows/designer', [
+            'workflow' => null,
+            'canEdit' => true,
+        ]);
+    })->name('workflows.designer');
 });
 
 require __DIR__.'/settings.php';

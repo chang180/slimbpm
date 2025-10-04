@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WorkflowHistory extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'workflow_instance_id',
         'action',
