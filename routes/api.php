@@ -31,13 +31,13 @@ Route::prefix('v1')->middleware('auth')->group(function () {
 
     // Workflow Management
     Route::apiResource('workflows', App\Http\Controllers\Api\WorkflowController::class);
-    Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class);
+    // Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class); // Not implemented yet
 
     // Form Management
     Route::apiResource('forms', App\Http\Controllers\Api\FormController::class);
-    Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class);
+    // Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class); // Not implemented yet
 
     // Notification Management
-    Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class);
-    Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class);
+    // Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class); // Not implemented yet
+    // Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class); // Not implemented yet
 });
