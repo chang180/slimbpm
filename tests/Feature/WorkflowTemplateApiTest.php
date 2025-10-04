@@ -192,3 +192,58 @@ test('it deactivates a workflow template on destroy', function () {
         'is_active' => false,
     ]);
 });
+
+test('it can duplicate a workflow template', function () {
+    $user = User::factory()->create();
+    $original = WorkflowTemplate::factory()->create(['created_by' => $user->id]);
+
+    $response = $this->actingAs($user)->postJson("/api/v1/workflows/{$original->id}/duplicate", [
+        'name' => 'Duplicated Workflow',
+        'description' => 'This is a duplicated workflow',
+    ]);
+
+    $response->assertCreated()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'description',
+                'definition',
+                'version',
+                'creator',
+            ],
+        ])
+        ->assertJsonPath('data.name', 'Duplicated Workflow')
+        ->assertJsonPath('data.description', 'This is a duplicated workflow')
+        ->assertJsonPath('data.version', '1.0.0')
+        ->assertJsonPath('data.definition', $original->definition);
+
+    $this->assertDatabaseHas('workflow_templates', [
+        'name' => 'Duplicated Workflow',
+        'description' => 'This is a duplicated workflow',
+        'definition' => json_encode($original->definition),
+        'created_by' => $user->id,
+    ]);
+});
+
+test('it can export a workflow template', function () {
+    $user = User::factory()->create();
+    $workflow = WorkflowTemplate::factory()->create(['created_by' => $user->id]);
+
+    $response = $this->actingAs($user)->getJson("/api/v1/workflows/{$workflow->id}/export");
+
+    $response->assertOk()
+        ->assertJsonStructure([
+            'id',
+            'name',
+            'description',
+            'definition',
+            'version',
+            'exported_at',
+        ])
+        ->assertJsonPath('id', $workflow->id)
+        ->assertJsonPath('name', $workflow->name)
+        ->assertJsonPath('description', $workflow->description)
+        ->assertJsonPath('definition', $workflow->definition)
+        ->assertJsonPath('version', $workflow->version);
+});

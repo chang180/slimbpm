@@ -79,4 +79,53 @@ class WorkflowTemplateManager
 
         return $definition;
     }
+
+    public function createNewVersion(WorkflowTemplate $template, array $payload, User $user): WorkflowTemplate
+    {
+        $newVersion = $this->incrementVersion($template->version);
+
+        return WorkflowTemplate::query()->create([
+            'name' => $payload['name'] ?? $template->name,
+            'description' => $payload['description'] ?? $template->description,
+            'definition' => $payload['definition'] ?? $template->definition,
+            'version' => $newVersion,
+            'parent_id' => $template->parent_id ?? $template->id,
+            'is_active' => true,
+            'is_current' => true,
+            'created_by' => $user->id,
+        ]);
+    }
+
+    public function getVersionHistory(WorkflowTemplate $template): Collection
+    {
+        $rootId = $template->parent_id ?? $template->id;
+
+        return WorkflowTemplate::query()
+            ->where('id', $rootId)
+            ->orWhere('parent_id', $rootId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
+    public function setCurrentVersion(WorkflowTemplate $template): void
+    {
+        $rootId = $template->parent_id ?? $template->id;
+
+        // 將所有相關版本設為非當前版本
+        WorkflowTemplate::query()
+            ->where('id', $rootId)
+            ->orWhere('parent_id', $rootId)
+            ->update(['is_current' => false]);
+
+        // 將選中的版本設為當前版本
+        $template->update(['is_current' => true]);
+    }
+
+    private function incrementVersion(string $version): string
+    {
+        $segments = array_map('intval', array_pad(explode('.', $version), 3, 0));
+        $segments[2]++; // 增加修訂版本號
+
+        return implode('.', array_slice($segments, 0, 3));
+    }
 }
