@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Department;
 use App\Models\FormTemplate;
+use App\Models\User;
 use App\Models\WorkflowTemplate;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -15,15 +15,18 @@ class DashboardController extends Controller
     /**
      * 顯示儀表板
      */
-    public function index(): Response
+    public function index(Request $request, string $slug): Response
     {
-        // 獲取系統統計資料
+        // 從中間件獲取當前組織
+        $organization = $request->get('current_organization');
+
+        // 獲取該組織的統計資料
         $stats = [
-            'totalUsers' => User::count(),
-            'totalDepartments' => Department::count(),
-            'totalForms' => FormTemplate::count(),
-            'totalWorkflows' => WorkflowTemplate::count(),
-            'activeWorkflows' => WorkflowTemplate::where('is_active', true)->count(),
+            'totalUsers' => User::where('organization_id', $organization->id)->count(),
+            'totalDepartments' => Department::where('organization_id', $organization->id)->count(),
+            'totalForms' => FormTemplate::where('organization_id', $organization->id)->count(),
+            'totalWorkflows' => WorkflowTemplate::where('organization_id', $organization->id)->count(),
+            'activeWorkflows' => WorkflowTemplate::where('organization_id', $organization->id)->where('is_active', true)->count(),
         ];
 
         // 獲取最近活動 (模擬資料)
@@ -69,7 +72,8 @@ class DashboardController extends Controller
         ];
 
         // 獲取部門統計
-        $departmentStats = Department::withCount('users')
+        $departmentStats = Department::where('organization_id', $organization->id)
+            ->withCount('users')
             ->orderBy('users_count', 'desc')
             ->limit(5)
             ->get()
@@ -86,6 +90,7 @@ class DashboardController extends Controller
         if ($totalUsers > 0) {
             $departmentStats = $departmentStats->map(function ($dept) use ($totalUsers) {
                 $dept['percentage'] = round(($dept['users_count'] / $totalUsers) * 100, 1);
+
                 return $dept;
             });
         }

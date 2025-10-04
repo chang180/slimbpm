@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { FormDefinition } from '../../types/FormTypes';
+import { route } from '@/lib/route';
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';

@@ -35,6 +35,56 @@ export interface PageProps {
     [key: string]: unknown;
 }
 
+export interface Organization {
+    id: number;
+    name: string;
+    slug: string;
+    contact_person?: string;
+    contact_email?: string;
+    industry?: string;
+    description?: string;
+    email?: string;
+    phone?: string;
+    website?: string;
+    address?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface OrganizationStats {
+    totalUsers: number;
+    totalDepartments: number;
+    totalForms: number;
+    totalWorkflows: number;
+    activeWorkflows: number;
+    recentActivity: Array<{
+        id: number;
+        type: string;
+        description: string;
+        user: string;
+        created_at: string;
+    }>;
+}
+
+export interface OrganizationSettingsFormData {
+    name: string;
+    description?: string;
+    email?: string;
+    phone?: string;
+    website?: string;
+    address?: string;
+    industry?: string;
+    timezone?: string;
+    language?: string;
+    date_format?: string;
+    currency?: string;
+    notifications?: {
+        email: boolean;
+        sms: boolean;
+        push: boolean;
+    };
+}
+
 export interface User {
     id: number;
     name: string;
@@ -42,6 +92,10 @@ export interface User {
     avatar?: string;
     email_verified_at: string | null;
     two_factor_enabled?: boolean;
+    organization_id?: number;
+    organization?: Organization;
+    role: 'admin' | 'manager' | 'user';
+    is_active?: boolean;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...

@@ -2,9 +2,10 @@ import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationStats } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
+import { route } from '@/lib/route';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
   Building2, 
   Settings, 
@@ -300,7 +301,7 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organizatio
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {stats.recent_activity.slice(0, 5).map((activity) => (
+                {stats.recent_activity.slice(0, 5).map((activity: any) => (
                   <div key={activity.id} className="flex items-start space-x-3">
                     <div className="flex-shrink-0">
                       <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">

@@ -13,6 +13,10 @@ class OrganizationSetting extends Model
 
     protected $fillable = [
         'name',
+        'slug',
+        'contact_person',
+        'contact_email',
+        'industry',
         'settings',
     ];
 

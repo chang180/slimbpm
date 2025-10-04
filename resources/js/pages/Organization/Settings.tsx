@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationSettingsFormData } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { Switch } from '@/Components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
-import { Alert, AlertDescription } from '@/Components/ui/alert';
+import { route } from '@/lib/route';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, AlertCircle, Save, Settings, Shield, Palette } from 'lucide-react';
 
 interface OrganizationSettingsProps extends PageProps {
@@ -23,6 +24,13 @@ const OrganizationSettings: React.FC<OrganizationSettingsProps> = ({ auth, organ
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const { data, setData, put, processing, errors, reset } = useForm<OrganizationSettingsFormData>({
+    name: organization.name,
+    description: organization.description || '',
+    email: organization.email || '',
+    phone: organization.phone || '',
+    website: organization.website || '',
+    address: organization.address || '',
+    industry: organization.industry || '',
     timezone: settings.timezone || 'Asia/Taipei',
     language: settings.language || 'zh-TW',
     date_format: settings.date_format || 'Y-m-d',

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Head } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationStats } from '@/types';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/Components/ui/card';
-import { Button } from '@/Components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/Components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BarChart3, 
   PieChart, 
@@ -291,7 +291,7 @@ const OrganizationReports: React.FC<OrganizationReportsProps> = ({ auth, organiz
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {stats.recent_activity.slice(0, 5).map((activity) => (
+                    {stats.recent_activity.slice(0, 5).map((activity: any) => (
                       <div key={activity.id} className="flex items-start space-x-3">
                         <div className="flex-shrink-0">
                           <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">

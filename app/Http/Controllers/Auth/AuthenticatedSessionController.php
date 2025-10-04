@@ -33,6 +33,7 @@ class AuthenticatedSessionController extends Controller
         $user = $request->validateCredentials();
 
         if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
+            /** @var \Illuminate\Http\Request $request */
             $request->session()->put([
                 'login.id' => $user->getKey(),
                 'login.remember' => $request->boolean('remember'),
@@ -41,11 +42,30 @@ class AuthenticatedSessionController extends Controller
             return to_route('two-factor.login');
         }
 
+        /** @var \Illuminate\Http\Request $request */
         Auth::login($user, $request->boolean('remember'));
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // 根據用戶角色分流到不同界面
+        return $this->redirectBasedOnRole($user);
+    }
+
+    /**
+     * 根據用戶角色重定向到相應界面
+     */
+    private function redirectBasedOnRole($user): RedirectResponse
+    {
+        switch ($user->role) {
+            case 'admin':
+            case 'manager':
+                // 管理員和主管進入後台管理界面
+                return redirect()->intended(route('dashboard', absolute: false));
+            case 'user':
+            default:
+                // 一般用戶進入前台用戶界面 (暫時重定向到儀表板)
+                return redirect()->intended(route('dashboard', absolute: false));
+        }
     }
 
     /**

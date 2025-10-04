@@ -7,9 +7,21 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-    
+// 企業註冊路由
+Route::get('/register', [App\Http\Controllers\Auth\CompanyRegistrationController::class, 'create'])->name('company.register');
+Route::post('/register', [App\Http\Controllers\Auth\CompanyRegistrationController::class, 'store']);
+
+// 企業後台登入路由
+Route::get('/login/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'create'])->name('company.login');
+Route::post('/login/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'store']);
+
+// 企業前台登入路由
+Route::get('/portal/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'createPortal'])->name('portal.login');
+Route::post('/portal/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'storePortal']);
+
+Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
+    Route::get('dashboard/{slug}', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
     // 表單相關路由
     Route::prefix('forms')->name('forms.')->group(function () {
         Route::get('/', [App\Http\Controllers\FormController::class, 'index'])->name('index');
@@ -63,7 +75,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/user-activity', [App\Http\Controllers\ReportsController::class, 'userActivity'])->name('user-activity');
         Route::get('/workflow-performance', [App\Http\Controllers\ReportsController::class, 'workflowPerformance'])->name('workflow-performance');
         Route::get('/system-stats', [App\Http\Controllers\ReportsController::class, 'systemStats'])->name('system-stats');
-        
+
         // 匯出路由
         Route::post('/export/user-activity', [App\Http\Controllers\ReportsController::class, 'exportUserActivity'])->name('export.user-activity');
         Route::post('/export/system-stats', [App\Http\Controllers\ReportsController::class, 'exportSystemStats'])->name('export.system-stats');
