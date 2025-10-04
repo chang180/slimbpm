@@ -13,7 +13,15 @@
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list)",
       "Bash(cat:*)",
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" vendor/bin/pint --dirty)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:request DepartmentRequest --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:factory DepartmentFactory --model=Department --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:test --pest DepartmentManagementTest --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=DepartmentManagement)"
     ],
     "deny": [],
     "ask": []
