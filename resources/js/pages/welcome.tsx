@@ -1,6 +1,7 @@
 import { dashboard, login, register } from '@/routes';
 import { type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
+import DarkModeToggle from '@/Components/DarkModeToggle';
 
 export default function Welcome() {
     const { auth } = usePage<SharedData>().props;
@@ -26,6 +27,13 @@ export default function Welcome() {
                             <span className="text-sm text-gray-500 dark:text-gray-400">(快簽)</span>
                         </div>
                         <div className="flex items-center space-x-4">
+                            {/* Dark Mode Toggle */}
+                            <div className="flex items-center space-x-2">
+                                <span className="text-sm text-gray-600 dark:text-gray-300">淺色</span>
+                                <DarkModeToggle />
+                                <span className="text-sm text-gray-600 dark:text-gray-300">深色</span>
+                            </div>
+                            
                             {auth.user ? (
                                 <Link
                                     href={dashboard()}
