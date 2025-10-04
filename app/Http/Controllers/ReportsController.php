@@ -6,12 +6,20 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\FormTemplate;
 use App\Models\WorkflowTemplate;
+use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ReportsController extends Controller
 {
+    protected ExportService $exportService;
+
+    public function __construct(ExportService $exportService)
+    {
+        $this->exportService = $exportService;
+    }
+
     /**
      * 顯示報表中心
      */
@@ -121,5 +129,32 @@ class ReportsController extends Controller
             'systemStats' => $systemStats,
             'usageData' => $usageData,
         ]);
+    }
+
+    /**
+     * 匯出用戶活動報表
+     */
+    public function exportUserActivity(Request $request)
+    {
+        $filters = $request->only(['department_id', 'date_from', 'date_to']);
+        return $this->exportService->exportUserActivityReport($filters);
+    }
+
+    /**
+     * 匯出系統統計報表
+     */
+    public function exportSystemStats(Request $request)
+    {
+        $filters = $request->only(['date_from', 'date_to']);
+        return $this->exportService->exportSystemStatsReport($filters);
+    }
+
+    /**
+     * 匯出流程效能報表
+     */
+    public function exportWorkflowPerformance(Request $request)
+    {
+        $filters = $request->only(['status', 'date_from', 'date_to']);
+        return $this->exportService->exportWorkflowPerformanceReport($filters);
     }
 }

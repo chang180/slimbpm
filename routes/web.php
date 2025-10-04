@@ -24,6 +24,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/user-activity', [App\Http\Controllers\ReportsController::class, 'userActivity'])->name('user-activity');
         Route::get('/workflow-performance', [App\Http\Controllers\ReportsController::class, 'workflowPerformance'])->name('workflow-performance');
         Route::get('/system-stats', [App\Http\Controllers\ReportsController::class, 'systemStats'])->name('system-stats');
+        
+        // 匯出路由
+        Route::post('/export/user-activity', [App\Http\Controllers\ReportsController::class, 'exportUserActivity'])->name('export.user-activity');
+        Route::post('/export/system-stats', [App\Http\Controllers\ReportsController::class, 'exportSystemStats'])->name('export.system-stats');
+        Route::post('/export/workflow-performance', [App\Http\Controllers\ReportsController::class, 'exportWorkflowPerformance'])->name('export.workflow-performance');
     });
 });
 
