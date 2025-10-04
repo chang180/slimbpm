@@ -64,18 +64,18 @@ class AuthenticatedSessionController extends Controller
         
         if (!$slug) {
             // 如果用戶沒有組織，重定向到歡迎頁面
-            return redirect()->intended(route('home'));
+            return redirect()->route('home');
         }
         
         switch ($user->role) {
             case 'admin':
             case 'manager':
                 // 管理員和主管進入後台管理界面
-                return redirect()->intended(route('dashboard', ['slug' => $slug]));
+                return redirect()->route('dashboard', ['slug' => $slug]);
             case 'user':
             default:
                 // 一般用戶進入前台用戶界面 (暫時重定向到儀表板)
-                return redirect()->intended(route('dashboard', ['slug' => $slug]));
+                return redirect()->route('dashboard', ['slug' => $slug]);
         }
     }
 
