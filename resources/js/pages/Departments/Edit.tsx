@@ -121,7 +121,7 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                                             <SelectValue placeholder="選擇上級部門（可選）" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">無（頂層部門）</SelectItem>
+                                            <SelectItem value="none">無（頂層部門）</SelectItem>
                                             {renderDepartmentOptions(departments)}
                                         </SelectContent>
                                     </Select>

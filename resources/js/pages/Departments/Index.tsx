@@ -185,7 +185,7 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ auth, departments, 
                                             <SelectValue placeholder="選擇狀態" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">全部狀態</SelectItem>
+                                            <SelectItem value="all">全部狀態</SelectItem>
                                             <SelectItem value="active">啟用</SelectItem>
                                             <SelectItem value="inactive">停用</SelectItem>
                                         </SelectContent>

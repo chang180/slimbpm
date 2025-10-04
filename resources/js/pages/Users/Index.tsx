@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
 import { Search, Plus, Edit, Trash2, Eye, Download, Filter } from 'lucide-react';
 
 interface User {
@@ -50,8 +50,8 @@ const UsersIndex: React.FC<UsersIndexProps> = ({ auth, users, filters }) => {
     const handleSearch = () => {
         router.get('/users', {
             search,
-            role: roleFilter,
-            status: statusFilter,
+            role: roleFilter === '' ? '' : roleFilter,
+            status: statusFilter === '' ? '' : statusFilter,
         }, {
             preserveState: true,
             replace: true,
@@ -175,32 +175,22 @@ const UsersIndex: React.FC<UsersIndexProps> = ({ auth, users, filters }) => {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                         角色
                                     </label>
-                                    <Select value={roleFilter} onValueChange={setRoleFilter}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="選擇角色" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="">全部角色</SelectItem>
-                                            <SelectItem value="admin">管理員</SelectItem>
-                                            <SelectItem value="manager">主管</SelectItem>
-                                            <SelectItem value="user">用戶</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <SafeSelect value={roleFilter} onValueChange={setRoleFilter} placeholder="選擇角色">
+                                        <SafeSelectItem value="">全部角色</SafeSelectItem>
+                                        <SafeSelectItem value="admin">管理員</SafeSelectItem>
+                                        <SafeSelectItem value="manager">主管</SafeSelectItem>
+                                        <SafeSelectItem value="user">用戶</SafeSelectItem>
+                                    </SafeSelect>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                         狀態
                                     </label>
-                                    <Select value={statusFilter} onValueChange={setStatusFilter}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="選擇狀態" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="">全部狀態</SelectItem>
-                                            <SelectItem value="active">啟用</SelectItem>
-                                            <SelectItem value="inactive">停用</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                    <SafeSelect value={statusFilter} onValueChange={setStatusFilter} placeholder="選擇狀態">
+                                        <SafeSelectItem value="">全部狀態</SafeSelectItem>
+                                        <SafeSelectItem value="active">啟用</SafeSelectItem>
+                                        <SafeSelectItem value="inactive">停用</SafeSelectItem>
+                                    </SafeSelect>
                                 </div>
                                 <div className="flex items-end">
                                     <Button onClick={handleSearch} className="w-full">

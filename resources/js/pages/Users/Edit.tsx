@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Save, Key } from 'lucide-react';
 import { Link } from '@inertiajs/react';
@@ -56,7 +56,12 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const submitData = {
+            ...data,
+            organization_id: data.organization_id === '' ? null : data.organization_id,
+        };
         put(`/users/${user.id}`, {
+            data: submitData,
             onSuccess: () => {
                 reset();
             },
@@ -181,22 +186,18 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     <div>
                                         <Label htmlFor="organization_id">組織</Label>
-                                        <Select
+                                        <SafeSelect
                                             value={data.organization_id}
                                             onValueChange={(value) => setData('organization_id', value)}
+                                            placeholder="選擇組織"
                                         >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="選擇組織" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="">無</SelectItem>
-                                                {organizations.map((org) => (
-                                                    <SelectItem key={org.id} value={org.id.toString()}>
-                                                        {org.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                            <SafeSelectItem value="">無</SafeSelectItem>
+                                            {organizations.map((org) => (
+                                                <SafeSelectItem key={org.id} value={org.id.toString()}>
+                                                    {org.name}
+                                                </SafeSelectItem>
+                                            ))}
+                                        </SafeSelect>
                                         {errors.organization_id && (
                                             <p className="mt-1 text-sm text-red-600">{errors.organization_id}</p>
                                         )}

@@ -36,8 +36,8 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   const handleFilter = () => {
     router.get(route('forms.index'), {
       search: search || undefined,
-      category: category || undefined,
-      is_public: isPublic,
+      category: category === 'all' ? undefined : category || undefined,
+      is_public: isPublic === 'all' ? undefined : isPublic,
     }, {
       preserveState: true,
       replace: true,
@@ -123,7 +123,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                       <SelectValue placeholder="選擇分類" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">全部分類</SelectItem>
+                      <SelectItem value="all">全部分類</SelectItem>
                       {categories.map((cat) => (
                         <SelectItem key={cat} value={cat}>
                           {cat}
@@ -145,7 +145,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                       <SelectValue placeholder="選擇可見性" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">全部</SelectItem>
+                      <SelectItem value="all">全部</SelectItem>
                       <SelectItem value="true">公開</SelectItem>
                       <SelectItem value="false">私人</SelectItem>
                     </SelectContent>

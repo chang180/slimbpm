@@ -99,7 +99,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
       (submission.submittedBy && submission.submittedBy.toLowerCase().includes(searchTerm.toLowerCase())) ||
       submission.submittedAt.includes(searchTerm);
     
-    const matchesStatus = statusFilter === '' || submission.status === statusFilter;
+    const matchesStatus = statusFilter === '' || statusFilter === 'all' || submission.status === statusFilter;
     
     return matchesSearch && matchesStatus;
   });
@@ -214,7 +214,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                         <SelectValue placeholder="選擇狀態" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">全部狀態</SelectItem>
+                        <SelectItem value="all">全部狀態</SelectItem>
                         <SelectItem value="draft">草稿</SelectItem>
                         <SelectItem value="submitted">已提交</SelectItem>
                         <SelectItem value="approved">已核准</SelectItem>
