@@ -165,28 +165,31 @@ php artisan test --coverage
 
 ### 1. 每日開發流程
 1. 拉取最新主分支更新
-2. 檢查 Linear Issue 狀態
+2. 檢查當前分支狀態
 3. 實作當日任務
 4. 執行測試確保品質
 5. 提交變動並推送到分支
+6. 在 commit message 中記錄進度
 
 ### 2. 提交規範
 ```bash
-# 提交格式
+# 提交格式 - 使用詳細的 commit message 來追蹤進度
 git commit -m "feat: Add organization management CRUD functionality
 
 - Implement OrganizationController with full CRUD operations
-- Add organization validation rules
+- Add organization validation rules  
 - Create organization management tests
 - Update API routes for organization endpoints
 
-Closes DEV-37"
+Progress: Organization CRUD completed (1/5 tasks)
+Next: Department management implementation"
 ```
 
 ### 3. 進度更新
-- 每日更新 Linear Issue 進度
+- 在 commit message 中記錄進度
 - 更新開發文件
 - 記錄遇到的問題和解決方案
+- 使用 git commit 來追蹤進度
 
 ## 🚨 注意事項
 
@@ -218,9 +221,10 @@ Closes DEV-37"
 - 查看 `tests/Feature/` 中的測試案例
 
 ### 3. 問題回報
-- 遇到問題時記錄在 Linear Issue 中
+- 遇到問題時在 commit message 中記錄
 - 提供詳細的錯誤訊息和重現步驟
 - 包含相關的程式碼片段
+- 使用 git commit 來追蹤問題和解決方案
 
 ## 🎯 完成標準
 

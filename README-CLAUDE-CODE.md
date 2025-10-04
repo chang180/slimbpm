@@ -25,20 +25,26 @@ php artisan test
 ```
 
 ### 📖 詳細指示檔案
-請查看 `.ai-dev/development/claude-code-instructions.md` 獲取完整的開發指示，包含：
+請查看以下檔案獲取完整的開發指示：
 
+- **開發指示**: `.ai-dev/development/claude-code-instructions.md`
+- **進度追蹤**: `.ai-dev/development/claude-code-progress.md`
+
+包含：
 - 具體的開發任務清單
 - 技術實作指南
 - 測試要求
 - 開發流程
 - 完成標準
+- 進度追蹤機制
 
 ### 🔧 開始開發
 1. 閱讀詳細指示檔案
 2. 確認開發環境正常
 3. 開始實作組織架構 CRUD 功能
 4. 建立對應的測試案例
-5. 提交變動並更新進度
+5. 提交變動並更新進度追蹤檔案
+6. 在 commit message 中記錄詳細進度
 
 ### 📞 需要幫助？
 - 查看現有的 Model 關聯結構
