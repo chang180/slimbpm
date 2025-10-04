@@ -16,6 +16,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('form-builder', function () {
         return Inertia::render('FormBuilder');
     })->name('form-builder');
+    
+    // 用戶管理路由
+    Route::resource('users', App\Http\Controllers\UserController::class);
 });
 
 require __DIR__.'/settings.php';
