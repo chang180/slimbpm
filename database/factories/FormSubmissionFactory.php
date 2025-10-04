@@ -46,6 +46,7 @@ class FormSubmissionFactory extends Factory
             ],
             'submitted_by' => User::factory(),
             'status' => $this->faker->randomElement(['draft', 'submitted', 'approved', 'rejected']),
+            'submitted_at' => $this->faker->dateTimeThisYear(),
         ];
     }
 

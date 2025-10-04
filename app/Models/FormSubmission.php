@@ -15,6 +15,7 @@ class FormSubmission extends Model
         'data',
         'submitted_by',
         'submitted_at',
+        'status',
     ];
 
     protected $casts = [

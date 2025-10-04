@@ -145,6 +145,7 @@ class FormController extends Controller
             'data' => $validated,
             'submitted_by' => auth()->id(),
             'status' => 'submitted',
+            'submitted_at' => now(),
         ]);
         
         return response()->json([
