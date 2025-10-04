@@ -21,7 +21,12 @@
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:request DepartmentRequest --no-interaction)",
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:factory DepartmentFactory --model=Department --no-interaction)",
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:test --pest DepartmentManagementTest --no-interaction)",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=DepartmentManagement)"
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=DepartmentManagement)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:request UserRequest --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:controller Api/UserController --api --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:test --pest UserManagementTest --no-interaction)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=UserManagement)"
     ],
     "deny": [],
     "ask": []

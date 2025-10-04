@@ -26,6 +26,9 @@ Route::prefix('v1')->middleware('auth')->group(function () {
     // Department Management
     Route::apiResource('departments', App\Http\Controllers\Api\DepartmentController::class);
 
+    // User Management
+    Route::apiResource('users', App\Http\Controllers\Api\UserController::class);
+
     // Workflow Management
     Route::apiResource('workflows', App\Http\Controllers\Api\WorkflowController::class);
     Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class);
