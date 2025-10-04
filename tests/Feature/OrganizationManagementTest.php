@@ -1,121 +1,229 @@
 <?php
 
-use App\Models\OrganizationSetting;
+namespace Tests\Feature;
+
 use App\Models\User;
+use App\Models\OrganizationSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
-uses(RefreshDatabase::class);
+class OrganizationManagementTest extends TestCase
+{
+    use RefreshDatabase;
 
-it('can list all organizations', function () {
-    $user = User::factory()->create();
-    OrganizationSetting::factory()->count(3)->create();
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->artisan('migrate');
+    }
 
-    $response = $this->actingAs($user)
-        ->getJson('/api/v1/organizations');
+    public function test_can_view_organization_index(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-    $response->assertSuccessful()
-        ->assertJsonCount(3, 'data');
-});
+        $response = $this->actingAs($user)->get('/organization');
 
-it('can create an organization', function () {
-    $user = User::factory()->create();
+        $response->assertStatus(200)
+            ->assertInertia(fn ($page) => 
+                $page->component('Organization/Index')
+                    ->has('organization')
+                    ->has('stats')
+            );
+    }
 
-    $organizationData = [
-        'name' => 'Test Organization',
-        'settings' => [
+    public function test_can_view_organization_settings(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+
+        $response = $this->actingAs($user)->get('/organization/settings');
+
+        $response->assertStatus(200)
+            ->assertInertia(fn ($page) => 
+                $page->component('Organization/Settings')
+                    ->has('organization')
+                    ->has('settings')
+            );
+    }
+
+    public function test_can_update_organization_settings(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+
+        $settingsData = [
             'timezone' => 'Asia/Taipei',
+            'language' => 'zh-TW',
+            'date_format' => 'Y-m-d',
+            'time_format' => 'H:i',
             'currency' => 'TWD',
-        ],
-    ];
+            'notifications' => [
+                'email_notifications' => true,
+                'system_notifications' => true,
+                'security_notifications' => true,
+            ],
+            'security' => [
+                'password_policy' => [
+                    'min_length' => 8,
+                    'require_uppercase' => true,
+                    'require_lowercase' => true,
+                    'require_numbers' => true,
+                    'require_symbols' => false,
+                ],
+                'session_timeout' => 120,
+                'two_factor_required' => false,
+            ],
+            'appearance' => [
+                'theme' => 'auto',
+                'primary_color' => '#3b82f6',
+                'logo_url' => '',
+            ],
+        ];
 
-    $response = $this->actingAs($user)
-        ->postJson('/api/v1/organizations', $organizationData);
+        $response = $this->actingAs($user)->put('/organization/settings', $settingsData);
 
-    $response->assertCreated()
-        ->assertJsonPath('data.name', 'Test Organization')
-        ->assertJsonPath('data.settings.timezone', 'Asia/Taipei');
+        $response->assertStatus(200)
+            ->assertJson(['message' => '組織設定已成功更新！']);
+    }
 
-    $this->assertDatabaseHas('organization_settings', [
-        'name' => 'Test Organization',
-    ]);
-});
+    public function test_can_view_organization_info(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-it('requires name when creating organization', function () {
-    $user = User::factory()->create();
+        $response = $this->actingAs($user)->get('/organization/info');
 
-    $response = $this->actingAs($user)
-        ->postJson('/api/v1/organizations', [
-            'settings' => [],
-        ]);
+        $response->assertStatus(200)
+            ->assertInertia(fn ($page) => 
+                $page->component('Organization/Info')
+                    ->has('organization')
+                    ->has('stats')
+            );
+    }
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['name']);
-});
+    public function test_can_view_organization_preferences(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-it('can show a specific organization', function () {
-    $user = User::factory()->create();
-    $organization = OrganizationSetting::factory()->create();
+        $response = $this->actingAs($user)->get('/organization/preferences');
 
-    $response = $this->actingAs($user)
-        ->getJson("/api/v1/organizations/{$organization->id}");
+        $response->assertStatus(200)
+            ->assertInertia(fn ($page) => 
+                $page->component('Organization/Preferences')
+                    ->has('organization')
+                    ->has('preferences')
+            );
+    }
 
-    $response->assertSuccessful()
-        ->assertJsonPath('data.id', $organization->id)
-        ->assertJsonPath('data.name', $organization->name);
-});
+    public function test_can_update_organization_preferences(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-it('can update an organization', function () {
-    $user = User::factory()->create();
-    $organization = OrganizationSetting::factory()->create();
+        $preferencesData = [
+            'system' => [
+                'auto_backup' => true,
+                'backup_frequency' => 'daily',
+                'data_retention_days' => 365,
+                'log_level' => 'info',
+            ],
+            'notifications' => [
+                'email_digest' => true,
+                'digest_frequency' => 'weekly',
+                'system_alerts' => true,
+                'security_alerts' => true,
+                'maintenance_notices' => true,
+            ],
+            'security' => [
+                'session_timeout' => 120,
+                'password_expiry_days' => 90,
+                'failed_login_lockout' => true,
+                'ip_whitelist' => [],
+                'audit_logging' => true,
+            ],
+            'display' => [
+                'default_theme' => 'auto',
+                'language' => 'zh-TW',
+                'timezone' => 'Asia/Taipei',
+                'date_format' => 'Y-m-d',
+                'items_per_page' => 20,
+            ],
+        ];
 
-    $updatedData = [
-        'name' => 'Updated Organization Name',
-        'settings' => [
-            'timezone' => 'America/New_York',
-        ],
-    ];
+        $response = $this->actingAs($user)->put('/organization/preferences', $preferencesData);
 
-    $response = $this->actingAs($user)
-        ->putJson("/api/v1/organizations/{$organization->id}", $updatedData);
+        $response->assertStatus(200)
+            ->assertJson(['message' => '偏好設定已成功更新！']);
+    }
 
-    $response->assertSuccessful()
-        ->assertJsonPath('data.name', 'Updated Organization Name');
+    public function test_can_view_organization_reports(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-    $this->assertDatabaseHas('organization_settings', [
-        'id' => $organization->id,
-        'name' => 'Updated Organization Name',
-    ]);
-});
+        $response = $this->actingAs($user)->get('/organization/reports');
 
-it('can delete an organization', function () {
-    $user = User::factory()->create();
-    $organization = OrganizationSetting::factory()->create();
+        $response->assertStatus(200)
+            ->assertInertia(fn ($page) => 
+                $page->component('Organization/Reports')
+                    ->has('organization')
+                    ->has('stats')
+            );
+    }
 
-    $response = $this->actingAs($user)
-        ->deleteJson("/api/v1/organizations/{$organization->id}");
+    public function test_requires_authentication_to_access_organization_pages(): void
+    {
+        $response = $this->get('/organization');
+        $response->assertRedirect('/login');
 
-    $response->assertSuccessful();
+        $response = $this->get('/organization/settings');
+        $response->assertRedirect('/login');
 
-    $this->assertDatabaseMissing('organization_settings', [
-        'id' => $organization->id,
-    ]);
-});
+        $response = $this->get('/organization/info');
+        $response->assertRedirect('/login');
 
-it('requires authentication to access organizations', function () {
-    $response = $this->getJson('/api/v1/organizations');
+        $response = $this->get('/organization/preferences');
+        $response->assertRedirect('/login');
 
-    $response->assertUnauthorized();
-});
+        $response = $this->get('/organization/reports');
+        $response->assertRedirect('/login');
+    }
 
-it('validates settings must be an array', function () {
-    $user = User::factory()->create();
+    public function test_organization_settings_validation(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
 
-    $response = $this->actingAs($user)
-        ->postJson('/api/v1/organizations', [
-            'name' => 'Test Organization',
-            'settings' => 'invalid',
-        ]);
+        $response = $this->actingAs($user)->putJson('/organization/settings', []);
 
-    $response->assertUnprocessable()
-        ->assertJsonValidationErrors(['settings']);
-});
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'timezone',
+                'language',
+                'date_format',
+                'time_format',
+                'currency',
+                'notifications',
+                'security',
+                'appearance',
+            ]);
+    }
+
+    public function test_organization_preferences_validation(): void
+    {
+        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+
+        $response = $this->actingAs($user)->putJson('/organization/preferences', []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'system',
+                'notifications',
+                'security',
+                'display',
+            ]);
+    }
+}
