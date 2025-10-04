@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { Building2, ArrowRight, Play, CheckCircle } from 'lucide-react';
+import { Building2, ArrowRight, Play, CheckCircle, LogIn } from 'lucide-react';
 
 export default function CTA() {
     return (
@@ -24,6 +24,13 @@ export default function CTA() {
                         <Building2 className="w-5 h-5 mr-2" />
                         免費註冊企業帳號
                         <ArrowRight className="w-5 h-5 ml-2" />
+                    </Link>
+                    <Link
+                        href="/login"
+                        className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-lg hover:bg-white hover:text-blue-600 transition-all duration-200 text-lg font-semibold"
+                    >
+                        <LogIn className="w-5 h-5 mr-2" />
+                        企業管理者登入
                     </Link>
                     <button 
                         onClick={() => {

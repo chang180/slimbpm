@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { type SharedData } from '@/types';
 import DarkModeToggle from '@/components/DarkModeToggle';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, LogIn, Building2 } from 'lucide-react';
 
 export default function Navigation() {
     const { auth } = usePage<SharedData>().props;
@@ -32,13 +32,23 @@ export default function Navigation() {
                             進入系統
                         </Link>
                     ) : (
-                        <Link
-                            href="/register"
-                            className="inline-flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                        >
-                            企業註冊
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                        </Link>
+                        <div className="flex items-center space-x-3">
+                            <Link
+                                href="/login"
+                                className="inline-flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                            >
+                                <LogIn className="w-4 h-4 mr-2" />
+                                企業登入
+                            </Link>
+                            <Link
+                                href="/register"
+                                className="inline-flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                            >
+                                <Building2 className="w-4 h-4 mr-2" />
+                                企業註冊
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                            </Link>
+                        </div>
                     )}
                 </div>
             </div>
