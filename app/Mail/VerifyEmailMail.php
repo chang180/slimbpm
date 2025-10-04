@@ -17,7 +17,7 @@ class VerifyEmailMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public object $notifiable,
+        public \Illuminate\Contracts\Auth\MustVerifyEmail $notifiable,
         public string $verificationUrl
     ) {
         //

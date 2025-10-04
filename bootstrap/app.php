@@ -33,6 +33,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(replace: [
             \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class => \App\Http\Middleware\RedirectIfAuthenticated::class,
         ]);
+
+        // 覆蓋 guest 中間件別名
+        $middleware->alias([
+            'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
