@@ -86,10 +86,18 @@ export default function Welcome() {
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                                     </svg>
                                 </Link>
-                                <button className="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-lg font-semibold">
-                                    觀看演示
+                                <button 
+                                    onClick={() => {
+                                        // 滾動到功能展示區域
+                                        document.getElementById('features-demo')?.scrollIntoView({ 
+                                            behavior: 'smooth' 
+                                        });
+                                    }}
+                                    className="inline-flex items-center px-8 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-lg font-semibold"
+                                >
+                                    查看功能演示
                                     <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9-4V9a2 2 0 012-2h4a2 2 0 012 2v1M7 7h10a2 2 0 012 2v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9a2 2 0 012-2z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                                     </svg>
                                 </button>
                             </div>
@@ -199,6 +207,216 @@ export default function Welcome() {
                                     完整的組織架構管理，支援組織設定、偏好配置，讓企業管理更加便利。
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Interactive Demo Section */}
+                <div id="features-demo" className="py-20 bg-gray-50 dark:bg-gray-900">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                                功能演示
+                            </h2>
+                            <p className="text-xl text-gray-600 dark:text-gray-300">
+                                體驗 SlimBPM 的核心功能
+                            </p>
+                        </div>
+                        
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Demo 1: 表單設計器 */}
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                            表單設計器演示
+                                        </h3>
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                            拖拽式表單建立
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                {/* 模擬表單設計器界面 */}
+                                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700">
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">範例：請假申請表</div>
+                                    <div className="space-y-3">
+                                        <div className="bg-white dark:bg-gray-800 p-3 rounded border">
+                                            <label className="block text-sm font-medium mb-1">員工姓名</label>
+                                            <div className="h-8 bg-gray-100 dark:bg-gray-600 rounded"></div>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 p-3 rounded border">
+                                            <label className="block text-sm font-medium mb-1">請假類型</label>
+                                            <div className="h-8 bg-gray-100 dark:bg-gray-600 rounded"></div>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 p-3 rounded border">
+                                            <label className="block text-sm font-medium mb-1">請假日期</label>
+                                            <div className="h-8 bg-gray-100 dark:bg-gray-600 rounded"></div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <span className="text-xs text-blue-600 dark:text-blue-400">✨ 支援多種欄位類型：文字、選擇、日期、檔案上傳</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Demo 2: 儀表板 */}
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                            數據分析儀表板
+                                        </h3>
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                            即時統計與圖表
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                {/* 模擬儀表板界面 */}
+                                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700">
+                                    <div className="grid grid-cols-2 gap-4 mb-4">
+                                        <div className="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                            <div className="text-2xl font-bold text-blue-600">156</div>
+                                            <div className="text-xs text-gray-600 dark:text-gray-400">總用戶數</div>
+                                        </div>
+                                        <div className="bg-white dark:bg-gray-800 p-3 rounded text-center">
+                                            <div className="text-2xl font-bold text-green-600">23</div>
+                                            <div className="text-xs text-gray-600 dark:text-gray-400">活躍流程</div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-white dark:bg-gray-800 p-3 rounded">
+                                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">系統使用趨勢</div>
+                                        <div className="h-16 bg-gradient-to-r from-blue-200 to-green-200 dark:from-blue-800 dark:to-green-800 rounded flex items-end justify-around">
+                                            <div className="w-2 bg-blue-500 h-8 rounded-t"></div>
+                                            <div className="w-2 bg-blue-500 h-12 rounded-t"></div>
+                                            <div className="w-2 bg-green-500 h-10 rounded-t"></div>
+                                            <div className="w-2 bg-green-500 h-14 rounded-t"></div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <span className="text-xs text-green-600 dark:text-green-400">📊 互動式圖表：線圖、柱狀圖、圓餅圖</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Demo 3: 工作流程 */}
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                            工作流程引擎
+                                        </h3>
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                            審批流程自動化
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                {/* 模擬工作流程界面 */}
+                                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700">
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">範例：請假審批流程</div>
+                                    <div className="flex items-center justify-between">
+                                        <div className="text-center">
+                                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">1</div>
+                                            <div className="text-xs mt-1">提交申請</div>
+                                        </div>
+                                        <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-2"></div>
+                                        <div className="text-center">
+                                            <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white text-xs font-bold">2</div>
+                                            <div className="text-xs mt-1">主管審核</div>
+                                        </div>
+                                        <div className="flex-1 h-0.5 bg-gray-300 dark:bg-gray-600 mx-2"></div>
+                                        <div className="text-center">
+                                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">3</div>
+                                            <div className="text-xs mt-1">完成</div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <span className="text-xs text-purple-600 dark:text-purple-400">🔄 支援條件分支、並行審核、自動通知</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Demo 4: 用戶管理 */}
+                            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center">
+                                        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                            用戶與部門管理
+                                        </h3>
+                                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                                            組織架構管理
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                {/* 模擬用戶管理界面 */}
+                                <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-700">
+                                    <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">組織架構範例</div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                                                <span className="text-xs font-bold text-blue-600 dark:text-blue-400">CEO</span>
+                                            </div>
+                                            <span className="text-sm">總經理</span>
+                                        </div>
+                                        <div className="ml-4 space-y-1">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                                                    <span className="text-xs font-bold text-green-600 dark:text-green-400">IT</span>
+                                                </div>
+                                                <span className="text-sm">資訊部 (5人)</span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                                                    <span className="text-xs font-bold text-purple-600 dark:text-purple-400">HR</span>
+                                                </div>
+                                                <span className="text-sm">人資部 (3人)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="mt-4 text-center">
+                                        <span className="text-xs text-orange-600 dark:text-orange-400">👥 支援角色分配、權限管理、部門層級</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Demo CTA */}
+                        <div className="text-center mt-12">
+                            <p className="text-gray-600 dark:text-gray-300 mb-6">
+                                想要體驗完整功能？立即註冊開始使用！
+                            </p>
+                            <Link
+                                href={auth.user ? dashboard() : register()}
+                                className="inline-flex items-center px-8 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold"
+                            >
+                                開始免費試用
+                                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </Link>
                         </div>
                     </div>
                 </div>
