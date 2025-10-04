@@ -20,7 +20,7 @@ test('new users can register', function () {
         'password_confirmation' => 'password',
     ]);
 
-    // 註冊後不會自動登入，需要驗證郵件
-    $this->assertGuest();
+    // 註冊後會自動登入，並導向驗證頁面
+    $this->assertAuthenticated();
     $response->assertRedirect(route('verification.notice'));
 });

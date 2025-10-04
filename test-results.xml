@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="D:\coding\slimbpm\phpunit.xml" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="0.847290">
+    <testsuite name="Feature" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="0.847290">
+      <testsuite name="Tests\Feature\Auth\RegistrationTest" file="tests\Feature\Auth\RegistrationTest.php" tests="1" assertions="1" errors="0" failures="1" skipped="0" time="0.847290">
+        <testcase name="new users can register" file="tests\Feature\Auth\RegistrationTest.php::new users can register" class="Tests\Feature\Auth\RegistrationTest" classname="Tests.Feature.Auth.RegistrationTest" assertions="1" time="0.847290">
+          <failure type="PHPUnit\Framework\ExpectationFailedException">new users can registerThe user is not authenticated
+Failed asserting that false is true.&#13;
+at vendor\laravel\framework\src\Illuminate\Foundation\Testing\Concerns\InteractsWithAuthentication.php:64
+at tests\Feature\Auth\RegistrationTest.php:24</failure>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

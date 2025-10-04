@@ -1,17 +1,26 @@
 {
   "permissions": {
     "allow": [
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=EmailVerification)",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan tinker --execute=\"echo route(''home'');\")",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=DebugOrganization)",
-      "Bash(del:*)",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"DashboardTest\")",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"DepartmentManagementTest\")",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"OrganizationManagementTest\")",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"UserManagementUITest\")",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"WorkflowDesignerPageTest\")",
+      "Bash(Select-String -Pattern \"verify|email|register\" -Context 2)",
+      "Bash(cat:*)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --name=register)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --name=verify)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --name=verification)",
       "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" vendor/bin/pint --dirty)",
-      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test)"
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=EmailVerification)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test)",
+      "Bash(npm run build:*)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan wayfinder:generate)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --name=verification.notice)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan route:list --name=verification.verify)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan tinker --execute=\"echo ''URL: '' . URL::signedRoute(''verification.verify'', [''id'' => 1, ''hash'' => sha1(''test@example.com'')]);\")",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan vendor:publish --tag=laravel-notifications)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan vendor:publish --tag=laravel-mail)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan make:mail VerifyEmailMail)",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan test --filter=\"new users can register\")",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" artisan tinker --execute=\"$user = new App\\Models\\User([''name'' => ''Test'', ''email'' => ''test@example.com'']); $url = ''http://example.com/verify''; $mail = new App\\Mail\\VerifyEmailMail($user, $url); echo ''Mail created successfully'';\")",
+      "Bash(\"C:\\Users\\chang180\\.config\\herd\\bin\\php84\\php.exe\" -d display_errors=1 artisan test --filter=\"new users can register\" --log-junit test-results.xml)"
     ],
     "deny": [],
     "ask": []

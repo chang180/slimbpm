@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-import { register } from '@/routes';
+import company from '@/routes/company';
 import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
 import { LoaderCircle, Mail, Lock, ArrowRight } from 'lucide-react';
@@ -134,8 +134,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
                             <p className="text-sm text-gray-600 dark:text-gray-400">
                                 還沒有帳戶？{' '}
-                                <TextLink 
-                                    href={register()} 
+                                <TextLink
+                                    href={company.register()}
                                     className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400"
                                     tabIndex={5}
                                 >

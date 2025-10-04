@@ -29,10 +29,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('verify-email', EmailVerificationPromptController::class)
-        ->name('verification.notice');
+    // 使用 Fortify 的 verification.notice 路由，這裡不需要重複定義
+    // Route::get('verify-email', EmailVerificationPromptController::class)
+    //     ->name('verification.notice');
 
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+    Route::get('email/verify/{id}/{hash}', VerifyEmailController::class)
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 

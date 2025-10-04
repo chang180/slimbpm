@@ -7,6 +7,7 @@ use App\Models\OrganizationSetting;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -70,7 +71,9 @@ class CompanyRegistrationController extends Controller
 
         event(new Registered($user));
 
-        // 不自動登入，讓用戶先驗證郵件
+        // 登入用戶以便訪問驗證頁面
+        Auth::login($user);
+
         return redirect()->route('verification.notice')
             ->with('success', '企業註冊成功！請檢查您的郵件並完成驗證。');
     }
