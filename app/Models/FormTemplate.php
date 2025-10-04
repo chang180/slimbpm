@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FormTemplate extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'name',
         'description',
         'definition',
+        'category',
+        'tags',
+        'is_public',
         'workflow_template_id',
         'is_active',
         'created_by',
@@ -19,6 +24,8 @@ class FormTemplate extends Model
 
     protected $casts = [
         'definition' => 'array',
+        'tags' => 'array',
+        'is_public' => 'boolean',
         'is_active' => 'boolean',
     ];
 
