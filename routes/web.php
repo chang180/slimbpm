@@ -4,7 +4,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return Inertia::render('welcome', [
+        'auth' => [
+            'user' => auth()->user() ? [
+                'id' => auth()->user()->id,
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'organization' => auth()->user()->organization ? [
+                    'id' => auth()->user()->organization->id,
+                    'name' => auth()->user()->organization->name,
+                    'slug' => auth()->user()->organization->slug,
+                ] : null,
+            ] : null,
+        ],
+    ]);
 })->name('home');
 
 // Fortify重導向路由
