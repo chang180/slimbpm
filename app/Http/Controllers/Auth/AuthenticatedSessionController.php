@@ -47,6 +47,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // 重新載入用戶以確保組織關係已載入
+        $user->load('organization');
+
         // 根據用戶角色分流到不同界面
         return $this->redirectBasedOnRole($user);
     }
@@ -56,15 +59,23 @@ class AuthenticatedSessionController extends Controller
      */
     private function redirectBasedOnRole($user): RedirectResponse
     {
+        // 獲取用戶所屬組織的 slug
+        $slug = $user->organization?->slug;
+        
+        if (!$slug) {
+            // 如果用戶沒有組織，重定向到歡迎頁面
+            return redirect()->intended(route('home'));
+        }
+        
         switch ($user->role) {
             case 'admin':
             case 'manager':
                 // 管理員和主管進入後台管理界面
-                return redirect()->intended(route('dashboard', absolute: false));
+                return redirect()->intended(route('dashboard', ['slug' => $slug]));
             case 'user':
             default:
                 // 一般用戶進入前台用戶界面 (暫時重定向到儀表板)
-                return redirect()->intended(route('dashboard', absolute: false));
+                return redirect()->intended(route('dashboard', ['slug' => $slug]));
         }
     }
 
