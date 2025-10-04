@@ -28,6 +28,9 @@ Route::prefix('v1')->group(function () {
 
     // Workflow Management
     Route::apiResource('workflows', App\Http\Controllers\Api\WorkflowController::class);
+    Route::post('workflows/{workflow}/duplicate', [App\Http\Controllers\Api\WorkflowController::class, 'duplicate'])->name('workflows.duplicate');
+    Route::get('workflows/{workflow}/export', [App\Http\Controllers\Api\WorkflowController::class, 'export'])->name('workflows.export');
+    Route::post('workflows/import', [App\Http\Controllers\Api\WorkflowController::class, 'import'])->name('workflows.import');
     Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class);
     Route::patch('workflow-instances/{workflow_instance}/steps/{step}', [App\Http\Controllers\Api\WorkflowStepController::class, 'update'])->name('workflow-instances.steps.update');
 

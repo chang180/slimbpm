@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WorkflowController extends Controller
@@ -41,7 +42,7 @@ class WorkflowController extends Controller
         $data = $request->validated();
         $definition = $data['definition'];
         $parentId = $data['parent_id'] ?? null;
-        $userId = $request->user()->id;
+        $userId = Auth::id();
 
         $template = DB::transaction(function () use ($data, $definition, $parentId, $userId) {
             $payload = [
@@ -81,7 +82,9 @@ class WorkflowController extends Controller
 
     public function update(WorkflowTemplateUpdateRequest $request, WorkflowTemplate $workflow): JsonResponse|WorkflowTemplateResource
     {
-        if ($request->boolean('create_new_version')) {
+        $data = $request->validated();
+        $createNewVersion = $data['create_new_version'] ?? false;
+        if ($createNewVersion) {
             $template = DB::transaction(function () use ($request, $workflow) {
                 $data = $request->validated();
 
@@ -91,7 +94,7 @@ class WorkflowController extends Controller
                     'definition' => $data['definition'] ?? $workflow->definition,
                     'is_active' => $data['is_active'] ?? $workflow->is_active,
                     'is_current' => true,
-                    'created_by' => $request->user()->id,
+                    'created_by' => Auth::id(),
                     'parent_id' => $workflow->parent_id ?? $workflow->id,
                     'version' => $data['version'] ?? $this->incrementVersion($workflow->version),
                 ];
@@ -140,6 +143,86 @@ class WorkflowController extends Controller
         });
 
         return response()->noContent();
+    }
+
+    public function duplicate(WorkflowTemplate $workflow, Request $request): JsonResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+        ]);
+
+        $newTemplate = DB::transaction(function () use ($workflow, $request) {
+            return WorkflowTemplate::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description', $workflow->description),
+                'definition' => $workflow->definition,
+                'version' => '1.0.0',
+                'parent_id' => null,
+                'is_current' => true,
+                'is_active' => true,
+                'created_by' => $request->user()->id,
+            ]);
+        });
+
+        return (new WorkflowTemplateResource($newTemplate->load('creator')))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+    public function export(WorkflowTemplate $workflow): JsonResponse
+    {
+        return response()->json([
+            'id' => $workflow->id,
+            'name' => $workflow->name,
+            'description' => $workflow->description,
+            'definition' => $workflow->definition,
+            'version' => $workflow->version,
+            'exported_at' => now()->toIso8601String(),
+        ]);
+    }
+
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:json',
+        ]);
+
+        $content = file_get_contents($request->file('file')->getPathname());
+        $data = json_decode($content, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'Invalid JSON file'], 400);
+        }
+
+        $validator = validator($data, [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'definition' => 'required|array',
+            'definition.nodes' => 'required|array|min:1',
+            'definition.edges' => 'required|array',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $template = DB::transaction(function () use ($data, $request) {
+            return WorkflowTemplate::create([
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
+                'definition' => $data['definition'],
+                'version' => '1.0.0',
+                'parent_id' => null,
+                'is_current' => true,
+                'is_active' => true,
+                'created_by' => $request->user()->id,
+            ]);
+        });
+
+        return (new WorkflowTemplateResource($template->load('creator')))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     private function markLineageAsNotCurrent(int $rootId): void
