@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
@@ -56,7 +57,7 @@ class NotificationController extends Controller
     public function show(Notification $notification): JsonResponse
     {
         // 檢查權限
-        if ($notification->user_id !== auth()->id()) {
+        if ($notification->user_id !== Auth::id()) {
             return response()->json(['message' => '無權限查看此通知'], 403);
         }
 
@@ -69,7 +70,7 @@ class NotificationController extends Controller
     public function update(Request $request, Notification $notification): JsonResponse
     {
         // 檢查權限
-        if ($notification->user_id !== auth()->id()) {
+        if ($notification->user_id !== Auth::id()) {
             return response()->json(['message' => '無權限修改此通知'], 403);
         }
 
@@ -88,7 +89,7 @@ class NotificationController extends Controller
     public function destroy(Notification $notification): JsonResponse
     {
         // 檢查權限
-        if ($notification->user_id !== auth()->id()) {
+        if ($notification->user_id !== Auth::id()) {
             return response()->json(['message' => '無權限刪除此通知'], 403);
         }
 
@@ -103,7 +104,7 @@ class NotificationController extends Controller
     public function markAsRead(Notification $notification): JsonResponse
     {
         // 檢查權限
-        if ($notification->user_id !== auth()->id()) {
+        if ($notification->user_id !== Auth::id()) {
             return response()->json(['message' => '無權限修改此通知'], 403);
         }
 

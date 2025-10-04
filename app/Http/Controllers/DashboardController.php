@@ -7,6 +7,7 @@ use App\Models\FormTemplate;
 use App\Models\User;
 use App\Models\WorkflowTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -19,6 +20,7 @@ class DashboardController extends Controller
     {
         // 從中間件獲取當前組織
         $organization = $request->get('current_organization');
+        $user = Auth::user();
 
         // 獲取該組織的統計資料
         $stats = [
@@ -95,11 +97,107 @@ class DashboardController extends Controller
             });
         }
 
+        // 獲取工作流程實例 (模擬資料)
+        $workflowInstances = [
+            [
+                'id' => '1',
+                'name' => '請假申請流程',
+                'status' => 'pending',
+                'currentStep' => '部門主管審核',
+                'assignee' => '李主管',
+                'dueDate' => now()->addDays(3)->toISOString(),
+                'priority' => 'medium',
+                'createdAt' => now()->subDays(1)->toISOString(),
+            ],
+            [
+                'id' => '2',
+                'name' => '採購申請流程',
+                'status' => 'in_progress',
+                'currentStep' => '財務審核',
+                'assignee' => '王會計',
+                'dueDate' => now()->addDays(5)->toISOString(),
+                'priority' => 'high',
+                'createdAt' => now()->subDays(2)->toISOString(),
+            ],
+            [
+                'id' => '3',
+                'name' => '設備維修申請',
+                'status' => 'completed',
+                'currentStep' => '已完成',
+                'assignee' => '張技師',
+                'dueDate' => now()->subDays(1)->toISOString(),
+                'priority' => 'low',
+                'createdAt' => now()->subDays(5)->toISOString(),
+            ],
+        ];
+
+        // 獲取工作流程模板 (模擬資料)
+        $workflowTemplates = [
+            [
+                'id' => '1',
+                'name' => '請假申請流程',
+                'description' => '員工請假申請的標準流程',
+                'category' => '人事管理',
+                'isActive' => true,
+                'usageCount' => 15,
+            ],
+            [
+                'id' => '2',
+                'name' => '採購申請流程',
+                'description' => '物品採購申請的審批流程',
+                'category' => '財務管理',
+                'isActive' => true,
+                'usageCount' => 8,
+            ],
+            [
+                'id' => '3',
+                'name' => '設備維修申請',
+                'description' => '設備故障維修的申請流程',
+                'category' => '設備管理',
+                'isActive' => true,
+                'usageCount' => 12,
+            ],
+        ];
+
+        // 獲取邀請記錄 (模擬資料)
+        $invitations = [
+            [
+                'id' => '1',
+                'email' => 'newuser1@company.com',
+                'role' => 'user',
+                'status' => 'sent',
+                'sentAt' => now()->subDays(1)->toISOString(),
+                'expiresAt' => now()->addDays(6)->toISOString(),
+            ],
+            [
+                'id' => '2',
+                'email' => 'newuser2@company.com',
+                'role' => 'manager',
+                'status' => 'pending',
+                'sentAt' => now()->subHours(2)->toISOString(),
+                'expiresAt' => now()->addDays(6)->toISOString(),
+            ],
+        ];
+
         return Inertia::render('dashboard', [
             'stats' => $stats,
             'recentActivities' => $recentActivities,
             'chartData' => $chartData,
             'departmentStats' => $departmentStats,
+            'workflowInstances' => $workflowInstances,
+            'workflowTemplates' => $workflowTemplates,
+            'invitations' => $invitations,
+            'organization' => [
+                'id' => $organization->id,
+                'name' => $organization->name,
+                'slug' => $organization->slug,
+            ],
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
+            ],
         ]);
     }
 }

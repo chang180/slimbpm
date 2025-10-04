@@ -7,6 +7,7 @@ use App\Models\FormTemplate;
 use App\Models\FormSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class FormController extends Controller
@@ -63,7 +64,7 @@ class FormController extends Controller
             'category' => $validated['category'] ?? '未分類',
             'tags' => $validated['tags'] ?? [],
             'is_public' => $validated['is_public'] ?? false,
-            'created_by' => auth()->id(),
+            'created_by' => Auth::id(),
         ]);
         
         return response()->json($form->load('creator'), 201);
@@ -83,7 +84,7 @@ class FormController extends Controller
     public function update(Request $request, FormTemplate $form): JsonResponse
     {
         // 檢查權限
-        if ($form->created_by !== auth()->id()) {
+        if ($form->created_by !== Auth::id()) {
             return response()->json(['message' => '無權限修改此表單'], 403);
         }
         
@@ -107,7 +108,7 @@ class FormController extends Controller
     public function destroy(FormTemplate $form): JsonResponse
     {
         // 檢查權限
-        if ($form->created_by !== auth()->id()) {
+        if ($form->created_by !== Auth::id()) {
             return response()->json(['message' => '無權限刪除此表單'], 403);
         }
         
@@ -123,7 +124,7 @@ class FormController extends Controller
     {
         $newForm = $form->replicate();
         $newForm->name = $form->name . ' (複製)';
-        $newForm->created_by = auth()->id();
+        $newForm->created_by = Auth::id();
         $newForm->is_public = false;
         $newForm->save();
         
@@ -143,7 +144,7 @@ class FormController extends Controller
         $submission = FormSubmission::create([
             'form_template_id' => $form->id,
             'data' => $validated,
-            'submitted_by' => auth()->id(),
+            'submitted_by' => Auth::id(),
             'status' => 'submitted',
             'submitted_at' => now(),
         ]);
@@ -160,7 +161,7 @@ class FormController extends Controller
     public function submissions(FormTemplate $form): JsonResponse
     {
         // 檢查權限
-        if ($form->created_by !== auth()->id()) {
+        if ($form->created_by !== Auth::id()) {
             return response()->json(['message' => '無權限查看此表單的提交記錄'], 403);
         }
         
