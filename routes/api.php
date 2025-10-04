@@ -31,14 +31,15 @@ Route::prefix('v1')->middleware('auth')->group(function () {
 
     // Workflow Management
     Route::apiResource('workflows', App\Http\Controllers\Api\WorkflowController::class);
-    // Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class); // Not implemented yet
+    Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class);
+    Route::patch('workflow-instances/{workflow_instance}/steps/{step}', [App\Http\Controllers\Api\WorkflowStepController::class, 'update'])->name('workflow-instances.steps.update');
 
     // Form Management
     Route::apiResource('forms', App\Http\Controllers\Api\FormController::class);
     Route::post('forms/{form}/duplicate', [App\Http\Controllers\Api\FormController::class, 'duplicate']);
     Route::post('forms/{form}/submit', [App\Http\Controllers\Api\FormController::class, 'submit']);
     Route::get('forms/{form}/submissions', [App\Http\Controllers\Api\FormController::class, 'submissions']);
-    // Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class); // Not implemented yet
+    Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class);
 
     // Notification Management
     Route::get('notifications/unread-count', [App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);

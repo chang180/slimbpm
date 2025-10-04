@@ -40,6 +40,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             'destroy' => 'web.users.destroy',
         ]
     ]);
+
+    // 工作流程設計器路由
+    Route::get('workflows/designer', function () {
+        return Inertia::render('workflows/designer', [
+            'workflow' => null,
+            'canEdit' => true,
+        ]);
+    })->name('workflows.designer');
 });
 
 require __DIR__.'/settings.php';
