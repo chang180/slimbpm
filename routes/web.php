@@ -18,7 +18,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('form-builder');
     
     // 用戶管理路由
-    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::resource('users', App\Http\Controllers\UserController::class, [
+        'names' => [
+            'index' => 'web.users.index',
+            'create' => 'web.users.create',
+            'store' => 'web.users.store',
+            'show' => 'web.users.show',
+            'edit' => 'web.users.edit',
+            'update' => 'web.users.update',
+            'destroy' => 'web.users.destroy',
+        ]
+    ]);
 });
 
 require __DIR__.'/settings.php';

@@ -93,7 +93,7 @@ class UserController extends Controller
             $user->departments()->sync($validated['departments']);
         }
 
-        return redirect()->route('users.index')
+        return redirect()->route('web.users.index')
             ->with('success', '用戶建立成功！');
     }
 
@@ -161,7 +161,7 @@ class UserController extends Controller
             $user->departments()->sync($validated['departments']);
         }
 
-        return redirect()->route('users.index')
+        return redirect()->route('web.users.index')
             ->with('success', '用戶更新成功！');
     }
 
@@ -172,7 +172,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return redirect()->route('users.index')
+        return redirect()->route('web.users.index')
             ->with('success', '用戶刪除成功！');
     }
 }
