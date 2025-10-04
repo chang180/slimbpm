@@ -3,19 +3,24 @@
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('registration screen can be rendered', function () {
-    $response = $this->get(route('register'));
+    $response = $this->get(route('company.register'));
 
     $response->assertStatus(200);
 });
 
 test('new users can register', function () {
-    $response = $this->post(route('register.store'), [
-        'name' => 'Test User',
-        'email' => 'test@example.com',
+    $response = $this->post(route('company.register'), [
+        'company_name' => 'Test Company',
+        'contact_person' => 'Test User',
+        'contact_email' => 'test@example.com',
+        'industry' => 'Technology',
+        'admin_name' => 'Test Admin',
+        'admin_email' => 'admin@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
 
-    $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    // 註冊後不會自動登入，需要驗證郵件
+    $this->assertGuest();
+    $response->assertRedirect(route('verification.notice'));
 });

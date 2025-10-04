@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 use Laravel\Fortify\Fortify;
@@ -17,7 +16,76 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // 自定義email verification的重定向邏輯
+        $this->app->instance(\Laravel\Fortify\Contracts\VerifyEmailResponse::class, new class implements \Laravel\Fortify\Contracts\VerifyEmailResponse
+        {
+            public function toResponse($request)
+            {
+                $user = \Illuminate\Support\Facades\Auth::user();
+
+                if (! $user) {
+                    return redirect()->route('home');
+                }
+
+                // 重新從資料庫取得用戶資料以確保有最新的 organization_id
+                $user = \App\Models\User::find($user->id);
+
+                if ($user && $user->organization_id) {
+                    $organization = \App\Models\OrganizationSetting::find($user->organization_id);
+                    if ($organization) {
+                        return redirect(route('dashboard', ['slug' => $organization->slug]).'?verified=1');
+                    }
+                }
+
+                return redirect()->route('home');
+            }
+        });
+
+        // 自定義登入後的重定向邏輯
+        $this->app->instance(\Laravel\Fortify\Contracts\LoginResponse::class, new class implements \Laravel\Fortify\Contracts\LoginResponse
+        {
+            public function toResponse($request)
+            {
+                $user = \Illuminate\Support\Facades\Auth::user();
+
+                if (! $user) {
+                    return redirect()->route('home');
+                }
+
+                // 直接使用 organization_id 查詢組織
+                if ($user->organization_id) {
+                    $organization = \App\Models\OrganizationSetting::find($user->organization_id);
+                    if ($organization) {
+                        return redirect()->intended(route('dashboard', ['slug' => $organization->slug]));
+                    }
+                }
+
+                return redirect()->route('home');
+            }
+        });
+
+        // 自定義註冊後的重定向邏輯
+        $this->app->instance(\Laravel\Fortify\Contracts\RegisterResponse::class, new class implements \Laravel\Fortify\Contracts\RegisterResponse
+        {
+            public function toResponse($request)
+            {
+                $user = \Illuminate\Support\Facades\Auth::user();
+
+                if (! $user) {
+                    return redirect()->route('home');
+                }
+
+                // 直接使用 organization_id 查詢組織
+                if ($user->organization_id) {
+                    $organization = \App\Models\OrganizationSetting::find($user->organization_id);
+                    if ($organization) {
+                        return redirect()->intended(route('dashboard', ['slug' => $organization->slug]));
+                    }
+                }
+
+                return redirect()->route('home');
+            }
+        });
     }
 
     /**
@@ -27,37 +95,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
         Fortify::confirmPasswordView(fn () => Inertia::render('auth/confirm-password'));
-
-        // 自定義登入後的重定向邏輯
-        Fortify::loginView(function () {
-            return redirect()->route('home');
-        });
-
-        // 重寫登入成功後的重定向
-        Fortify::redirects('login', function (Request $request) {
-            $user = Auth::user();
-            
-            if (!$user) {
-                return redirect()->route('home');
-            }
-
-            // 載入組織關係
-            $user->load('organization');
-            $slug = $user->organization?->slug;
-            
-            if (!$slug) {
-                return redirect()->route('home');
-            }
-
-            // 根據用戶角色重定向
-            switch ($user->role) {
-                case 'admin':
-                case 'manager':
-                case 'user':
-                default:
-                    return redirect()->intended(route('dashboard', ['slug' => $slug]));
-            }
-        });
+        Fortify::verifyEmailView(fn () => Inertia::render('auth/verify-email'));
 
         RateLimiter::for('two-factor', function (Request $request) {
             return Limit::perMinute(5)->by($request->session()->get('login.id'));

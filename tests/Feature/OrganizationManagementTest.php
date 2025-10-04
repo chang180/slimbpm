@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\OrganizationSetting;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -19,38 +19,36 @@ class OrganizationManagementTest extends TestCase
 
     public function test_can_view_organization_index(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/organization');
 
         $response->assertStatus(200)
-            ->assertInertia(fn ($page) => 
-                $page->component('Organization/Index')
-                    ->has('organization')
-                    ->has('stats')
+            ->assertInertia(fn ($page) => $page->component('Organization/Index')
+                ->has('organization')
+                ->has('stats')
             );
     }
 
     public function test_can_view_organization_settings(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/organization/settings');
 
         $response->assertStatus(200)
-            ->assertInertia(fn ($page) => 
-                $page->component('Organization/Settings')
-                    ->has('organization')
-                    ->has('settings')
+            ->assertInertia(fn ($page) => $page->component('Organization/Settings')
+                ->has('organization')
+                ->has('settings')
             );
     }
 
     public function test_can_update_organization_settings(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $settingsData = [
             'timezone' => 'Asia/Taipei',
@@ -89,38 +87,36 @@ class OrganizationManagementTest extends TestCase
 
     public function test_can_view_organization_info(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/organization/info');
 
         $response->assertStatus(200)
-            ->assertInertia(fn ($page) => 
-                $page->component('Organization/Info')
-                    ->has('organization')
-                    ->has('stats')
+            ->assertInertia(fn ($page) => $page->component('Organization/Info')
+                ->has('organization')
+                ->has('stats')
             );
     }
 
     public function test_can_view_organization_preferences(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/organization/preferences');
 
         $response->assertStatus(200)
-            ->assertInertia(fn ($page) => 
-                $page->component('Organization/Preferences')
-                    ->has('organization')
-                    ->has('preferences')
+            ->assertInertia(fn ($page) => $page->component('Organization/Preferences')
+                ->has('organization')
+                ->has('preferences')
             );
     }
 
     public function test_can_update_organization_preferences(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $preferencesData = [
             'system' => [
@@ -160,16 +156,15 @@ class OrganizationManagementTest extends TestCase
 
     public function test_can_view_organization_reports(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/organization/reports');
 
         $response->assertStatus(200)
-            ->assertInertia(fn ($page) => 
-                $page->component('Organization/Reports')
-                    ->has('organization')
-                    ->has('stats')
+            ->assertInertia(fn ($page) => $page->component('Organization/Reports')
+                ->has('organization')
+                ->has('stats')
             );
     }
 
@@ -193,8 +188,8 @@ class OrganizationManagementTest extends TestCase
 
     public function test_organization_settings_validation(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->putJson('/organization/settings', []);
 
@@ -213,8 +208,8 @@ class OrganizationManagementTest extends TestCase
 
     public function test_organization_preferences_validation(): void
     {
-        $user = User::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->putJson('/organization/preferences', []);
 

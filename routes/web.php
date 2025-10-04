@@ -7,6 +7,27 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+// Fortify重導向路由
+Route::get('/dashboard-redirect', function () {
+    $user = auth()->user();
+
+    if (! $user) {
+        return redirect()->route('home');
+    }
+
+    // 重新從資料庫取得用戶資料以確保有最新的 organization_id
+    $user = \App\Models\User::find($user->id);
+
+    if ($user && $user->organization_id) {
+        $organization = \App\Models\OrganizationSetting::find($user->organization_id);
+        if ($organization) {
+            return redirect(route('dashboard', ['slug' => $organization->slug]));
+        }
+    }
+
+    return redirect()->route('home');
+})->middleware('auth')->name('dashboard.redirect');
+
 // 企業註冊路由
 Route::get('/register', [App\Http\Controllers\Auth\CompanyRegistrationController::class, 'create'])->name('company.register');
 Route::post('/register', [App\Http\Controllers\Auth\CompanyRegistrationController::class, 'store']);

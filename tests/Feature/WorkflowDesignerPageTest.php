@@ -26,8 +26,10 @@ test('workflow designer page requires verified email when enabled', function () 
 });
 
 test('workflow designer page renders for authenticated users', function () {
+    $organization = \App\Models\OrganizationSetting::factory()->create();
     $user = User::factory()->create([
         'email_verified_at' => now(),
+        'organization_id' => $organization->id,
     ]);
 
     $this->actingAs($user)

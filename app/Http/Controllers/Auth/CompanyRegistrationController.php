@@ -7,7 +7,6 @@ use App\Models\OrganizationSetting;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
@@ -66,16 +65,14 @@ class CompanyRegistrationController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'admin',
             'organization_id' => $organization->id,
-            'email_verified_at' => now(), // 自動驗證
+            // 移除自動驗證，讓用戶通過郵件驗證
         ]);
 
         event(new Registered($user));
 
-        // 自動登入管理員
-        Auth::login($user);
-
-        return redirect()->route('dashboard', ['slug' => $slug])
-            ->with('success', '企業註冊成功！歡迎使用 SlimBPM 系統。');
+        // 不自動登入，讓用戶先驗證郵件
+        return redirect()->route('verification.notice')
+            ->with('success', '企業註冊成功！請檢查您的郵件並完成驗證。');
     }
 
     /**

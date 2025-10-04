@@ -27,12 +27,17 @@ class EnsureOrganizationAccess
         $slug = $request->route('slug');
 
         if (! $slug) {
-            // 如果沒有 slug，嘗試從用戶的組織獲取
-            if ($user->organization) {
-                return redirect()->route('dashboard', ['slug' => $user->organization->slug]);
+            // 如果沒有 slug，嘗試從 session 獲取
+            $slug = $request->session()->get('current_organization_slug');
+
+            if (! $slug && $user->organization) {
+                // 如果 session 中也沒有，從用戶的組織獲取
+                $slug = $user->organization->slug;
             }
 
-            return redirect()->route('home');
+            if (! $slug) {
+                return redirect()->route('home');
+            }
         }
 
         // 驗證 slug 對應的組織是否存在
@@ -46,6 +51,9 @@ class EnsureOrganizationAccess
         if ($user->organization_id !== $organization->id) {
             abort(403, '您沒有權限訪問該企業的系統');
         }
+
+        // 將當前組織 slug 存入 session
+        $request->session()->put('current_organization_slug', $organization->slug);
 
         // 將組織資訊添加到請求中，方便後續使用
         $request->merge(['current_organization' => $organization]);

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Department;
 use App\Models\OrganizationSetting;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,8 +20,9 @@ class UserManagementUITest extends TestCase
 
     public function test_can_view_users_index_page(): void
     {
-        $user = User::factory()->create(['role' => 'admin']);
-        User::factory()->count(3)->create();
+        $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        User::factory()->count(3)->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($user)->get('/users');
 
@@ -35,7 +36,8 @@ class UserManagementUITest extends TestCase
 
     public function test_can_view_user_create_page(): void
     {
-        $user = User::factory()->create(['role' => 'admin']);
+        $organization = OrganizationSetting::factory()->create();
+        $user = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
         Department::factory()->count(2)->create();
         OrganizationSetting::factory()->count(2)->create();
 
@@ -45,15 +47,15 @@ class UserManagementUITest extends TestCase
             ->assertInertia(fn ($page) => $page
                 ->component('Users/Create')
                 ->has('departments', 2)
-                ->has('organizations', 2)
+                ->has('organizations', 3)
             );
     }
 
     public function test_can_create_new_user(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $department = Department::factory()->create();
         $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $department = Department::factory()->create();
 
         $userData = [
             'name' => 'New User',
@@ -81,8 +83,9 @@ class UserManagementUITest extends TestCase
 
     public function test_can_view_user_show_page(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $user = User::factory()->create(['organization_id' => $organization->id]);
         $user->departments()->attach(Department::factory()->create());
 
         $response = $this->actingAs($admin)->get("/users/{$user->id}");
@@ -97,8 +100,9 @@ class UserManagementUITest extends TestCase
 
     public function test_can_view_user_edit_page(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $user = User::factory()->create(['organization_id' => $organization->id]);
         Department::factory()->count(2)->create();
         OrganizationSetting::factory()->count(2)->create();
 
@@ -109,14 +113,15 @@ class UserManagementUITest extends TestCase
                 ->component('Users/Edit')
                 ->has('user')
                 ->has('departments', 2)
-                ->has('organizations', 2)
+                ->has('organizations', 3)
             );
     }
 
     public function test_can_update_user(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $user = User::factory()->create(['organization_id' => $organization->id]);
         $department = Department::factory()->create();
 
         $updateData = [
@@ -143,8 +148,9 @@ class UserManagementUITest extends TestCase
 
     public function test_can_delete_user(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->delete("/users/{$user->id}");
 
@@ -156,9 +162,10 @@ class UserManagementUITest extends TestCase
 
     public function test_can_search_users(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com']);
-        User::factory()->create(['name' => 'Jane Smith', 'email' => 'jane@example.com']);
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com', 'organization_id' => $organization->id]);
+        User::factory()->create(['name' => 'Jane Smith', 'email' => 'jane@example.com', 'organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->get('/users?search=John');
 
@@ -172,9 +179,10 @@ class UserManagementUITest extends TestCase
 
     public function test_can_filter_users_by_role(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->create(['role' => 'manager']);
-        User::factory()->create(['role' => 'user']);
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        User::factory()->create(['role' => 'manager', 'organization_id' => $organization->id]);
+        User::factory()->create(['role' => 'user', 'organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->get('/users?role=manager');
 
@@ -188,9 +196,10 @@ class UserManagementUITest extends TestCase
 
     public function test_can_filter_users_by_status(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        User::factory()->create(['is_active' => true]);
-        User::factory()->create(['is_active' => false]);
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        User::factory()->create(['is_active' => true, 'organization_id' => $organization->id]);
+        User::factory()->create(['is_active' => false, 'organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->get('/users?status=inactive');
 
@@ -220,7 +229,8 @@ class UserManagementUITest extends TestCase
 
     public function test_validates_user_creation_data(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->post('/users', []);
 
@@ -229,8 +239,9 @@ class UserManagementUITest extends TestCase
 
     public function test_validates_user_update_data(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $user = User::factory()->create();
+        $organization = OrganizationSetting::factory()->create();
+        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
+        $user = User::factory()->create(['organization_id' => $organization->id]);
 
         $response = $this->actingAs($admin)->put("/users/{$user->id}", []);
 

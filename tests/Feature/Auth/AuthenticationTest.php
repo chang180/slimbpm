@@ -13,7 +13,8 @@ test('login screen can be rendered', function () {
 });
 
 test('users can authenticate using the login screen', function () {
-    $user = User::factory()->withoutTwoFactor()->create();
+    $organization = \App\Models\OrganizationSetting::factory()->create();
+    $user = User::factory()->withoutTwoFactor()->create(['organization_id' => $organization->id]);
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,
@@ -21,7 +22,7 @@ test('users can authenticate using the login screen', function () {
     ]);
 
     $this->assertAuthenticated();
-    $response->assertRedirect(route('dashboard', absolute: false));
+    $response->assertRedirect(route('dashboard', ['slug' => $organization->slug]));
 });
 
 test('users with two factor enabled are redirected to two factor challenge', function () {

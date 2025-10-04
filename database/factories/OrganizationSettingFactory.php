@@ -18,6 +18,10 @@ class OrganizationSettingFactory extends Factory
     {
         return [
             'name' => fake()->company(),
+            'slug' => fake()->uuid(),
+            'contact_person' => fake()->name(),
+            'contact_email' => fake()->email(),
+            'industry' => fake()->randomElement(['Technology', 'Healthcare', 'Finance', 'Education', 'Manufacturing']),
             'settings' => [
                 'timezone' => fake()->timezone(),
                 'currency' => fake()->currencyCode(),
