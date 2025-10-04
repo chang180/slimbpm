@@ -45,10 +45,10 @@ export interface SelectOption {
 
 // 條件式邏輯
 export interface ConditionalLogic {
-  field: string;
-  operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
-  value: any;
-  action: 'show' | 'hide' | 'require' | 'optional';
+  field?: string;
+  operator?: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than';
+  value?: any;
+  action?: 'show' | 'hide' | 'require' | 'optional';
 }
 
 // 表單定義
@@ -98,6 +98,8 @@ export interface FormSettings {
   submitButtonText: string;
   successMessage: string;
   redirectUrl?: string;
+  formId?: string;
+  customClass?: string;
 }
 
 // 表單提交資料

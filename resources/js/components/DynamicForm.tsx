@@ -253,7 +253,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         />
 
         {fieldError && (
-          <p className="mt-1 text-sm text-red-600">{fieldError.message}</p>
+          <p className="mt-1 text-sm text-red-600">
+            {typeof fieldError.message === 'string' ? fieldError.message : '此欄位有誤'}
+          </p>
         )}
       </div>
     );
