@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
@@ -17,7 +18,7 @@ class VerifyEmailMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public \Illuminate\Contracts\Auth\MustVerifyEmail $notifiable,
+        public MustVerifyEmail $notifiable,
         public string $verificationUrl
     ) {
         //
