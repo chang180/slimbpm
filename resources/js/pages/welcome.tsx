@@ -450,54 +450,47 @@ export default function Welcome() {
                     </div>
                 </div>
 
-                {/* Footer */}
-                <footer className="bg-gray-900 text-white py-12">
-                    <div className="max-w-7xl mx-auto px-6">
-                        <div className="grid md:grid-cols-4 gap-8">
-                            <div>
-                                <div className="flex items-center space-x-2 mb-4">
-                                    <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                                        <span className="text-white font-bold text-sm">S</span>
+                        {/* Footer */}
+                        <footer className="bg-gray-900 text-white py-12">
+                            <div className="max-w-7xl mx-auto px-6">
+                                <div className="grid md:grid-cols-3 gap-8">
+                                    <div>
+                                        <div className="flex items-center space-x-2 mb-4">
+                                            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                                                <span className="text-white font-bold text-sm">S</span>
+                                            </div>
+                                            <span className="text-xl font-bold">SlimBPM</span>
+                                        </div>
+                                        <p className="text-gray-400">
+                                            專為中小企業設計的輕量級工作流程管理系統
+                                        </p>
                                     </div>
-                                    <span className="text-xl font-bold">SlimBPM</span>
+                                    <div>
+                                        <h3 className="text-lg font-semibold mb-4">核心功能</h3>
+                                        <ul className="space-y-2 text-gray-400">
+                                            <li>表單設計器</li>
+                                            <li>工作流程引擎</li>
+                                            <li>用戶與部門管理</li>
+                                            <li>通知系統</li>
+                                            <li>數據分析報表</li>
+                                            <li>組織管理</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-lg font-semibold mb-4">系統特色</h3>
+                                        <ul className="space-y-2 text-gray-400">
+                                            <li>輕量級設計</li>
+                                            <li>易於使用</li>
+                                            <li>快速部署</li>
+                                            <li>成本效益高</li>
+                                        </ul>
+                                    </div>
                                 </div>
-                                <p className="text-gray-400">
-                                    專為中小企業設計的輕量級工作流程管理系統
-                                </p>
+                                <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                                    <p>&copy; 2025 SlimBPM (快簽). 版權所有。</p>
+                                </div>
                             </div>
-                            <div>
-                                <h3 className="text-lg font-semibold mb-4">產品功能</h3>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>表單設計器</li>
-                                    <li>工作流程引擎</li>
-                                    <li>用戶管理</li>
-                                    <li>通知系統</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold mb-4">技術支援</h3>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>使用指南</li>
-                                    <li>API 文件</li>
-                                    <li>常見問題</li>
-                                    <li>技術支援</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold mb-4">關於我們</h3>
-                                <ul className="space-y-2 text-gray-400">
-                                    <li>公司介紹</li>
-                                    <li>聯絡我們</li>
-                                    <li>隱私政策</li>
-                                    <li>服務條款</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                            <p>&copy; 2025 SlimBPM (快簽). 版權所有。</p>
-                        </div>
-                    </div>
-                </footer>
+                        </footer>
             </div>
         </>
     );

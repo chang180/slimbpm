@@ -181,7 +181,6 @@ Authorization: Bearer {your-token}
 
 - **專案維護者**: 開發團隊
 - **Linear 專案**: [SlimBPM (快簽)](https://linear.app/devstream-core/project/slimbpm-快簽)
-- **技術支援**: 透過 Linear Issues
 
 ---
 
