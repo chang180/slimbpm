@@ -28,6 +28,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'org.access' => EnsureOrganizationAccess::class,
         ]);
+
+        // 覆蓋默認的 RedirectIfAuthenticated 中間件
+        $middleware->web(replace: [
+            \Illuminate\Auth\Middleware\RedirectIfAuthenticated::class => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
