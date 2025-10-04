@@ -24,9 +24,9 @@ export default function Navigation() {
                         <span className="text-sm text-gray-600 dark:text-gray-300">深色</span>
                     </div>
                     
-                    {auth.user ? (
+                    {auth.user && auth.user.organization?.slug ? (
                         <Link
-                            href={`/dashboard/${auth.user.organization?.slug || ''}`}
+                            href={`/dashboard/${auth.user.organization.slug}`}
                             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                         >
                             進入系統

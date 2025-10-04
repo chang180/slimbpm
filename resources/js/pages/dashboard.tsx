@@ -4,6 +4,7 @@ import AppLayout from '@/layouts/app-layout';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { useSlug } from '@/hooks/useSlug';
 import { 
     Users, 
     Building2, 
@@ -29,12 +30,6 @@ import {
     Cell
 } from 'recharts';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: '儀表板',
-        href: dashboard().url,
-    },
-];
 
 interface DashboardProps {
     stats: {
@@ -70,8 +65,17 @@ export default function Dashboard({
     stats, 
     recentActivities, 
     chartData, 
-    departmentStats 
+    departmentStats
 }: DashboardProps) {
+    const slug = useSlug();
+    
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: '儀表板',
+            href: slug ? dashboard(slug).url : '#',
+        },
+    ];
+
     const getActivityIcon = (type: string) => {
         switch (type) {
             case 'user_login':

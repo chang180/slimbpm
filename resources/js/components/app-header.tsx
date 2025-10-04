@@ -32,14 +32,15 @@ import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import { useSlug } from '@/hooks/useSlug';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 
-const mainNavItems: NavItem[] = [
+const getMainNavItems = (slug?: string): NavItem[] => [
     {
         title: 'Dashboard',
-        href: dashboard().url,
+        href: slug ? dashboard(slug).url : '#',
         icon: LayoutGrid,
     },
 ];
@@ -68,6 +69,8 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+    const slug = useSlug();
+    const mainNavItems = getMainNavItems(slug);
     return (
         <>
             <div className="border-b border-sidebar-border/80">

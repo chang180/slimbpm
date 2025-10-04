@@ -13,13 +13,14 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
+import { useSlug } from '@/hooks/useSlug';
 import { BookOpen, Folder, LayoutGrid, Building2 } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const getMainNavItems = (slug?: string): NavItem[] => [
     {
         title: 'Dashboard',
-        href: dashboard().url,
+        href: slug ? dashboard(slug).url : '#',
         icon: LayoutGrid,
     },
     {
@@ -43,13 +44,16 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const slug = useSlug();
+    const mainNavItems = getMainNavItems(slug);
+    
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard().url} prefetch>
+                            <Link href={slug ? dashboard(slug).url : '#'} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
