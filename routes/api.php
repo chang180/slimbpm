@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -22,21 +22,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('v1')->middleware('auth')->group(function () {
     // Organization Management
     Route::apiResource('organizations', App\Http\Controllers\Api\OrganizationController::class);
-    
+
     // Department Management
     Route::apiResource('departments', App\Http\Controllers\Api\DepartmentController::class);
-    
+
+    // User Management
+    Route::apiResource('users', App\Http\Controllers\Api\UserController::class);
+
     // Workflow Management
     Route::apiResource('workflows', App\Http\Controllers\Api\WorkflowController::class);
-    
+    // Route::apiResource('workflow-instances', App\Http\Controllers\Api\WorkflowInstanceController::class); // Not implemented yet
+
     // Form Management
     Route::apiResource('forms', App\Http\Controllers\Api\FormController::class);
     Route::post('forms/{form}/duplicate', [App\Http\Controllers\Api\FormController::class, 'duplicate']);
     Route::post('forms/{form}/submit', [App\Http\Controllers\Api\FormController::class, 'submit']);
     Route::get('forms/{form}/submissions', [App\Http\Controllers\Api\FormController::class, 'submissions']);
-    // Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class);
-    
+    // Route::apiResource('form-submissions', App\Http\Controllers\Api\FormSubmissionController::class); // Not implemented yet
+
     // Notification Management
-    // Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class);
-    // Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class);
+    // Route::apiResource('notifications', App\Http\Controllers\Api\NotificationController::class); // Not implemented yet
+    // Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class); // Not implemented yet
 });
