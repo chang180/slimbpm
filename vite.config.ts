@@ -15,6 +15,7 @@ export default defineConfig({
         tailwindcss(),
         wayfinder({
             formVariants: true,
+            routes: false, // 禁用路由生成
         }),
     ],
     esbuild: {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { route } from '../../routes';
+import { forms } from '../../routes/forms';
 import { FormTemplate } from '../../types/FormTypes';
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import { Button } from '../../components/ui/button';
@@ -35,7 +35,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   const [isPublic, setIsPublic] = useState(filters.is_public);
 
   const handleFilter = () => {
-    router.get(route('forms.index'), {
+    router.get(forms.index.url(), {
       search: search || undefined,
       category: category === 'all' ? undefined : category || undefined,
       is_public: isPublic === 'all' ? undefined : isPublic,
@@ -46,7 +46,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   };
 
   const handleDuplicate = (formId: string) => {
-    router.post(route('forms.duplicate', formId), {}, {
+    router.post(forms.duplicate.url({ form: formId }), {}, {
       onSuccess: () => {
         // 成功後會重導向到新表單
       }
@@ -55,7 +55,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
 
   const handleDelete = (formId: string) => {
     if (confirm('確定要刪除此表單嗎？此操作無法復原。')) {
-      router.delete(route('forms.destroy', formId), {
+      router.delete(forms.destroy.url({ form: formId }), {
         onSuccess: () => {
           // 成功後會重導向到表單列表
         }
@@ -86,7 +86,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                 <h1 className="text-3xl font-bold text-gray-900">表單管理</h1>
                 <p className="mt-2 text-gray-600">建立和管理您的表單模板</p>
               </div>
-              <Link href={route('forms.create')}>
+              <Link href={forms.create.url()}>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
                   新增表單
@@ -203,28 +203,28 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
 
                     {/* 操作按鈕 */}
                     <div className="flex flex-wrap gap-2 pt-2">
-                      <Link href={route('forms.show', form.id)}>
+                      <Link href={forms.show.url({ form: form.id })}>
                         <Button variant="outline" size="sm">
                           <Eye className="w-3 h-3 mr-1" />
                           查看
                         </Button>
                       </Link>
                       
-                      <Link href={route('forms.edit', form.id)}>
+                      <Link href={forms.edit.url({ form: form.id })}>
                         <Button variant="outline" size="sm">
                           <Edit className="w-3 h-3 mr-1" />
                           編輯
                         </Button>
                       </Link>
                       
-                      <Link href={route('forms.submit', form.id)}>
+                      <Link href={forms.submit.url({ form: form.id })}>
                         <Button variant="outline" size="sm">
                           <Plus className="w-3 h-3 mr-1" />
                           提交
                         </Button>
                       </Link>
                       
-                      <Link href={route('forms.results', form.id)}>
+                      <Link href={forms.results.url({ form: form.id })}>
                         <Button variant="outline" size="sm">
                           <BarChart3 className="w-3 h-3 mr-1" />
                           結果
@@ -264,7 +264,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                   <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <h3 className="text-lg font-medium mb-2">沒有找到表單</h3>
                   <p className="mb-4">嘗試調整篩選條件或建立新的表單</p>
-                  <Link href={route('forms.create')}>
+                  <Link href={forms.create.url()}>
                     <Button>
                       <Plus className="w-4 h-4 mr-2" />
                       建立第一個表單

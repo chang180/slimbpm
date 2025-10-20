@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { route } from '../../routes';
+import { forms } from '../../routes/forms';
 import { FormTemplate, FormSubmission } from '../../types/FormTypes';
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import { Button } from '../../components/ui/button';
@@ -117,7 +117,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.get(route('forms.show', form.id))}
+                onClick={() => router.get(forms.show.url({ form: form.id }))}
                 className="mr-4"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -136,7 +136,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                   <Download className="w-4 h-4 mr-2" />
                   匯出 CSV
                 </Button>
-                <Link href={route('forms.submit', form.id)}>
+                <Link href={forms.submit.url({ form: form.id })}>
                   <Button>
                     <FileText className="w-4 h-4 mr-2" />
                     填寫表單
@@ -292,7 +292,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                       <p className="text-gray-600 mb-4">
                         {searchTerm || statusFilter ? '嘗試調整篩選條件' : '此表單還沒有任何提交記錄'}
                       </p>
-                      <Link href={route('forms.submit', form.id)}>
+                      <Link href={forms.submit.url({ form: form.id })}>
                         <Button variant="outline">
                           <FileText className="w-4 h-4 mr-2" />
                           填寫表單
