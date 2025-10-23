@@ -4,6 +4,8 @@ export { default as EnterpriseStats } from './EnterpriseStats';
 export { default as MemberInvitation } from './MemberInvitation';
 export { default as WorkflowMenu } from './WorkflowMenu';
 export { default as QuickActions } from './QuickActions';
+export { default as UserDashboard } from './UserDashboard';
+export { default as ManagerDashboard } from './ManagerDashboard';
 
 // 類型定義導出
 export type { default as DashboardHeaderProps } from './DashboardHeader';
@@ -11,3 +13,5 @@ export type { default as EnterpriseStatsProps } from './EnterpriseStats';
 export type { default as MemberInvitationProps } from './MemberInvitation';
 export type { default as WorkflowMenuProps } from './WorkflowMenu';
 export type { default as QuickActionsProps } from './QuickActions';
+export type { default as UserDashboardProps } from './UserDashboard';
+export type { default as ManagerDashboardProps } from './ManagerDashboard';
