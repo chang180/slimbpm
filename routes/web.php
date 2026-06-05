@@ -53,6 +53,11 @@ Route::post('/login/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::
 Route::get('/portal/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'createPortal'])->name('portal.login');
 Route::post('/portal/{slug}', [App\Http\Controllers\Auth\CompanyLoginController::class, 'storePortal']);
 
+// 邀請接受路由
+Route::get('/invitations/accept/{token}', [App\Http\Controllers\InvitationController::class, 'accept'])->name('invitations.accept');
+Route::post('/invitations/accept/{token}', [App\Http\Controllers\InvitationController::class, 'store'])->name('invitations.store');
+Route::post('/invitations/login/{token}', [App\Http\Controllers\InvitationController::class, 'login'])->name('invitations.login');
+
 Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
     Route::get('dashboard/{slug}', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
@@ -115,6 +120,9 @@ Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
         Route::post('/export/system-stats', [App\Http\Controllers\ReportsController::class, 'exportSystemStats'])->name('export.system-stats');
         Route::post('/export/workflow-performance', [App\Http\Controllers\ReportsController::class, 'exportWorkflowPerformance'])->name('export.workflow-performance');
     });
+
+    // 邀請管理路由（管理員用）
+    Route::get('/invitations', [App\Http\Controllers\InvitationManagementController::class, 'index'])->name('invitations.index');
 
     // 工作流程執行路由
     Route::prefix('workflows')->name('workflows.')->group(function () {

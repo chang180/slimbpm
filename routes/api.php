@@ -51,4 +51,10 @@ Route::prefix('v1')->middleware('auth')->group(function () {
     Route::post('notifications/{notification}/mark-as-read', [App\Http\Controllers\Api\NotificationController::class, 'markAsRead']);
     Route::apiResource('notification-settings', App\Http\Controllers\Api\NotificationSettingController::class);
     Route::post('notification-settings/reset', [App\Http\Controllers\Api\NotificationSettingController::class, 'reset']);
+
+    // Invitation Management
+    Route::get('invitations', [App\Http\Controllers\Api\InvitationController::class, 'index'])->name('api.invitations.index');
+    Route::post('invitations', [App\Http\Controllers\Api\InvitationController::class, 'store'])->name('api.invitations.store');
+    Route::delete('invitations/{invitation}', [App\Http\Controllers\Api\InvitationController::class, 'destroy'])->name('api.invitations.destroy');
+    Route::post('invitations/{invitation}/resend', [App\Http\Controllers\Api\InvitationController::class, 'resend'])->name('api.invitations.resend');
 });
