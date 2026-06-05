@@ -116,13 +116,18 @@ Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
         Route::post('/export/workflow-performance', [App\Http\Controllers\ReportsController::class, 'exportWorkflowPerformance'])->name('export.workflow-performance');
     });
 
-    // 工作流程設計器路由
-    Route::get('workflows/designer', function () {
-        return Inertia::render('workflows/designer', [
-            'workflow' => null,
-            'canEdit' => true,
-        ]);
-    })->name('workflows.designer');
+    // 工作流程執行路由
+    Route::prefix('workflows')->name('workflows.')->group(function () {
+        Route::get('/', [App\Http\Controllers\WorkflowInstanceController::class, 'index'])->name('index');
+        Route::get('/start', [App\Http\Controllers\WorkflowInstanceController::class, 'create'])->name('start');
+        Route::get('/designer', function () {
+            return Inertia::render('workflows/designer', [
+                'workflow' => null,
+                'canEdit' => true,
+            ]);
+        })->name('designer');
+        Route::get('/{workflowInstance}', [App\Http\Controllers\WorkflowInstanceController::class, 'show'])->name('show');
+    });
 });
 
 require __DIR__.'/settings.php';
