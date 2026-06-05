@@ -121,6 +121,9 @@ Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
         Route::post('/export/workflow-performance', [App\Http\Controllers\ReportsController::class, 'exportWorkflowPerformance'])->name('export.workflow-performance');
     });
 
+    // 通知中心路由
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+
     // 邀請管理路由（管理員用）
     Route::get('/invitations', [App\Http\Controllers\InvitationManagementController::class, 'index'])->name('invitations.index');
 
