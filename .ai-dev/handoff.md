@@ -5,7 +5,7 @@
 
 ---
 
-## 📅 最後更新：2026-06-06（實作狀態盤點：handoff 完成度修正）
+## 📅 最後更新：2026-06-06（立即任務改為建立 AI-first 開發文件庫）
 
 ---
 
@@ -96,24 +96,45 @@
 
 ## 📋 下一步開發順序
 
-### 🎯 後續任務 (依優先順序)
-1. **先修前端可用性阻斷**
-   - 修 `npm run types` 的主要錯誤，至少先讓 Forms、Dashboard、Organization 三大區塊型別穩定。
-   - 移除或修正壞連結與假 handler。
-2. **表單模組收斂**
-   - 決定 `/form-builder` 是否保留；若保留，必須接 `FormTemplate` 後端。
-   - 補 `Forms/Edit.tsx` 或移除 edit route/入口。
-   - 改掉 Forms pages 的錯誤 route helper 使用。
-3. **Dashboard 快捷操作接真功能**
-   - 邀請：接 `/api/v1/invitations` 或導到 `/invitations`。
-   - 工作流程：啟動導 `/workflows/start?template_id=...`，查看導 `/workflows/{id}`，審批導詳情頁或 step API。
-4. **組織設定/報表重做成真資料**
-   - 使用 `current_organization`，不要 `OrganizationSetting::first()`。
-   - 設定與偏好要持久化到 DB 或明確改成唯讀/未實作。
-5. **低成本 regression 測試補強**
-   - 優先用 Laravel Feature + Inertia endpoint tests，不新增 Playwright/Cypress/Dusk。
-6. **行動端響應式審查** — 現有頁面在小螢幕的排版。
-7. **生產部署文件** — `.env.production` 範本、安裝步驟。
+### 🚨 立即任務：建立可查詢的開發現狀文件庫
+
+> 目前先暫停功能修復。原因：現有 handoff、README、`.ai-dev/` 文件互相矛盾，且多處高估完成度，導致人類與 AI 都難以掌握真實進度。
+
+立即工作項目：
+
+1. **盤點現在專案結構**
+   - Laravel backend：controllers、models、requests、services、routes、tests。
+   - React frontend：pages、components、hooks、generated routes、layout。
+   - 標記哪些目錄是正式程式、哪些是 demo/歷史/生成檔。
+2. **盤點可讀且可信的文件**
+   - `.ai-dev/handoff.md`
+   - `.ai-dev/README.md`
+   - `.ai-dev/development/*`
+   - `.ai-dev/features/*`
+   - `.ai-dev/scratch/*`
+   - root `README.md`
+   - 明確標記「可信現況」「歷史規劃」「過期/不可採信完成度」。
+3. **在專案根目錄建立 `docs/`**
+   - `docs/README.md`：AI 讀取入口。
+   - `docs/01-current-state.md`：目前真實開發狀態。
+   - `docs/02-project-structure.md`：專案結構與重要檔案。
+   - `docs/03-module-status.md`：各功能模組現況。
+   - `docs/04-known-issues-and-backlog.md`：已知問題與修復順序。
+   - `docs/05-documentation-inventory.md`：既有文件可信度盤點。
+   - `docs/06-development-workflow.md`：後續 AI/人類協作流程。
+4. **後續功能開發必須先查 `docs/`**
+   - `.ai-dev/` 保留作為歷史與短期交接。
+   - `docs/` 作為目前正式可查詢的開發文件庫。
+
+### 🎯 文件庫完成後的後續任務 (暫定)
+
+1. **先修前端可用性阻斷**：Forms、Dashboard、Organization 三大區塊。
+2. **表單模組收斂**：`/form-builder` 去留、`Forms/Edit.tsx`、route helper。
+3. **Dashboard 快捷操作接真功能**。
+4. **組織設定/報表重做成真資料**。
+5. **低成本 regression 測試補強**。
+6. **行動端響應式審查**。
+7. **生產部署文件**。
 8. **E2E 瀏覽器測試** (可選)
    - 前置：需先安裝 `pestphp/pest-plugin-browser` 與 Playwright（依賴變更需使用者同意）
    - 僅保留少量 smoke flow：登入 → 建立表單 → 啟動工作流程 → 審批
@@ -189,6 +210,13 @@ php vendor/bin/pint --dirty   # 注意必須加 php 前綴
 | Sidebar 導覽列 | `resources/js/components/app-sidebar.tsx` |
 | Web 路由 | `routes/web.php` |
 | Feature E2E 工作流程測試 | `tests/Feature/EndToEndWorkflowFeatureTest.php` |
+| AI-first 開發文件庫入口 | `docs/README.md` |
+| 目前真實開發狀態 | `docs/01-current-state.md` |
+| 專案結構文件 | `docs/02-project-structure.md` |
+| 模組狀態文件 | `docs/03-module-status.md` |
+| 已知問題與 backlog | `docs/04-known-issues-and-backlog.md` |
+| 既有文件可信度盤點 | `docs/05-documentation-inventory.md` |
+| 開發協作流程 | `docs/06-development-workflow.md` |
 
 ---
 
