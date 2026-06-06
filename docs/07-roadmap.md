@@ -64,17 +64,23 @@ Goal: raise Yellow modules to Green with tests and manual verification.
 - [x] Fix Select imports and Inertia form typing in create/edit
 - Users TS 30 → 0；全專案 TS 38 → 9
 
-### 2B. Departments Module (Next)
+### 2B. Departments Module ✅ (2026-06-06)
 
-- Fix JSX namespace errors; verify CRUD flows
-- See `.ai-dev/tasks/phase-2b-departments/plan.md`
+- [x] Fix JSX namespace errors; AppLayout on create/edit
+- Departments TS 4 → 0；全專案 TS 9 → 5
+
+### 2C. Invitations & Notifications (Next)
+
+- Fix invitations paginator types; align Wayfinder API paths
+- Add InvitationsPageTest + NotificationsPageTest
+- See `.ai-dev/tasks/phase-2c-invitations-notifications/plan.md`
 
 | Module | Work | Phase |
 |--------|------|-------|
 | ~~Users~~ | Fix Select imports and Inertia form typing in create/edit | **2A** ✅ |
-| Departments | Fix JSX namespace errors; verify CRUD flows | **2B** |
-| Invitations | Ensure dashboard and `/invitations` use the same API paths | 2C |
-| Notifications | Add Feature tests for mark-read, filters, unread badge refresh | 2C |
+| ~~Departments~~ | Fix JSX namespace errors; verify CRUD flows | **2B** ✅ |
+| Invitations | Paginator types; Wayfinder API; page tests | **2C** |
+| Notifications | Inertia page smoke tests | **2C** |
 | Workflows | Verify monitor cancel/suspend/resume UX | 2D |
 | Reports | Verify export buttons and date filters on all `/reports/*` pages | 2D |
 | Misc TS | app-header, DynamicForm, enhanced-select | 2E |

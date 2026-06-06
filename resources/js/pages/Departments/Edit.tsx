@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, useForm, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps, Department } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { Department } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,12 +11,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Save } from 'lucide-react';
 
-interface DepartmentsEditProps extends PageProps {
+interface DepartmentsEditProps {
     department: Department;
     departments: Department[];
 }
 
-const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, departments }) => {
+const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ department, departments }) => {
     const { data, setData, put, processing, errors, reset } = useForm({
         name: department.name,
         description: department.description || '',
@@ -33,13 +33,13 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
         });
     };
 
-    const renderDepartmentOptions = (depts: Department[], level: number = 0): JSX.Element[] => {
-        const options: JSX.Element[] = [];
+    const renderDepartmentOptions = (depts: Department[], level: number = 0): React.ReactElement[] => {
+        const options: React.ReactElement[] = [];
 
         depts.forEach(dept => {
             options.push(
                 <SelectItem key={dept.id} value={dept.id.toString()}>
-                    {'\u00A0'.repeat(level * 4)}{dept.name}
+                    {' '.repeat(level * 4)}{dept.name}
                 </SelectItem>
             );
 
@@ -52,33 +52,29 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href="/departments">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            返回
-                        </Link>
-                    </Button>
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        編輯部門 - {department.name}
-                    </h2>
-                </div>
-            }
-        >
+        <AppLayout>
             <Head title={`編輯部門 - ${department.name}`} />
 
             <div className="py-12">
                 <div className="max-w-2xl mx-auto sm:px-6 lg:px-8">
+                    <div className="mb-6 flex items-center gap-4">
+                        <Button variant="ghost" size="sm" asChild>
+                            <Link href="/departments">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                返回
+                            </Link>
+                        </Button>
+                        <h2 className="font-semibold text-xl leading-tight">
+                            編輯部門 - {department.name}
+                        </h2>
+                    </div>
+
                     <Card>
                         <CardHeader>
                             <CardTitle>部門資訊</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={handleSubmit} className="space-y-6">
-                                {/* 部門名稱 */}
                                 <div>
                                     <Label htmlFor="name">部門名稱 *</Label>
                                     <Input
@@ -94,7 +90,6 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                                     )}
                                 </div>
 
-                                {/* 部門描述 */}
                                 <div>
                                     <Label htmlFor="description">部門描述</Label>
                                     <Textarea
@@ -110,7 +105,6 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                                     )}
                                 </div>
 
-                                {/* 上級部門 */}
                                 <div>
                                     <Label htmlFor="parent_id">上級部門</Label>
                                     <Select
@@ -133,7 +127,6 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                                     </p>
                                 </div>
 
-                                {/* 狀態 */}
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         id="is_active"
@@ -148,19 +141,11 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                                     </Label>
                                 </div>
 
-                                {/* 提交按鈕 */}
                                 <div className="flex justify-end gap-4">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        asChild
-                                    >
+                                    <Button type="button" variant="outline" asChild>
                                         <Link href="/departments">取消</Link>
                                     </Button>
-                                    <Button
-                                        type="submit"
-                                        disabled={processing}
-                                    >
+                                    <Button type="submit" disabled={processing}>
                                         <Save className="w-4 h-4 mr-2" />
                                         {processing ? '更新中...' : '更新部門'}
                                     </Button>
@@ -170,7 +155,7 @@ const DepartmentsEdit: React.FC<DepartmentsEditProps> = ({ auth, department, dep
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 
