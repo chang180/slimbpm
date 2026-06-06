@@ -14,12 +14,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle, AlertCircle, Save, Settings, Shield, Palette } from 'lucide-react';
 
-interface OrganizationSettingsProps extends PageProps {
-  organization: Organization;
-  settings: OrganizationSettingsFormData;
+interface StoredSettings {
+  timezone?: string;
+  language?: string;
+  date_format?: string;
+  time_format?: string;
+  currency?: string;
+  notifications?: Partial<OrganizationSettingsFormData['notifications']>;
+  security?: Partial<OrganizationSettingsFormData['security']>;
+  appearance?: Partial<OrganizationSettingsFormData['appearance']>;
 }
 
-const OrganizationSettings: React.FC<OrganizationSettingsProps> = ({ auth, organization, settings }) => {
+interface OrganizationSettingsProps extends PageProps {
+  organization: Organization;
+  settings: StoredSettings;
+}
+
+const OrganizationSettings: React.FC<OrganizationSettingsProps> = ({ organization, settings }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -112,23 +123,21 @@ const OrganizationSettings: React.FC<OrganizationSettingsProps> = ({ auth, organ
   ];
 
   return (
-    <AppLayout
-      user={auth.user}
-      header={
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-            組織設定
-          </h2>
-          <div className="flex items-center space-x-2">
-            <Settings className="h-5 w-5 text-gray-500" />
-            <span className="text-sm text-gray-500">{organization.name}</span>
-          </div>
-        </div>
-      }
-    >
+    <AppLayout>
       <Head title="組織設定" />
 
       <div className="py-12">
+        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-6">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              組織設定
+            </h2>
+            <div className="flex items-center space-x-2">
+              <Settings className="h-5 w-5 text-gray-500" />
+              <span className="text-sm text-gray-500">{organization.name}</span>
+            </div>
+          </div>
+        </div>
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           {message && (
             <Alert className={`mb-6 ${message.type === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>

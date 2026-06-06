@@ -4,21 +4,18 @@ import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationStats } from '@/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { 
-  Building2, 
-  Users, 
-  FolderOpen, 
-  Workflow, 
-  FileText, 
+import {
+  Building2,
+  Users,
+  FolderOpen,
+  Workflow,
+  FileText,
   Activity,
   Calendar,
   Mail,
   Phone,
   Globe,
   MapPin,
-  Edit,
-  Download
 } from 'lucide-react';
 
 interface OrganizationInfoProps extends PageProps {
@@ -26,7 +23,7 @@ interface OrganizationInfoProps extends PageProps {
   stats: OrganizationStats;
 }
 
-const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization, stats }) => {
+const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ organization, stats }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-TW', {
       year: 'numeric',
@@ -48,30 +45,15 @@ const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization,
   };
 
   return (
-    <AppLayout
-      user={auth.user}
-      header={
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-            組織資訊
-          </h2>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
-              <Edit className="h-4 w-4 mr-2" />
-              編輯
-            </Button>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              匯出
-            </Button>
-          </div>
-        </div>
-      }
-    >
+    <AppLayout>
       <Head title="組織資訊" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight mb-6">
+            組織資訊
+          </h2>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* 主要資訊 */}
             <div className="lg:col-span-2 space-y-6">
@@ -110,9 +92,9 @@ const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization,
                     {organization.website && (
                       <div className="flex items-center space-x-2">
                         <Globe className="h-4 w-4 text-gray-500" />
-                        <a 
-                          href={organization.website} 
-                          target="_blank" 
+                        <a
+                          href={organization.website}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="text-sm text-blue-600 hover:underline"
                         >
@@ -155,29 +137,29 @@ const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization,
                       <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-2">
                         <Users className="h-6 w-6 text-blue-600" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">{stats.total_users}</div>
+                      <div className="text-2xl font-bold text-gray-900">{stats.totalUsers}</div>
                       <div className="text-sm text-gray-500">總用戶數</div>
                     </div>
                     <div className="text-center">
                       <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
-                        <Users className="h-6 w-6 text-green-600" />
+                        <FolderOpen className="h-6 w-6 text-green-600" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">{stats.active_users}</div>
-                      <div className="text-sm text-gray-500">活躍用戶</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-2">
-                        <FolderOpen className="h-6 w-6 text-purple-600" />
-                      </div>
-                      <div className="text-2xl font-bold text-gray-900">{stats.total_departments}</div>
+                      <div className="text-2xl font-bold text-gray-900">{stats.totalDepartments}</div>
                       <div className="text-sm text-gray-500">部門數量</div>
                     </div>
                     <div className="text-center">
-                      <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-2">
-                        <Workflow className="h-6 w-6 text-orange-600" />
+                      <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg mx-auto mb-2">
+                        <Workflow className="h-6 w-6 text-purple-600" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">{stats.total_workflows}</div>
+                      <div className="text-2xl font-bold text-gray-900">{stats.totalWorkflows}</div>
                       <div className="text-sm text-gray-500">工作流程</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg mx-auto mb-2">
+                        <Activity className="h-6 w-6 text-orange-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-gray-900">{stats.activeWorkflows}</div>
+                      <div className="text-sm text-gray-500">活躍流程</div>
                     </div>
                   </div>
                 </CardContent>
@@ -192,27 +174,31 @@ const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization,
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {stats.recent_activity.map((activity: any) => (
-                      <div key={activity.id} className="flex items-start space-x-3">
-                        <div className="flex-shrink-0">
-                          <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                            <Activity className="h-4 w-4 text-gray-600" />
+                  {stats.recentActivity.length === 0 ? (
+                    <p className="text-sm text-gray-500">目前尚無活動記錄</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {stats.recentActivity.map((activity, index) => (
+                        <div key={activity.id ?? index} className="flex items-start space-x-3">
+                          <div className="flex-shrink-0">
+                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                              <Activity className="h-4 w-4 text-gray-600" />
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-gray-900">{activity.description}</p>
+                            <div className="flex items-center space-x-2 mt-1">
+                              <span className="text-xs text-gray-500">{activity.user}</span>
+                              <span className="text-xs text-gray-400">•</span>
+                              <span className="text-xs text-gray-500">
+                                {formatDate(activity.created_at)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-900">{activity.description}</p>
-                          <div className="flex items-center space-x-2 mt-1">
-                            <span className="text-xs text-gray-500">{activity.user_name}</span>
-                            <span className="text-xs text-gray-400">•</span>
-                            <span className="text-xs text-gray-500">
-                              {formatDate(activity.created_at)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -230,21 +216,21 @@ const OrganizationInfo: React.FC<OrganizationInfoProps> = ({ auth, organization,
                       <FileText className="h-4 w-4 text-gray-500" />
                       <span className="text-sm">表單數量</span>
                     </div>
-                    <span className="font-semibold">{stats.total_forms}</span>
+                    <span className="font-semibold">{stats.totalForms}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Workflow className="h-4 w-4 text-gray-500" />
                       <span className="text-sm">工作流程</span>
                     </div>
-                    <span className="font-semibold">{stats.total_workflows}</span>
+                    <span className="font-semibold">{stats.totalWorkflows}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <FolderOpen className="h-4 w-4 text-gray-500" />
                       <span className="text-sm">部門數量</span>
                     </div>
-                    <span className="font-semibold">{stats.total_departments}</span>
+                    <span className="font-semibold">{stats.totalDepartments}</span>
                   </div>
                 </CardContent>
               </Card>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization } from '@/types';
 import { route } from '@/lib/route';
@@ -47,10 +47,9 @@ interface OrganizationPreferencesProps extends PageProps {
   };
 }
 
-const OrganizationPreferences: React.FC<OrganizationPreferencesProps> = ({ 
-  auth, 
-  organization, 
-  preferences 
+const OrganizationPreferences: React.FC<OrganizationPreferencesProps> = ({
+  organization,
+  preferences,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -94,12 +93,13 @@ const OrganizationPreferences: React.FC<OrganizationPreferencesProps> = ({
       ...data,
       security: {
         ...data.security,
-        ip_whitelist: data.security.ip_whitelist.split('\n').filter(ip => ip.trim()),
+        ip_whitelist: data.security.ip_whitelist
+          .split('\n')
+          .filter((ip: string) => ip.trim()),
       },
     };
 
-    put(route('organization.preferences.update'), {
-      data: submitData,
+    router.put(route('organization.preferences.update'), submitData, {
       onSuccess: () => {
         setMessage({ type: 'success', text: '偏好設定已成功更新！' });
         setIsLoading(false);
@@ -158,24 +158,20 @@ const OrganizationPreferences: React.FC<OrganizationPreferencesProps> = ({
   ];
 
   return (
-    <AppLayout
-      user={auth.user}
-      header={
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-            組織偏好設定
-          </h2>
-          <div className="flex items-center space-x-2">
-            <Settings className="h-5 w-5 text-gray-500" />
-            <span className="text-sm text-gray-500">{organization.name}</span>
-          </div>
-        </div>
-      }
-    >
+    <AppLayout>
       <Head title="組織偏好設定" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              組織偏好設定
+            </h2>
+            <div className="flex items-center space-x-2">
+              <Settings className="h-5 w-5 text-gray-500" />
+              <span className="text-sm text-gray-500">{organization.name}</span>
+            </div>
+          </div>
           {message && (
             <Alert className={`mb-6 ${message.type === 'success' ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
               {message.type === 'success' ? (

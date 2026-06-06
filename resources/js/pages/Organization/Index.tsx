@@ -6,12 +6,12 @@ import { route } from '@/lib/route';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Building2, 
-  Settings, 
-  BarChart3, 
-  Users, 
-  FolderOpen, 
+import {
+  Building2,
+  Settings,
+  BarChart3,
+  Users,
+  FolderOpen,
   Workflow,
   FileText,
   Activity,
@@ -22,9 +22,7 @@ import {
   MapPin,
   Edit,
   Download,
-  Shield,
   Bell,
-  Palette
 } from 'lucide-react';
 
 interface OrganizationIndexProps extends PageProps {
@@ -32,7 +30,7 @@ interface OrganizationIndexProps extends PageProps {
   stats: OrganizationStats;
 }
 
-const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organization, stats }) => {
+const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ organization, stats }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('zh-TW', {
       year: 'numeric',
@@ -87,67 +85,56 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organizatio
   const quickStats = [
     {
       title: '總用戶數',
-      value: stats.total_users,
+      value: stats.totalUsers,
       icon: Users,
       color: 'blue',
-      change: '+12%',
-      changeType: 'positive',
-    },
-    {
-      title: '活躍用戶',
-      value: stats.active_users,
-      icon: Activity,
-      color: 'green',
-      change: '+8%',
-      changeType: 'positive',
     },
     {
       title: '部門數量',
-      value: stats.total_departments,
+      value: stats.totalDepartments,
       icon: FolderOpen,
-      color: 'purple',
-      change: '+2',
-      changeType: 'positive',
+      color: 'green',
     },
     {
       title: '工作流程',
-      value: stats.total_workflows,
+      value: stats.totalWorkflows,
       icon: Workflow,
+      color: 'purple',
+    },
+    {
+      title: '活躍流程',
+      value: stats.activeWorkflows,
+      icon: Activity,
       color: 'orange',
-      change: '+5',
-      changeType: 'positive',
     },
   ];
 
   return (
-    <AppLayout
-      user={auth.user}
-      header={
-        <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-            組織管理
-          </h2>
-          <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link href={route('organization.settings')}>
-                <Edit className="h-4 w-4 mr-2" />
-                編輯設定
-              </Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <Link href={route('organization.reports')}>
-                <Download className="h-4 w-4 mr-2" />
-                匯出報表
-              </Link>
-            </Button>
-          </div>
-        </div>
-      }
-    >
+    <AppLayout>
       <Head title="組織管理" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              組織管理
+            </h2>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" asChild>
+                <Link href={route('organization.settings')}>
+                  <Edit className="h-4 w-4 mr-2" />
+                  編輯設定
+                </Link>
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href={route('organization.reports')}>
+                  <Download className="h-4 w-4 mr-2" />
+                  匯出報表
+                </Link>
+              </Button>
+            </div>
+          </div>
+
           {/* 組織概覽 */}
           <Card className="mb-6">
             <CardHeader>
@@ -185,9 +172,9 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organizatio
                 {organization.website && (
                   <div className="flex items-center space-x-2">
                     <Globe className="h-4 w-4 text-gray-500" />
-                    <a 
-                      href={organization.website} 
-                      target="_blank" 
+                    <a
+                      href={organization.website}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-blue-600 hover:underline"
                     >
@@ -238,14 +225,7 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organizatio
                     </div>
                     <div className="ml-4 flex-1">
                       <p className="text-sm font-medium text-gray-500">{stat.title}</p>
-                      <div className="flex items-center space-x-2">
-                        <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
-                        <span className={`text-sm font-medium ${
-                          stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {stat.change}
-                        </span>
-                      </div>
+                      <p className="text-2xl font-semibold text-gray-900">{stat.value}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -300,27 +280,31 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ auth, organizatio
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {stats.recent_activity.slice(0, 5).map((activity: any) => (
-                  <div key={activity.id} className="flex items-start space-x-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                        <Activity className="h-4 w-4 text-gray-600" />
+              {stats.recentActivity.length === 0 ? (
+                <p className="text-sm text-gray-500">目前尚無活動記錄</p>
+              ) : (
+                <div className="space-y-4">
+                  {stats.recentActivity.slice(0, 5).map((activity, index) => (
+                    <div key={activity.id ?? index} className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                          <Activity className="h-4 w-4 text-gray-600" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-900">{activity.description}</p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <span className="text-xs text-gray-500">{activity.user}</span>
+                          <span className="text-xs text-gray-400">•</span>
+                          <span className="text-xs text-gray-500">
+                            {formatDate(activity.created_at)}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900">{activity.description}</p>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-xs text-gray-500">{activity.user_name}</span>
-                        <span className="text-xs text-gray-400">•</span>
-                        <span className="text-xs text-gray-500">
-                          {formatDate(activity.created_at)}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
+use App\Models\FormSubmission;
+use App\Models\FormTemplate;
 use App\Models\OrganizationSetting;
 use App\Models\User;
-use App\Models\Department;
+use App\Models\WorkflowHistory;
 use App\Models\WorkflowTemplate;
-use App\Models\FormTemplate;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -16,18 +20,10 @@ class OrganizationController extends Controller
     /**
      * 顯示組織管理主頁面
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $organization = OrganizationSetting::first() ?? OrganizationSetting::create([
-            'name' => '預設組織',
-            'description' => '系統預設組織',
-            'email' => 'admin@example.com',
-            'phone' => '+886-2-1234-5678',
-            'website' => 'https://example.com',
-            'address' => '台北市信義區信義路五段7號',
-        ]);
-
-        $stats = $this->getOrganizationStats();
+        $organization = $request->get('current_organization');
+        $stats = $this->getOrganizationStats($organization);
 
         return Inertia::render('Organization/Index', [
             'organization' => $organization,
@@ -38,14 +34,12 @@ class OrganizationController extends Controller
     /**
      * 顯示組織設定頁面
      */
-    public function settings(): Response
+    public function settings(Request $request): Response
     {
-        $organization = OrganizationSetting::first() ?? OrganizationSetting::create([
-            'name' => '預設組織',
-            'description' => '系統預設組織',
-        ]);
+        $organization = $request->get('current_organization');
+        $stored = $organization->settings ?? [];
 
-        $settings = [
+        $settings = array_merge([
             'timezone' => 'Asia/Taipei',
             'language' => 'zh-TW',
             'date_format' => 'Y-m-d',
@@ -72,7 +66,7 @@ class OrganizationController extends Controller
                 'primary_color' => '#3b82f6',
                 'logo_url' => '',
             ],
-        ];
+        ], array_diff_key($stored, ['preferences' => null]));
 
         return Inertia::render('Organization/Settings', [
             'organization' => $organization,
@@ -83,8 +77,10 @@ class OrganizationController extends Controller
     /**
      * 更新組織設定
      */
-    public function updateSettings(Request $request)
+    public function updateSettings(Request $request): JsonResponse
     {
+        $organization = $request->get('current_organization');
+
         $validated = $request->validate([
             'timezone' => 'required|string',
             'language' => 'required|string',
@@ -110,8 +106,9 @@ class OrganizationController extends Controller
             'appearance.logo_url' => 'nullable|url',
         ]);
 
-        // 這裡會實作實際的設定更新邏輯
-        // 目前只是返回成功訊息
+        $existing = $organization->settings ?? [];
+        $organization->settings = array_merge($existing, $validated);
+        $organization->save();
 
         return response()->json(['message' => '組織設定已成功更新！']);
     }
@@ -119,18 +116,10 @@ class OrganizationController extends Controller
     /**
      * 顯示組織資訊頁面
      */
-    public function info(): Response
+    public function info(Request $request): Response
     {
-        $organization = OrganizationSetting::first() ?? OrganizationSetting::create([
-            'name' => '預設組織',
-            'description' => '系統預設組織',
-            'email' => 'admin@example.com',
-            'phone' => '+886-2-1234-5678',
-            'website' => 'https://example.com',
-            'address' => '台北市信義區信義路五段7號',
-        ]);
-
-        $stats = $this->getOrganizationStats();
+        $organization = $request->get('current_organization');
+        $stats = $this->getOrganizationStats($organization);
 
         return Inertia::render('Organization/Info', [
             'organization' => $organization,
@@ -141,14 +130,12 @@ class OrganizationController extends Controller
     /**
      * 顯示組織偏好設定頁面
      */
-    public function preferences(): Response
+    public function preferences(Request $request): Response
     {
-        $organization = OrganizationSetting::first() ?? OrganizationSetting::create([
-            'name' => '預設組織',
-            'description' => '系統預設組織',
-        ]);
+        $organization = $request->get('current_organization');
+        $stored = ($organization->settings ?? [])['preferences'] ?? [];
 
-        $preferences = [
+        $preferences = array_merge([
             'system' => [
                 'auto_backup' => true,
                 'backup_frequency' => 'daily',
@@ -176,7 +163,7 @@ class OrganizationController extends Controller
                 'date_format' => 'Y-m-d',
                 'items_per_page' => 20,
             ],
-        ];
+        ], $stored);
 
         return Inertia::render('Organization/Preferences', [
             'organization' => $organization,
@@ -187,8 +174,10 @@ class OrganizationController extends Controller
     /**
      * 更新組織偏好設定
      */
-    public function updatePreferences(Request $request)
+    public function updatePreferences(Request $request): JsonResponse
     {
+        $organization = $request->get('current_organization');
+
         $validated = $request->validate([
             'system' => 'required|array',
             'system.auto_backup' => 'boolean',
@@ -215,8 +204,10 @@ class OrganizationController extends Controller
             'display.items_per_page' => 'required|integer|min:10|max:100',
         ]);
 
-        // 這裡會實作實際的偏好設定更新邏輯
-        // 目前只是返回成功訊息
+        $existing = $organization->settings ?? [];
+        $existing['preferences'] = $validated;
+        $organization->settings = $existing;
+        $organization->save();
 
         return response()->json(['message' => '偏好設定已成功更新！']);
     }
@@ -224,14 +215,10 @@ class OrganizationController extends Controller
     /**
      * 顯示組織統計報表頁面
      */
-    public function reports(): Response
+    public function reports(Request $request): Response
     {
-        $organization = OrganizationSetting::first() ?? OrganizationSetting::create([
-            'name' => '預設組織',
-            'description' => '系統預設組織',
-        ]);
-
-        $stats = $this->getOrganizationStats();
+        $organization = $request->get('current_organization');
+        $stats = $this->getOrganizationStats($organization);
 
         return Inertia::render('Organization/Reports', [
             'organization' => $organization,
@@ -240,53 +227,64 @@ class OrganizationController extends Controller
     }
 
     /**
-     * 取得組織統計資料
+     * 取得 org-scoped 組織統計資料（camelCase）
      */
-    private function getOrganizationStats(): array
+    private function getOrganizationStats(OrganizationSetting $organization): array
     {
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $recentActivity = $this->getRecentActivity($orgUserIds);
+
         return [
-            'total_users' => User::count(),
-            'active_users' => User::where('is_active', true)->count(),
-            'total_departments' => Department::count(),
-            'total_workflows' => WorkflowTemplate::count(),
-            'total_forms' => FormTemplate::count(),
-            'recent_activity' => [
-                [
-                    'id' => 1,
-                    'type' => 'user_created',
-                    'description' => '新增用戶：張三',
-                    'user_name' => '系統管理員',
-                    'created_at' => now()->subHours(2)->toISOString(),
-                ],
-                [
-                    'id' => 2,
-                    'type' => 'department_created',
-                    'description' => '建立部門：技術部',
-                    'user_name' => '系統管理員',
-                    'created_at' => now()->subHours(4)->toISOString(),
-                ],
-                [
-                    'id' => 3,
-                    'type' => 'workflow_created',
-                    'description' => '建立工作流程：請假申請',
-                    'user_name' => '系統管理員',
-                    'created_at' => now()->subHours(6)->toISOString(),
-                ],
-                [
-                    'id' => 4,
-                    'type' => 'form_created',
-                    'description' => '建立表單：員工資料表',
-                    'user_name' => '系統管理員',
-                    'created_at' => now()->subHours(8)->toISOString(),
-                ],
-                [
-                    'id' => 5,
-                    'type' => 'user_updated',
-                    'description' => '更新用戶：李四',
-                    'user_name' => '系統管理員',
-                    'created_at' => now()->subHours(12)->toISOString(),
-                ],
-            ],
+            'totalUsers' => $orgUserIds->count(),
+            'totalDepartments' => Department::where('organization_id', $organization->id)->count(),
+            'totalForms' => FormTemplate::whereIn('created_by', $orgUserIds)->count(),
+            'totalWorkflows' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->count(),
+            'activeWorkflows' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->where('is_active', true)->count(),
+            'recentActivity' => $recentActivity,
         ];
+    }
+
+    private function getRecentActivity(Collection $orgUserIds): array
+    {
+        $actionLabels = [
+            'started' => '啟動了工作流程',
+            'approved' => '審批通過',
+            'rejected' => '拒絕審批',
+            'completed' => '完成了工作流程',
+            'cancelled' => '取消了工作流程',
+        ];
+
+        $histories = WorkflowHistory::with(['performer', 'workflowInstance'])
+            ->whereHas('workflowInstance.starter', fn ($q) => $q->whereIn('id', $orgUserIds))
+            ->orderBy('performed_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(fn ($h) => [
+                'id' => $h->id,
+                'type' => $h->action,
+                'description' => ($actionLabels[$h->action] ?? $h->action).'：'.($h->workflowInstance->title ?? ''),
+                'user' => $h->performer->name ?? '系統',
+                'created_at' => $h->performed_at?->toISOString() ?? now()->toISOString(),
+            ]);
+
+        $submissions = FormSubmission::with(['submitter', 'formTemplate'])
+            ->whereIn('submitted_by', $orgUserIds)
+            ->orderBy('submitted_at', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(fn ($s) => [
+                'id' => 'fs_'.$s->id,
+                'type' => 'form_submit',
+                'description' => '提交了「'.($s->formTemplate->name ?? '表單').'」',
+                'user' => $s->submitter->name ?? '用戶',
+                'created_at' => $s->submitted_at?->toISOString() ?? $s->created_at->toISOString(),
+            ]);
+
+        return $histories->concat($submissions)
+            ->sortByDesc('created_at')
+            ->take(5)
+            ->values()
+            ->toArray();
     }
 }

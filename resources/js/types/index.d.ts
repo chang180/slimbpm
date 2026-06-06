@@ -74,14 +74,31 @@ export interface OrganizationSettingsFormData {
     website?: string;
     address?: string;
     industry?: string;
-    timezone?: string;
-    language?: string;
-    date_format?: string;
-    currency?: string;
-    notifications?: {
-        email: boolean;
-        sms: boolean;
-        push: boolean;
+    timezone: string;
+    language: string;
+    date_format: string;
+    time_format: string;
+    currency: string;
+    notifications: {
+        email_notifications: boolean;
+        system_notifications: boolean;
+        security_notifications: boolean;
+    };
+    security: {
+        password_policy: {
+            min_length: number;
+            require_uppercase: boolean;
+            require_lowercase: boolean;
+            require_numbers: boolean;
+            require_symbols: boolean;
+        };
+        session_timeout: number;
+        two_factor_required: boolean;
+    };
+    appearance: {
+        theme: 'light' | 'dark' | 'auto';
+        primary_color: string;
+        logo_url: string;
     };
 }
 
