@@ -85,8 +85,9 @@ Recent low-cost regression tests:
 
 - `tests/Feature/EndToEndWorkflowFeatureTest.php`
 - `tests/Feature/ReportsPagesTest.php`
+- `tests/Browser/SmokeTest.php` — Pest Browser smoke (Phase 3H)
 
-There is no installed Pest Browser plugin. The `tests/Browser/` directory does not exist. Browser E2E is optional and not the current strategy.
+Pest Browser is installed. Browser tests require `npm run build` before running `php artisan test tests/Browser`.
 
 ## Architecture Notes
 

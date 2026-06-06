@@ -311,4 +311,4 @@ Keep rollback practical:
 - Backend tests are strong relative to frontend coverage, but visible UI flows still need more manual and browser-level validation.
 - Some frontend pages and interactions remain incomplete or recently repaired; verify the exact workflows needed for your deployment.
 - Department web routes still have documented organization scoping limitations.
-- Pest Browser is not installed; browser smoke testing is a future optional phase.
+- Pest Browser smoke tests are available (`tests/Browser/SmokeTest.php`); run `npm run build` then `php artisan test tests/Browser` on staging before go-live.

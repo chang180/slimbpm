@@ -138,16 +138,17 @@ See prior sections in git history / task progress files.
 
 - [x] Add `docs/08-deployment.md`; link from docs README and inventory
 
-**Phase 3 complete.** 253 tests · TS 0 errors · deployment guide published.
+**Phase 3 complete.** 258 tests (253 Feature/Unit + 5 Browser) · TS 0 errors · deployment guide published.
 
-### 3H. Browser Smoke (Optional)
+### 3H. Browser Smoke ✅ (2026-06-06)
 
-- Requires explicit approval for Pest Browser + Playwright dependencies
-- See `.ai-dev/tasks/phase-3h-browser-smoke-optional/plan.md`
+- [x] Pest Browser + Playwright installed
+- [x] `tests/Browser/SmokeTest.php` — login, dashboard, forms, workflows, notification bell
+- [x] `docs/06-development-workflow.md` updated
 
 ## Phase 4 — Product Expansion (Current — optional)
 
-Phase 1–3 exit criteria met (except optional 3H Browser smoke).
+Phase 1–3 exit criteria met (including optional 3H Browser smoke).
 
 - Scheduled reports and advanced export formats
 - PWA / mobile-first improvements

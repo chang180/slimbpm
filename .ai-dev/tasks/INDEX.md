@@ -1,6 +1,6 @@
 # 開發任務總覽
 
-最後更新：2026-06-06（**Phase 3 全部驗收完成**）
+最後更新：2026-06-06（**Phase 3 全部驗收完成，含 3H Browser smoke**）
 
 ## Phase 1–3 ✅
 
@@ -8,20 +8,20 @@
 |------|------|
 | Phase 1A–1D | ✅ 已驗收 |
 | Phase 2A–2E | ✅ 已驗收 |
-| Phase 3A–3G | ✅ 已驗收 |
+| Phase 3A–3H | ✅ 已驗收 |
 
-**基線：** **253 tests** · TS 0 errors · [`docs/08-deployment.md`](../../docs/08-deployment.md)
+**基線：** **258 tests**（253 Feature/Unit + 5 Browser）· TS 0 errors · [`docs/08-deployment.md`](../../docs/08-deployment.md)
 
 | 3F | 響應式審查 — DashboardHeader、WorkflowMenu、Forms/Show |
 | 3G | 部署指南 — `docs/08-deployment.md` |
+| 3H | Pest Browser smoke — `tests/Browser/SmokeTest.php` |
 
 ---
 
-## 可選 / 下一階段
+## 下一階段
 
 | 項目 | 說明 |
 |------|------|
-| **3H** | [phase-3h-browser-smoke-optional](./phase-3h-browser-smoke-optional/) — Pest Browser（需批准依賴） |
 | **Phase 4** | 產品擴充 → [`docs/07-roadmap.md`](../../docs/07-roadmap.md) |
 
 ### 已知後續項（非 Phase 3 阻擋）

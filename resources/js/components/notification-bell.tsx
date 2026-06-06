@@ -126,7 +126,12 @@ export function NotificationBell() {
     return (
         <DropdownMenu open={open} onOpenChange={handleOpenChange}>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="relative h-8 w-8 p-0">
+                <Button
+            variant="ghost"
+            size="sm"
+            className="relative h-8 w-8 p-0"
+            data-test="notification-bell"
+        >
                     <Bell className="h-4 w-4" />
                     {unreadCount > 0 && (
                         <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-[1rem] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white">

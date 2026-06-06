@@ -17,15 +17,39 @@
 
 ## Testing Strategy
 
-Current strategy: low-cost Feature/Inertia regression tests.
+Primary strategy: Feature + Inertia regression tests. Optional browser smoke tests supplement JS-heavy UI checks.
 
-Use:
+### Feature / Inertia tests
 
 ```bash
 php artisan test tests/Feature/SpecificTest.php
 ```
 
-For frontend validation:
+### Browser smoke tests (Phase 3H)
+
+Requires one-time setup:
+
+```bash
+composer require pestphp/pest-plugin-browser --dev
+npm install playwright@latest --save-dev
+npx playwright install chromium
+```
+
+Before running browser tests, build frontend assets (Pest serves the app via an internal HTTP server, not Herd):
+
+```bash
+npm run build
+php artisan test tests/Browser
+```
+
+Notes:
+
+- Browser tests use real login flows (no `actingAs` integration).
+- Default assertion timeout is 15s in `tests/Browser/SmokeTest.php` to tolerate cold starts.
+- PHP `sockets` extension must be enabled.
+- Browser tests do not replace Feature tests; run both when validating UI changes.
+
+### Frontend validation
 
 ```bash
 npm run types
@@ -43,7 +67,7 @@ For phased development, see `.ai-dev/tasks/`:
 3. Coordinator reviews against exit criteria in the plan.
 4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
 
-Current active tasks: Phase 3 complete. See `docs/07-roadmap.md` Phase 4 or optional `phase-3h-browser-smoke-optional`.
+Current active tasks: Phase 3 complete (including optional 3H Browser smoke). See `docs/07-roadmap.md` Phase 4.
 
 ## Documentation Updates
 
@@ -67,7 +91,6 @@ Suggested commit messages:
 
 ## Current Do-Not-Do List
 
-- Do not add Playwright/Pest Browser dependencies unless explicitly approved.
 - Do not call modules 100% complete based only on backend tests.
 - Do not use `resources/js/lib/route.ts` for routes it does not define.
 - Do not edit generated Wayfinder route files as a long-term fix; fix route naming or imports instead.

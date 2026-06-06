@@ -62,14 +62,6 @@ Completed:
 
 ## P3 Browser E2E
 
-Not current priority.
+**Done (Phase 3H, 2026-06-06).** See `tests/Browser/SmokeTest.php` and `docs/06-development-workflow.md`.
 
-Pest Browser requires dependency changes:
-
-```bash
-composer require pestphp/pest-plugin-browser --dev
-npm install playwright@latest
-npx playwright install
-```
-
-Current testing strategy is low-cost Laravel Feature + Inertia endpoint tests.
+Current testing strategy: Feature + Inertia endpoint tests, plus optional browser smoke for JS-heavy UI checks.

@@ -70,5 +70,4 @@ Phases 0–3 are complete. See `07-roadmap.md` Phase 4 for product expansion, or
 
 1. Department org scoping on web routes.
 2. Stabilize flaky `UserManagementUITest` search assertion.
-3. Optional Pest Browser smoke (Phase 3H, requires dependency approval).
-4. Staging deployment trial using `08-deployment.md`.
+3. Staging deployment trial using `08-deployment.md`.
