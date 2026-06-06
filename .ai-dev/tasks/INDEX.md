@@ -1,30 +1,22 @@
 # 開發任務總覽
 
-最後更新：2026-06-06（Phase 2B 驗收通過）
+最後更新：2026-06-06（Phase 2C 驗收通過）
 
 | 階段 | 目錄 | 狀態 |
 |------|------|------|
 | Phase 1A–1D | [phase-1a](./phase-1a-typescript-baseline/) … [phase-1d](./phase-1d-organization/) | ✅ 已驗收 |
-| Phase 2A | [phase-2a-users](./phase-2a-users/) | ✅ 已驗收 |
-| ~~Phase 2B~~ | [phase-2b-departments](./phase-2b-departments/) | ✅ **已驗收** |
-| Phase 2C | [phase-2c-invitations-notifications](./phase-2c-invitations-notifications/) | **可派工** |
-| Phase 2D+ | 待寫 | Workflows、Reports |
+| Phase 2A–2C | [phase-2a](./phase-2a-users/) … [phase-2c](./phase-2c-invitations-notifications/) | ✅ 已驗收 |
+| Phase 2D | [phase-2d-workflows-reports](./phase-2d-workflows-reports/) | **可派工** |
+| Phase 2E | 待寫 | Misc TS（4 errors） |
 
-## Phase 2B 摘要
-
-| 項目 | 成果 |
-|------|------|
-| Departments Create/Edit | `React.ReactElement[]`、AppLayout |
-| Departments TS | 4 → **0** |
-| 全專案 TS | 9 → **5** |
-| 測試 | **224** passed |
-
-## Phase 2A 摘要
+## Phase 2C 摘要
 
 | 項目 | 成果 |
 |------|------|
-| Users Create/Edit | SafeSelect、router.post/put、AppLayout |
-| Users TS | 30 → **0** |
+| invitations/Index | LengthAwarePaginator + Wayfinder API |
+| 新增測試 | InvitationsPageTest + NotificationsPageTest（+10） |
+| 全專案 TS | 5 → **4** |
+| 測試 | **234** passed |
 
 ## 路線圖
 

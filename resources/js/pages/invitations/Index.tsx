@@ -10,6 +10,9 @@ import { Head, router } from '@inertiajs/react';
 import { CheckCircle2, Clock, Loader2, Mail, Plus, RefreshCw, Trash2, UserPlus, XCircle } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
+import { type LengthAwarePaginator } from '@/lib/pagination';
+import apiInvitations from '@/routes/api/invitations';
+import { useSlug } from '@/hooks/useSlug';
 
 interface InvitationRecord {
     id: number;
@@ -25,14 +28,7 @@ interface InvitationRecord {
 }
 
 interface InvitationsIndexProps {
-    invitations: {
-        data: InvitationRecord[];
-        meta: {
-            current_page: number;
-            last_page: number;
-            total: number;
-        };
-    };
+    invitations: LengthAwarePaginator<InvitationRecord>;
 }
 
 const statusConfig = {
@@ -51,12 +47,13 @@ function formatDate(dateStr: string | null): string {
 }
 
 export default function InvitationsIndex({ invitations }: InvitationsIndexProps) {
+    const slug = useSlug();
     const breadcrumbs = useMemo<BreadcrumbItem[]>(
         () => [
-            { title: '儀表板', href: '/dashboard' },
+            { title: '儀表板', href: slug ? `/dashboard/${slug}` : '/dashboard-redirect' },
             { title: '邀請管理', href: '/invitations' },
         ],
-        [],
+        [slug],
     );
 
     const [showInviteDialog, setShowInviteDialog] = useState(false);
@@ -81,7 +78,7 @@ export default function InvitationsIndex({ invitations }: InvitationsIndexProps)
         setSendErrors([]);
 
         router.post(
-            '/api/v1/invitations',
+            apiInvitations.store.url(),
             { emails, role },
             {
                 onSuccess: () => {
@@ -104,7 +101,7 @@ export default function InvitationsIndex({ invitations }: InvitationsIndexProps)
     const handleCancel = (id: number) => {
         if (!confirm('確定要取消此邀請嗎？')) return;
         setActionLoading(id);
-        router.delete(`/api/v1/invitations/${id}`, {
+        router.delete(apiInvitations.destroy.url(id), {
             onSuccess: () => router.reload(),
             onFinish: () => setActionLoading(null),
         });
@@ -112,7 +109,7 @@ export default function InvitationsIndex({ invitations }: InvitationsIndexProps)
 
     const handleResend = (id: number) => {
         setActionLoading(id);
-        router.post(`/api/v1/invitations/${id}/resend`, {}, {
+        router.post(apiInvitations.resend.url(id), {}, {
             onSuccess: () => router.reload(),
             onFinish: () => setActionLoading(null),
         });

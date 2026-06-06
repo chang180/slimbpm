@@ -69,18 +69,24 @@ Goal: raise Yellow modules to Green with tests and manual verification.
 - [x] Fix JSX namespace errors; AppLayout on create/edit
 - Departments TS 4 → 0；全專案 TS 9 → 5
 
-### 2C. Invitations & Notifications (Next)
+### 2C. Invitations & Notifications ✅ (2026-06-06)
 
-- Fix invitations paginator types; align Wayfinder API paths
-- Add InvitationsPageTest + NotificationsPageTest
-- See `.ai-dev/tasks/phase-2c-invitations-notifications/plan.md`
+- [x] Invitations paginator types + Wayfinder API
+- [x] InvitationsPageTest + NotificationsPageTest
+- TS 5 → 4；tests 224 → **234**
+
+### 2D. Workflows & Reports (Next)
+
+- Monitor cancel/suspend/resume UX; Reports export/filters
+- See `.ai-dev/tasks/phase-2d-workflows-reports/plan.md`
 
 | Module | Work | Phase |
 |--------|------|-------|
-| ~~Users~~ | Fix Select imports and Inertia form typing in create/edit | **2A** ✅ |
-| ~~Departments~~ | Fix JSX namespace errors; verify CRUD flows | **2B** ✅ |
-| Invitations | Paginator types; Wayfinder API; page tests | **2C** |
-| Notifications | Inertia page smoke tests | **2C** |
+| ~~Invitations~~ | Paginator + Wayfinder + page tests | **2C** ✅ |
+| ~~Notifications~~ | Inertia page smoke tests | **2C** ✅ |
+| Workflows | Monitor UX verification | **2D** |
+| Reports | Export buttons and date filters | **2D** |
+| Misc TS | app-header, DynamicForm, enhanced-select | **2E** |
 | Workflows | Verify monitor cancel/suspend/resume UX | 2D |
 | Reports | Verify export buttons and date filters on all `/reports/*` pages | 2D |
 | Misc TS | app-header, DynamicForm, enhanced-select | 2E |
