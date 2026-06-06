@@ -37,16 +37,15 @@ Goal: make the three highest-risk areas usable without dead links, demo handlers
 
 **Result:** Forms TS errors 0; total TS 164 → 131; 217 tests pass.
 
-### 1C. Dashboard Module (Current)
+### 1C. Dashboard Module ✅ (2026-06-06)
 
-- Replace `useDashboardActions.ts` `console.log` handlers with real navigation or API calls.
-- Fix or remove broken links in `QuickActions.tsx` and `WorkflowMenu.tsx`.
-- Wire invitation widget to existing invitation API.
-- Align dashboard component prop types with controller props.
+- [x] Wire dashboard actions to invitation API and Wayfinder routes
+- [x] Fix prop mapping and QuickActions/WorkflowMenu links
+- [x] Add `DashboardPageTest.php`
 
-**Exit criteria:** every dashboard quick action either works or is removed from UI.
+**Result:** Dashboard TS errors 0; total TS 131 → 128; 221 tests pass.
 
-### 1D. Organization Module
+### 1D. Organization Module (Current)
 
 - Replace `OrganizationSetting::first()` with `current_organization` in `OrganizationController`.
 - Persist settings and preferences instead of validate-and-return-JSON-only.

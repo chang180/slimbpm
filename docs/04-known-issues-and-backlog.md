@@ -15,7 +15,7 @@ Command:
 npm run types
 ```
 
-Current status: **131 errors** (down from 164 after Phase 1B; 176 after Phase 1A).
+Current status: **128 errors** (down from 164 after Phase 1B; 131 after Phase 1C).
 
 Resolved in Phase 1A:
 
@@ -27,10 +27,14 @@ Resolved in Phase 1B:
 - Forms route helper naming collision and missing `route()` imports
 - Forms layout/type errors in `resources/js/pages/Forms/*`
 
-Remaining error clusters (Phase 1C–1D / Phase 2):
+Resolved in Phase 1C:
 
-- Dashboard props/action mismatch → **Phase 1C**
-- Organization prop/type mismatches → Phase 1D
+- Dashboard props/action mismatch and fake handlers
+- QuickActions union type and broken dashboard links
+
+Remaining error clusters (Phase 1D / Phase 2):
+
+- Organization prop/type mismatches and layout props → **Phase 1D**
 - Users create/edit missing Select imports → Phase 2
 - Departments JSX namespace → Phase 2
 
@@ -38,29 +42,13 @@ Remaining error clusters (Phase 1C–1D / Phase 2):
 
 Web `forms.*` / `workflows.*` and API `api.forms.*` / `api.workflows.*` are now separated. Wayfinder web routes point to Inertia controllers.
 
-## P1 Dashboard Real Actions
+## P1 Forms Integration ✅ (Phase 1B complete)
 
-Files:
+Forms pages wired to Wayfinder; `Forms/Edit.tsx` added; `FormPagesTest.php` covers web paths.
 
-- `resources/js/hooks/useDashboardActions.ts`
-- `resources/js/components/dashboard/QuickActions.tsx`
-- `resources/js/components/dashboard/WorkflowMenu.tsx`
+## P1 Dashboard Real Actions ✅ (Phase 1C complete)
 
-Required decisions:
-
-- Replace fake handlers with real navigation/API calls.
-- Remove or implement missing routes.
-- Decide whether dashboard should perform approvals inline or link to workflow detail pages.
-
-## P1 Forms Integration
-
-Required work:
-
-- Create `resources/js/pages/Forms/Edit.tsx` or remove edit route/entry points.
-- Stop using incomplete `resources/js/lib/route.ts` for `forms.*`.
-- Prefer Wayfinder generated helpers or explicit paths consistently.
-- Decide if `/form-builder` becomes the canonical form designer or is removed as demo.
-- Add focused Feature/Inertia tests after repair.
+`useDashboardActions.ts` uses invitation API and Wayfinder navigation. See `DashboardPageTest.php`.
 
 ## P1 Organization Scoping And Persistence
 

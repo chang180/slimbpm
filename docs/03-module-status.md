@@ -21,22 +21,25 @@ Known files:
 
 ## Dashboard
 
-Status: Red
+Status: Yellow (was Red)
 
-Backend uses real database stats and org-scoped chart data in `DashboardController`. Frontend widgets exist, but user actions are not reliably implemented.
+Phase 1C complete (2026-06-06):
 
-Major gaps:
+- `useDashboardActions.ts` uses real invitation API and Wayfinder workflow navigation.
+- `dashboard.tsx` maps `on*` props correctly; `UserDashboard` receives `organizationSlug`.
+- QuickActions/WorkflowMenu broken links fixed or removed.
+- `tests/Feature/DashboardPageTest.php` added (4 tests).
 
-- `useDashboardActions.ts` handlers mostly only `console.log`.
-- `QuickActions.tsx` links to missing routes:
-  - `/workflows/instances`
-  - `/organization/permissions`
-  - `/organization/backup`
-  - `/organization/export`
-- `WorkflowMenu.tsx` links to missing routes:
-  - `/workflows/instances`
-  - `/workflows/reports`
-- Dashboard prop names do not match component prop names cleanly; `npm run types` reports assignment errors.
+Remaining:
+
+- Dashboard does not inline approve/reject; navigates to workflow show page (by design).
+
+Important files:
+
+- `resources/js/hooks/useDashboardActions.ts`
+- `resources/js/pages/dashboard.tsx`
+- `resources/js/components/dashboard/*`
+- `tests/Feature/DashboardPageTest.php`
 
 ## Forms
 
