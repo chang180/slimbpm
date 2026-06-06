@@ -18,9 +18,19 @@ class ReportsController extends Controller
 {
     public function __construct(protected ExportService $exportService) {}
 
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        return Inertia::render('reports/Index');
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $summary = [
+            'totalUsers' => $orgUserIds->count(),
+            'totalWorkflowInstances' => WorkflowInstance::whereIn('started_by', $orgUserIds)->count(),
+            'totalSubmissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)->count(),
+            'activeWorkflows' => WorkflowInstance::whereIn('started_by', $orgUserIds)->where('status', 'running')->count(),
+        ];
+
+        return Inertia::render('reports/Index', ['summary' => $summary]);
     }
 
     public function userActivity(Request $request): Response
@@ -139,6 +149,47 @@ class ReportsController extends Controller
             'systemStats' => $systemStats,
             'usageData' => $usageData,
             'orgName' => $organization->name,
+        ]);
+    }
+
+    public function departmentAnalysis(Request $request): Response
+    {
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $departments = Department::where('organization_id', $organization->id)
+            ->withCount('users')
+            ->orderBy('users_count', 'desc')
+            ->get();
+
+        $totalOrgUsers = $orgUserIds->count();
+
+        $departmentData = $departments->map(function ($dept) use ($totalOrgUsers) {
+            $deptUserIds = $dept->users()->pluck('users.id');
+
+            return [
+                'id' => $dept->id,
+                'name' => $dept->name,
+                'users_count' => $dept->users_count,
+                'percentage' => $totalOrgUsers > 0
+                    ? round(($dept->users_count / $totalOrgUsers) * 100, 1)
+                    : 0,
+                'submissions' => FormSubmission::whereIn('submitted_by', $deptUserIds)->count(),
+                'workflows' => WorkflowInstance::whereIn('started_by', $deptUserIds)->count(),
+            ];
+        });
+
+        $stats = [
+            'totalDepartments' => $departments->count(),
+            'totalUsers' => $totalOrgUsers,
+            'avgUsersPerDept' => $departments->count() > 0
+                ? round($totalOrgUsers / $departments->count(), 1)
+                : 0,
+        ];
+
+        return Inertia::render('reports/DepartmentAnalysis', [
+            'departments' => $departmentData,
+            'stats' => $stats,
         ]);
     }
 

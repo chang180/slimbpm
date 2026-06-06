@@ -114,6 +114,7 @@ Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
         Route::get('/user-activity', [App\Http\Controllers\ReportsController::class, 'userActivity'])->name('user-activity');
         Route::get('/workflow-performance', [App\Http\Controllers\ReportsController::class, 'workflowPerformance'])->name('workflow-performance');
         Route::get('/system-stats', [App\Http\Controllers\ReportsController::class, 'systemStats'])->name('system-stats');
+        Route::get('/department-analysis', [App\Http\Controllers\ReportsController::class, 'departmentAnalysis'])->name('department-analysis');
 
         // 匯出路由
         Route::post('/export/user-activity', [App\Http\Controllers\ReportsController::class, 'exportUserActivity'])->name('export.user-activity');

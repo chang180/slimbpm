@@ -14,21 +14,17 @@ import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import { useSlug } from '@/hooks/useSlug';
-import { 
-    BookOpen, 
-    Folder, 
-    LayoutGrid, 
-    Building2, 
-    Users, 
-    FileText, 
-    Workflow, 
+import {
+    Activity,
     BarChart3,
+    Bell,
+    Building2,
+    FileText,
+    LayoutGrid,
     Settings,
     UserPlus,
-    Mail,
-    Shield,
-    Database,
-    Bell
+    Users,
+    Workflow,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 
@@ -76,6 +72,15 @@ const getMainNavItems = (slug?: string, userRole?: string): NavItem[] => {
         }
     );
 
+    // 管理員/主管可看到流程監控
+    if (userRole === 'admin' || userRole === 'manager') {
+        baseItems.push({
+            title: '流程監控',
+            href: '/workflows/monitor',
+            icon: Activity,
+        });
+    }
+
     // 管理員專用選單
     if (userRole === 'admin') {
         baseItems.push(
@@ -93,11 +98,6 @@ const getMainNavItems = (slug?: string, userRole?: string): NavItem[] => {
                 title: '通知設定',
                 href: '/notifications',
                 icon: Bell,
-            },
-            {
-                title: '系統設定',
-                href: '/system/settings',
-                icon: Shield,
             }
         );
     }
@@ -105,28 +105,7 @@ const getMainNavItems = (slug?: string, userRole?: string): NavItem[] => {
     return baseItems;
 };
 
-const getFooterNavItems = (userRole?: string): NavItem[] => {
-    const items: NavItem[] = [
-        {
-            title: '說明文件',
-            href: '/help',
-            icon: BookOpen,
-        },
-    ];
-
-    // 管理員可以看到更多選項
-    if (userRole === 'admin') {
-        items.push(
-            {
-                title: '系統日誌',
-                href: '/system/logs',
-                icon: Database,
-            }
-        );
-    }
-
-    return items;
-};
+const getFooterNavItems = (_userRole?: string): NavItem[] => [];
 
 export function AppSidebar() {
     const slug = useSlug();
