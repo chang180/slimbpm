@@ -5,40 +5,44 @@
 
 ---
 
-## 📅 最後更新：2026-06-06（低成本 Feature/Inertia regression 補強）
+## 📅 最後更新：2026-06-06（實作狀態盤點：handoff 完成度修正）
 
 ---
 
-## ✅ 已完成 (截至 2026-06-06)
+## ⚠️ 目前真實狀態 (2026-06-06 盤點後)
 
-### 核心業務功能（全部 100%）
+> 先前 handoff 寫成「核心業務功能 100% / 報表系統 100%」不準確。
+> 目前比較接近「後端多數 CRUD/API 已有雛形，前端多處仍是 demo、壞連結或未接 API」。
 
-| 功能 | 後端 | 前端 | 測試 |
-|------|------|------|------|
-| 基礎架構 / 身份驗證 | ✅ | ✅ | ✅ |
-| 用戶管理 | ✅ | ✅ | ✅ |
-| 部門管理 | ✅ | ✅ | ✅ |
-| 組織設定 | ✅ | ✅ | ✅ |
-| 表單設計器 | ✅ | ✅ | ✅ |
-| 表單管理與提交 | ✅ | ✅ | ✅ |
-| 工作流程設計器 | ✅ | ✅ | ✅ |
-| 工作流程執行 (啟動/審批/暫停/恢復/取消) | ✅ | ✅ | ✅ |
-| 工作流程監控 (admin/manager) | ✅ | ✅ | ✅ |
-| 成員邀請系統 | ✅ | ✅ | ✅ |
-| 通知系統 (中心 + 下拉 + 徽章) | ✅ | ✅ | ✅ |
-| 儀表板 (真實資料 + 6 個月圖表) | ✅ | ✅ | ✅ |
-| 個人設定 (資料/密碼/外觀/2FA) | ✅ | ✅ | ✅ |
+### 核心功能盤點
 
-### 報表系統（100%）
+| 功能 | 後端 | 前端 | 測試 | 目前判定 |
+|------|------|------|------|---------|
+| 基礎架構 / 身份驗證 | 🟡 | 🟡 | ✅ | Fortify/Inertia 基本可用，但 `npm run types` 顯示 2FA/Wayfinder form helper 型別錯誤 |
+| 用戶管理 | 🟡 | 🔴 | 🟡 | Controller/API 有，但 `Users/Create.tsx`、`Users/Edit.tsx` 缺 Select imports/type errors |
+| 部門管理 | 🟡 | 🟡 | 🟡 | 基本頁面/API 有，TypeScript 有 JSX namespace 錯誤 |
+| 組織設定 / 偏好 | 🔴 | 🔴 | 🟡 | Controller 使用 `OrganizationSetting::first()`，未使用 current org；update 只回 JSON，不持久化；前端型別大量不匹配 |
+| 組織報表 (`/organization/reports`) | 🔴 | 🔴 | ❌ | 前端含模擬圖表、硬編效能數字、匯出只 `console.log` |
+| 表單列表 / 建立 / 顯示 / 提交 / 結果 | 🟡 | 🔴 | 🟡 | 後端有，但前端多處使用錯誤/缺失 route helper；`Forms/Edit.tsx` 不存在但 controller render `Forms/Edit` |
+| 獨立表單設計器 (`/form-builder`) | 🔴 | 🔴 | ❌ | localStorage demo，`alert()` 儲存，不接 `form_templates` |
+| 工作流程設計器 | 🟡 | 🟡 | ✅ | API 可建立 template，ReactFlow 設計器可存；但 Wayfinder route type 有衝突 |
+| 工作流程執行 / 審批 | 🟡 | 🟡 | ✅ | API/頁面可跑主要流程；dashboard 上的審批快捷操作只是 `console.log` |
+| 工作流程監控 | 🟡 | 🟡 | ✅ | admin/manager monitor 有實作與測試，需再確認前端 cancel/suspend/resume UX |
+| 成員邀請系統 | 🟡 | 🔴 | 🟡 | `/invitations` 頁面/API 有；dashboard 的邀請元件只接 `useDashboardActions` console.log |
+| 通知系統 | 🟡 | 🟡 | 🟡 | 通知中心/下拉/API 有，尚需實測全部 mark-read/filter 行為 |
+| 儀表板 | 🟡 | 🔴 | 🟡 | 後端 stats/chart 使用真資料；前端 quick actions 多個壞連結與假 handler |
+| 個人設定 / 2FA | 🟡 | 🟡 | 🟡 | 後端/頁面有測試，但 TypeScript 顯示 Wayfinder `.form()` helper 型別錯誤 |
+
+### 報表系統盤點
 
 | 報表頁面 | 狀態 |
 |---------|------|
-| 報表中心 (`/reports`) — 真實 org 統計 | ✅ |
-| 用戶活動報表 — 真實資料 + 圖表 | ✅ |
-| 流程效能報表 — 真實資料 + 圖表 | ✅ |
-| 系統統計報表 — 真實資料 + 圖表 | ✅ |
-| 部門分析報表 — 表格 + 進度條 | ✅ |
-| CSV 匯出 (ExportService) — 真實資料 + org scoping | ✅ |
+| `/reports` 報表中心 | 🟡 真資料 + org scoping 測試已補 |
+| `/reports/user-activity` | 🟡 Controller 真資料，前端需互動/匯出手動驗證 |
+| `/reports/workflow-performance` | 🟡 真資料 + org scoping 測試已補 |
+| `/reports/system-stats` | 🟡 Controller 真資料，前端需互動/匯出手動驗證 |
+| `/reports/department-analysis` | 🟡 真資料 + org scoping 測試已補 |
+| CSV 匯出 (ExportService) | ✅ 已有 org scoping 測試 |
 
 ### 測試統計
 - **205 個測試 / 970 個斷言** — 全部通過 (100%)
@@ -60,7 +64,26 @@
 
 ## 🔧 目前已知問題 / 待修正
 
-無重大待修正問題。ExportService 已於 2026-06-06 完整修正。
+### 高優先級問題
+1. **前端 TypeScript 未通過**
+   - `npm run types` 失敗，涵蓋 Dashboard、Forms、Organization、Users、2FA、Wayfinder generated routes。
+   - `npm run build` 仍可通過，因 Vite build 不等同 typecheck。
+2. **Dashboard 多個假操作**
+   - `resources/js/hooks/useDashboardActions.ts` 幾乎全是 `console.log`，包含邀請、流程啟動/查看/編輯/審批。
+   - `QuickActions.tsx` 連到不存在路由：`/workflows/instances`、`/organization/permissions`、`/organization/backup`、`/organization/export`。
+   - `WorkflowMenu.tsx` 連到不存在路由：`/workflows/instances`、`/workflows/reports`。
+3. **表單前端路由/頁面缺口**
+   - `resources/js/lib/route.ts` 只支援少數 route name，但 Forms pages 呼叫 `route('forms.*')`。
+   - `Forms/Show.tsx`、`Forms/Submit.tsx` 使用 `route()` 但沒有正確 import。
+   - `resources/js/pages/Forms/Edit.tsx` 不存在，`FormController@edit` 會 render missing component。
+   - `/form-builder` 是 localStorage demo，未接後端。
+4. **組織管理多處是 demo**
+   - `OrganizationController` 多處使用 `OrganizationSetting::first()`，沒有 current org scoping。
+   - `updateSettings()`、`updatePreferences()` 驗證後只回 JSON，沒有持久化。
+   - `Organization/Reports.tsx` 使用模擬 chart data、硬編「120ms / 99.9% / 1,234」等假數據。
+5. **Wayfinder / route name 衝突**
+   - `api/v1/forms` 與 `forms`、`api/v1/workflows` 與 `workflows` 等同名 route 導致 generated routes 混雜，TypeScript 報錯。
+   - Feature test 裡已遇到 `route('forms.show')` 解析到 API JSON 的問題。
 
 ### Pest Browser E2E 前置條件
 目前專案尚未安裝 `pestphp/pest-plugin-browser`，因此真正的 Pest 4 Browser `visit()` 測試尚不能加入/執行。
@@ -74,12 +97,24 @@
 ## 📋 下一步開發順序
 
 ### 🎯 後續任務 (依優先順序)
-1. **低成本 regression 測試補強**（目前採用）
-   - 優先用 Laravel Feature + Inertia endpoint tests，不新增 Playwright/Cypress/Dusk
-   - 下一批可補：通知中心頁面 props、邀請流程 Web 頁面、設定頁權限/2FA 邊界
-2. **行動端響應式審查** — 現有頁面在小螢幕的排版
-3. **生產部署文件** — `.env.production` 範本、安裝步驟
-4. **E2E 瀏覽器測試** (可選)
+1. **先修前端可用性阻斷**
+   - 修 `npm run types` 的主要錯誤，至少先讓 Forms、Dashboard、Organization 三大區塊型別穩定。
+   - 移除或修正壞連結與假 handler。
+2. **表單模組收斂**
+   - 決定 `/form-builder` 是否保留；若保留，必須接 `FormTemplate` 後端。
+   - 補 `Forms/Edit.tsx` 或移除 edit route/入口。
+   - 改掉 Forms pages 的錯誤 route helper 使用。
+3. **Dashboard 快捷操作接真功能**
+   - 邀請：接 `/api/v1/invitations` 或導到 `/invitations`。
+   - 工作流程：啟動導 `/workflows/start?template_id=...`，查看導 `/workflows/{id}`，審批導詳情頁或 step API。
+4. **組織設定/報表重做成真資料**
+   - 使用 `current_organization`，不要 `OrganizationSetting::first()`。
+   - 設定與偏好要持久化到 DB 或明確改成唯讀/未實作。
+5. **低成本 regression 測試補強**
+   - 優先用 Laravel Feature + Inertia endpoint tests，不新增 Playwright/Cypress/Dusk。
+6. **行動端響應式審查** — 現有頁面在小螢幕的排版。
+7. **生產部署文件** — `.env.production` 範本、安裝步驟。
+8. **E2E 瀏覽器測試** (可選)
    - 前置：需先安裝 `pestphp/pest-plugin-browser` 與 Playwright（依賴變更需使用者同意）
    - 僅保留少量 smoke flow：登入 → 建立表單 → 啟動工作流程 → 審批
 
@@ -117,6 +152,10 @@ DB CHECK constraint 只允許：`['running', 'completed', 'cancelled', 'suspende
 `forms.*`、`workflows.*` 同時存在 Web 與 API route name 時，Feature 測試中 `route('forms.show')` / `route('workflows.index')` 可能解析到 API。
 測試 Web 頁面請優先使用明確 path，例如 `/forms/{id}`、`/workflows`，或先確認 `route:list`。
 
+### 前端 route helper 注意
+`resources/js/lib/route.ts` 不是完整 Ziggy/Wayfinder route helper，只包含少數 auth/dashboard route。
+不要用它產生 `forms.*`、`organization.*` 等路由，否則可能回傳 `#`。
+
 ### Pint 執行 (Windows)
 ```bash
 php vendor/bin/pint --dirty   # 注意必須加 php 前綴
@@ -138,6 +177,11 @@ php vendor/bin/pint --dirty   # 注意必須加 php 前綴
 | 報表後端 | `app/Http/Controllers/ReportsController.php` |
 | 工作流程監控後端 | `app/Http/Controllers/WorkflowMonitorController.php` |
 | CSV 匯出 | `app/Services/ExportService.php` |
+| Dashboard 假操作來源 | `resources/js/hooks/useDashboardActions.ts` |
+| Dashboard 壞連結來源 | `resources/js/components/dashboard/QuickActions.tsx` |
+| Dashboard Workflow 壞連結來源 | `resources/js/components/dashboard/WorkflowMenu.tsx` |
+| localStorage 表單設計 demo | `resources/js/pages/FormBuilder.tsx` |
+| 組織設定/報表 Controller | `app/Http/Controllers/OrganizationController.php` |
 | 工作流程監控前端 | `resources/js/pages/workflows/Monitor.tsx` |
 | 部門分析報表前端 | `resources/js/pages/reports/DepartmentAnalysis.tsx` |
 | 工作流程監控測試 | `tests/Feature/WorkflowMonitorTest.php` |
@@ -158,21 +202,25 @@ php artisan test tests/Feature/EndToEndWorkflowFeatureTest.php tests/Feature/Wor
 php artisan test tests/Feature/ReportsPagesTest.php
 php artisan test tests/Feature/ReportsPagesTest.php tests/Feature/ReportsExportTest.php tests/Feature/EndToEndWorkflowFeatureTest.php
 php vendor/bin/pint --dirty
+npm run types
+npm run build
 ```
 
 結果：
 - 16 個測試 / 151 個斷言通過（報表頁面 + 報表匯出 + Feature E2E 工作流程）
 - Pint dirty 通過
+- `npm run types` 失敗（大量前端型別/route/helper 問題，見「高優先級問題」）
+- `npm run build` 通過（但不代表 typecheck 通過）
 - 尚未重跑全套測試；上次全套紀錄仍為 205 個測試 / 970 個斷言通過
 
 ---
 
 ## 📊 整體進度
 
-- **核心業務功能**: 100% ✅
-- **報表系統**: 100% ✅
-- **整體完成度**: ~92%
-- **剩餘**: 低成本 regression 補強、行動端、部署文件；Browser E2E 暫列可選
+- **核心業務功能**: 約 55-65%（後端雛形多，前端整合缺口大）
+- **報表系統**: 約 70%（`/reports/*` 較完整，`/organization/reports` 是 demo）
+- **整體完成度**: 暫估 ~60%
+- **剩餘**: 前端可用性阻斷、表單/儀表板/組織模組整合、低成本 regression、行動端、部署文件
 
 ---
 
