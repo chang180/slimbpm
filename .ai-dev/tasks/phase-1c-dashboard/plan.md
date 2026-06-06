@@ -6,58 +6,80 @@
 | **狀態** | 可派工 |
 | **協調者** | Cursor |
 | **前置** | Phase 1B 已驗收（2026-06-06） |
-| **前置閱讀** | `docs/03-module-status.md`（Dashboard 章節） |
+| **前置閱讀** | `docs/03-module-status.md`（Dashboard 章節）、Phase 1B 的 Wayfinder 用法 |
 
 ---
 
 ## 背景
 
-Dashboard 後端 `DashboardController` 已提供真實 stats/chart 資料，但前端：
+Dashboard 後端 `DashboardController` 已提供真實 stats / chart / invitations / workflow 資料，但前端：
 
-1. **`useDashboardActions.ts`** — 所有 handler 僅 `console.log`，未導航或呼叫 API。
-2. **`dashboard.tsx`** — 把 `handleSendInvitation` 等 spread 給子元件，但 `ManagerDashboard` 期望 `onSendInvitation` 等 prop 名稱 → TypeScript 報錯。
-3. **`QuickActions.tsx` / `WorkflowMenu.tsx`** — 連到不存在路由：
-   - `/workflows/instances`
-   - `/workflows/reports`
-   - `/organization/permissions`
-   - `/organization/backup`
-   - `/organization/export`
+1. **`useDashboardActions.ts`** — 全部 handler 只有 `console.log`。
+2. **`dashboard.tsx`** — spread `{...actions}` 傳 `handleSendInvitation`，子元件卻要 `onSendInvitation`；`UserDashboard` 還缺 `organizationSlug`。
+3. **`QuickActions.tsx` / `WorkflowMenu.tsx`** — 含不存在路由與 TS union 錯誤（`onClick` vs `href`）。
+
+目前 dashboard 相關 TS 錯誤約 **10+**（全專案 131）。
 
 ---
 
 ## 協調者決策
 
-### 不存在路由的處理
+### 壞連結替換表
 
-| 原連結 | 決策 |
-|--------|------|
-| `/workflows/instances` | 改為 `/workflows`（現有 WorkflowInstance index） |
-| `/workflows/reports` | 改為 `/reports/workflow-performance` |
-| `/organization/permissions` | **移除**（Phase 4 才實作） |
+| 原 href | 處置 |
+|---------|------|
+| `/workflows/instances` | → `/workflows` |
+| `/workflows/reports` | → `/reports/workflow-performance` |
+| `/organization/permissions` | **移除**（Phase 4） |
 | `/organization/backup` | **移除** |
 | `/organization/export` | **移除** |
 
-### 邀請操作
+保留且已正確：`/forms/create`、`/workflows/designer`、`/reports`、`/organization/settings` 等。
 
-Dashboard 邀請 widget 應呼叫既有 API（`api.invitations.*`）或導向 `/invitations` 管理頁。優先：
+### 邀請 API
 
-- 發送/重送/取消 → `router.post/delete` 至 Wayfinder `@/routes/api/invitations` 或等效 API path
-- 「邀請成員」快捷 → Link 至 `/invitations`
+使用既有 session-auth API（非 Sanctum token）：
 
-### 工作流程操作
+| 操作 | Method | Path |
+|------|--------|------|
+| 發送 | POST | `/api/v1/invitations` |
+| 重送 | POST | `/api/v1/invitations/{id}/resend` |
+| 取消 | DELETE | `/api/v1/invitations/{id}` |
 
-- 啟動模板 → `router.get('/workflows/start')` 或 `@/routes/workflows` 的 start route
-- 查看實例 → `router.get(workflowsRoutes.show.url({ workflowInstance: id }))`
-- 批准/拒絕 → 若 dashboard 無 inline UI，改為導向 workflow show 頁（**不要**留 console.log）
+Payload 參考 `InvitationStoreRequest`：`emails`（string[]）、`role`、`message?`。
+
+成功後建議：
+
+```tsx
+router.reload({ only: ['invitations', 'stats'] });
+```
+
+或使用 Inertia `router.post` / `router.delete` 至上述 path（需 `Accept: application/json` 或依 API 回應處理）。
+
+快捷「邀請成員」→ `router.visit('/invitations')` 或展開現有 `MemberInvitation` 表單。
+
+### 工作流程導航
+
+```tsx
+import workflowsRoutes from '@/routes/workflows';
+
+// 啟動模板
+router.get(workflowsRoutes.start.url());
+
+// 查看實例
+router.get(workflowsRoutes.show.url({ workflowInstance: Number(id) }));
+```
+
+批准/拒絕：Dashboard **不實作 inline API**；改導向 workflow show 頁讓使用者操作（避免半套 API 整合）。
 
 ---
 
 ## 目標
 
-1. 移除 dashboard 相關 `console.log` 假 handler。
-2. 修正 `dashboard.tsx` 與 `UserDashboard` / `ManagerDashboard` 的 prop 對接。
-3. 修復或移除所有壞連結。
-4. Dashboard 相關 TypeScript 錯誤清零。
+1. 移除 dashboard 模組所有 `console.log` 假 handler。
+2. 修正 prop 命名對接（`handle*` → `on*`，補 `organizationSlug`）。
+3. 修復 QuickActions union type 與 WorkflowMenu 壞連結。
+4. dashboard 相關 TS errors = 0。
 
 ---
 
@@ -65,32 +87,63 @@ Dashboard 邀請 widget 應呼叫既有 API（`api.invitations.*`）或導向 `/
 
 ### Task 1：重寫 `useDashboardActions.ts`
 
-- [ ] 使用 `router` from `@inertiajs/react` 做導航。
-- [ ] 邀請 CRUD 呼叫 `/api/v1/invitations`（或 Wayfinder `@/routes/api/invitations`）。
-- [ ] 工作流程 handler 改為導向真實頁面。
-- [ ] 成功/失敗後 `router.reload({ only: [...] })` 刷新 invitations/stats（若需要）。
+**檔案：** `resources/js/hooks/useDashboardActions.ts`
 
-### Task 2：修正 `dashboard.tsx` prop mapping
+- [ ] 改回傳 **`on*`** 命名（與子元件 interface 一致），或只在 `dashboard.tsx` 做 mapping（二擇一，推薦 hook 直接回傳 `onSendInvitation` 等）。
+- [ ] 邀請：實作 POST/DELETE/POST resend 至 `/api/v1/invitations*`，錯誤時 `console.error` 可保留，但不可只有 log 而不發 request。
+- [ ] 工作流程：`onViewWorkflow` → `workflowsRoutes.show.url(...)`；`onStartWorkflow` → `workflowsRoutes.start.url()`。
+- [ ] `onInviteMembers` / `onSendBulkInvites` → 導向 `/invitations` 或 toggle MemberInvitation UI（若子元件已有表單，可 scroll/focus 即可）。
+- [ ] `onApproveWorkflow` / `onRejectWorkflow` → 導向 instance show 頁（同上 show url）。
 
-- [ ] 將 `handleSendInvitation` 等映射為 `onSendInvitation` 等，或統一子元件 prop 命名。
-- [ ] 確保 `UserDashboard` / `ManagerDashboard` props 與傳入值一致。
-- [ ] 移除多餘的 `maxUsers` prop 錯誤（若子元件未宣告則補 interface 或移除傳遞）。
+### Task 2：修正 `dashboard.tsx`
 
-### Task 3：修復 QuickActions / WorkflowMenu
+**檔案：** `resources/js/pages/dashboard.tsx`
 
-- [ ] 依上表替換或移除壞連結。
-- [ ] `QuickActions.tsx` 的 `onClick` union type 錯誤一併修復（TS2339）。
-- [ ] 確認 Phase 1B 已改的 `/forms/create` 連結仍正確。
+- [ ] 傳入 `organizationSlug: organization.slug` 給 `UserDashboard`（目前缺此 prop）。
+- [ ] 確認 spread 的 action props 名稱與 `UserDashboardProps` / `ManagerDashboardProps` 一致。
+- [ ] `maxUsers`：若子元件需要則保留；`UserDashboard` interface 若無 `maxUsers` 則不要傳（目前 TS 報錯來源之一）。
+
+**參考 mapping：**
+
+```tsx
+const {
+  onSendInvitation,
+  onResendInvitation,
+  // ...
+} = useDashboardActions();
+
+<UserDashboard
+  {...safeProps}
+  organizationSlug={organization.slug}
+  onStartWorkflow={onStartWorkflow}
+  // ...
+/>
+```
+
+### Task 3：`QuickActions.tsx` + `WorkflowMenu.tsx`
+
+**QuickActions：**
+
+- [ ] 依上表改 href 或移除 systemActions 中三項未實作連結。
+- [ ] 修 TS2339：將 action 型別拆成 `{ href: string; ... } | { onClick: () => void; ... }` discriminated union，render 時用 `'href' in action` 窄化。
+
+**WorkflowMenu：**
+
+- [ ] `/workflows/instances` → `/workflows`
+- [ ] `/workflows/reports` → `/reports/workflow-performance`
 
 ### Task 4：測試
 
-- [ ] `php artisan test` — 217+ 全過。
-- [ ] 新增 `tests/Feature/DashboardPageTest.php`（至少：admin 可載入 dashboard Inertia 頁、props 含 stats）。
-- [ ] `npm run types` — dashboard 相關檔案 0 error：
+- [ ] 新增 `tests/Feature/DashboardPageTest.php`：
+  - admin/manager 可 GET `/dashboard/{slug}` → 200 + Inertia `dashboard`
+  - props 含 `stats`、`organization`、`user`
+- [ ] `php artisan test` — 217+ 全過
+- [ ] `npm run types` — 以下路徑 0 error：
   - `resources/js/pages/dashboard.tsx`
   - `resources/js/hooks/useDashboardActions.ts`
-  - `resources/js/components/dashboard/*`
-- [ ] `npm run build` 通過。
+  - `resources/js/components/dashboard/**`
+- [ ] `npm run build` 通過
+- [ ] PHP 有改：`php vendor/bin/pint --dirty`
 
 ---
 
@@ -99,15 +152,16 @@ Dashboard 邀請 widget 應呼叫既有 API（`api.invitations.*`）或導向 `/
 | 項目 | 階段 |
 |------|------|
 | Organization 設定持久化 | Phase 1D |
-| 新增 permissions/backup/export 頁面 | Phase 4 |
-| Dashboard 視覺重設計 | 不在 scope |
+| 新增 permissions/backup/export 頁 | Phase 4 |
+| Dashboard UI 視覺重設計 | 不在 scope |
+| Inline 審批 API 整合 | 不在 scope（導向 show 頁即可） |
 
 ---
 
 ## Exit Criteria
 
-- [ ] Dashboard 上每個可點擊項目要麼導向真實頁面，要麼呼叫真 API，要麼從 UI 移除
-- [ ] 無 `console.log` 假 handler 殘留於 `useDashboardActions.ts`
+- [ ] 無 `console.log` 假 handler 於 `useDashboardActions.ts`（error log 除外）
+- [ ] 所有 dashboard 可點項：真導航 / 真 API / 已移除
 - [ ] dashboard 相關 TS errors = 0
 - [ ] `php artisan test` 全過
 - [ ] `progress.md` 含修前/修後 dashboard TS error 數
