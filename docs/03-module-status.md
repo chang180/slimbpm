@@ -40,17 +40,26 @@ Major gaps:
 
 ## Forms
 
-Status: Red
+Status: Yellow (was Red)
 
-Backend has `FormController` and API controller. Feature tests cover some API and web paths. Frontend integration is inconsistent.
+Phase 1B complete (2026-06-06):
 
-Major gaps:
+- All Forms pages use Wayfinder `@/routes/forms` as `formsRoutes`.
+- `Forms/Edit.tsx` added; web routes reachable without 500.
+- Pages use `AppLayout` consistently.
+- `/form-builder` demoted (demo banner; QuickActions links to `/forms/create`).
+- `tests/Feature/FormPagesTest.php` covers index/create/show/edit/submit/results.
 
-- `resources/js/pages/Forms/Edit.tsx` does not exist, but `FormController@edit` renders `Forms/Edit`.
-- `resources/js/pages/FormBuilder.tsx` is localStorage-only demo behavior.
-- Several Forms pages call `route('forms.*')` via a hand-written helper that does not define those routes.
-- `Forms/Show.tsx` and `Forms/Submit.tsx` use `route()` without proper import.
-- `Forms/Index.tsx` has typing confusion between paginated `forms` data and imported `forms` route helper.
+Remaining:
+
+- `/form-builder` still localStorage demo (Phase 4 integration).
+- Form definition editing UX may need designer integration later.
+
+Important files:
+
+- `resources/js/pages/Forms/*`
+- `app/Http/Controllers/FormController.php`
+- `tests/Feature/FormPagesTest.php`
 
 ## Workflows
 

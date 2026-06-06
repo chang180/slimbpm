@@ -28,18 +28,16 @@ Goal: make the three highest-risk areas usable without dead links, demo handlers
 
 **Result:** TS errors 176 → 164; 209 tests pass.
 
-### 1B. Forms Module (Current)
+### 1B. Forms Module ✅ (2026-06-06)
 
-- Add `resources/js/pages/Forms/Edit.tsx` or remove the edit route until it exists.
-- Stop using incomplete `resources/js/lib/route.ts` for `forms.*` routes.
-- Decide fate of `/form-builder`:
-  - integrate with `FormTemplate` persistence, or
-  - rename/mark as demo and remove from primary navigation.
-- Add focused Feature/Inertia tests for create → show → submit → results.
+- [x] Wire Forms pages to Wayfinder `@/routes/forms`
+- [x] Add `Forms/Edit.tsx`
+- [x] Demote `/form-builder` demo
+- [x] Add `FormPagesTest.php` (8 tests)
 
-**Exit criteria:** all Forms sidebar links work; edit page does not 500; no `route()` import gaps.
+**Result:** Forms TS errors 0; total TS 164 → 131; 217 tests pass.
 
-### 1C. Dashboard Module
+### 1C. Dashboard Module (Current)
 
 - Replace `useDashboardActions.ts` `console.log` handlers with real navigation or API calls.
 - Fix or remove broken links in `QuickActions.tsx` and `WorkflowMenu.tsx`.

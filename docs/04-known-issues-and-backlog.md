@@ -15,17 +15,21 @@ Command:
 npm run types
 ```
 
-Current status: **164 errors** (down from 176 after Phase 1A).
+Current status: **131 errors** (down from 164 after Phase 1B; 176 after Phase 1A).
 
 Resolved in Phase 1A:
 
 - Wayfinder workflow route collision
 - auth/2FA `.form()` helper type mismatch
 
-Remaining error clusters (Phase 1B–1D / Phase 2):
+Resolved in Phase 1B:
 
-- Forms route helper and missing component issues → **Phase 1B**
-- Dashboard props/action mismatch → Phase 1C
+- Forms route helper naming collision and missing `route()` imports
+- Forms layout/type errors in `resources/js/pages/Forms/*`
+
+Remaining error clusters (Phase 1C–1D / Phase 2):
+
+- Dashboard props/action mismatch → **Phase 1C**
 - Organization prop/type mismatches → Phase 1D
 - Users create/edit missing Select imports → Phase 2
 - Departments JSX namespace → Phase 2
