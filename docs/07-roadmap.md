@@ -75,17 +75,21 @@ Goal: raise Yellow modules to Green with tests and manual verification.
 - [x] InvitationsPageTest + NotificationsPageTest
 - TS 5 → 4；tests 224 → **234**
 
-### 2D. Workflows & Reports (Next)
+### 2D. Workflows & Reports ✅ (2026-06-06)
 
-- Monitor cancel/suspend/resume UX; Reports export/filters
-- See `.ai-dev/tasks/phase-2d-workflows-reports/plan.md`
+- [x] Monitor credentials + error banner + pagination labels
+- [x] Reports Index export buttons wired
+- Tests 234 → **236**
+
+### 2E. Misc TypeScript (Next)
+
+- Clear remaining 4 TS errors (app-header, DynamicForm, enhanced-select)
+- See `.ai-dev/tasks/phase-2e-misc-typescript/plan.md`
 
 | Module | Work | Phase |
 |--------|------|-------|
-| ~~Invitations~~ | Paginator + Wayfinder + page tests | **2C** ✅ |
-| ~~Notifications~~ | Inertia page smoke tests | **2C** ✅ |
-| Workflows | Monitor UX verification | **2D** |
-| Reports | Export buttons and date filters | **2D** |
+| ~~Workflows~~ | Monitor UX verification | **2D** ✅ |
+| ~~Reports~~ | Export buttons and page tests | **2D** ✅ |
 | Misc TS | app-header, DynamicForm, enhanced-select | **2E** |
 | Workflows | Verify monitor cancel/suspend/resume UX | 2D |
 | Reports | Verify export buttons and date filters on all `/reports/*` pages | 2D |

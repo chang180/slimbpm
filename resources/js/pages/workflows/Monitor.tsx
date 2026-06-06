@@ -15,7 +15,7 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
+import { formatPaginationLabel, hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface InstanceRow {
     id: number;
@@ -124,6 +124,7 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
 
     const [search, setSearch] = useState(filters.search ?? '');
     const [actionLoading, setActionLoading] = useState<number | null>(null);
+    const [actionError, setActionError] = useState<string | null>(null);
 
     const activeStatus = filters.status ?? '';
 
@@ -140,12 +141,16 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
         applyFilters({ ...(status ? { status } : {}), ...(search ? { search } : {}) });
     };
 
+    const actionLabels: Record<string, string> = { suspend: '暫停', resume: '恢復', cancel: '取消' };
+
     const handleAction = async (id: number, action: 'suspend' | 'resume' | 'cancel') => {
         setActionLoading(id);
+        setActionError(null);
         try {
             const csrfToken = (document.querySelector('meta[name="csrf-token"]') as HTMLMetaElement)?.content ?? '';
             const res = await fetch(`/api/v1/workflow-instances/${id}`, {
                 method: 'PUT',
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
@@ -156,7 +161,13 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
             });
             if (res.ok) {
                 router.reload({ only: ['instances', 'stats'] });
+            } else {
+                const label = actionLabels[action] ?? action;
+                setActionError(`${label}操作失敗（狀態碼 ${res.status}），請稍後再試。`);
             }
+        } catch {
+            const label = actionLabels[action] ?? action;
+            setActionError(`${label}操作時發生網路錯誤，請檢查連線後再試。`);
         } finally {
             setActionLoading(null);
         }
@@ -194,6 +205,13 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
                         </button>
                     ))}
                 </div>
+
+                {/* Action error */}
+                {actionError && (
+                    <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-950/30 dark:text-red-400">
+                        {actionError}
+                    </div>
+                )}
 
                 {/* Search & Filter */}
                 <form onSubmit={handleSearch} className="flex gap-2">
@@ -352,8 +370,9 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
                                     size="sm"
                                     disabled={!link.url}
                                     onClick={() => link.url && router.get(link.url)}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
+                                >
+                                    {formatPaginationLabel(link.label)}
+                                </Button>
                             ))}
                         </div>
                     </div>

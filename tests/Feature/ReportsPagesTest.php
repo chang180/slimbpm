@@ -113,6 +113,39 @@ it('scopes workflow performance report props to organization users and templates
     CarbonImmutable::setTestNow();
 });
 
+it('renders user activity report page with correct props', function () {
+    $organization = OrganizationSetting::factory()->create();
+    $admin = User::factory()->create(['organization_id' => $organization->id, 'role' => 'admin']);
+
+    actingAs($admin)
+        ->get('/reports/user-activity')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('reports/UserActivity')
+            ->has('userStats')
+            ->has('activityData')
+            ->has('departmentStats')
+            ->where('userStats.totalUsers', 1)
+        );
+});
+
+it('renders system stats report page with correct props', function () {
+    $organization = OrganizationSetting::factory()->create();
+    $admin = User::factory()->create(['organization_id' => $organization->id, 'role' => 'admin']);
+
+    actingAs($admin)
+        ->get('/reports/system-stats')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('reports/SystemStats')
+            ->has('systemStats')
+            ->has('usageData')
+            ->has('orgName')
+            ->where('systemStats.totalUsers', 1)
+            ->where('orgName', $organization->name)
+        );
+});
+
 it('scopes department analysis stats and row metrics to the current organization', function () {
     $organization = OrganizationSetting::factory()->create();
     $admin = User::factory()->create(['organization_id' => $organization->id, 'role' => 'admin']);

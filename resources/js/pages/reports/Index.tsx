@@ -3,7 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     BarChart3,
     FileText,
@@ -42,6 +42,7 @@ export default function ReportsIndex({ summary }: ReportsIndexProps) {
             description: '用戶登入、操作記錄和活躍度分析',
             icon: Users,
             href: '/reports/user-activity',
+            exportHref: '/reports/export/user-activity',
             color: 'text-blue-600',
             statValue: summary.totalUsers.toLocaleString(),
             statLabel: '組織成員數',
@@ -52,6 +53,7 @@ export default function ReportsIndex({ summary }: ReportsIndexProps) {
             description: '工作流程執行統計和效能分析',
             icon: TrendingUp,
             href: '/reports/workflow-performance',
+            exportHref: '/reports/export/workflow-performance',
             color: 'text-green-600',
             statValue: summary.activeWorkflows.toLocaleString(),
             statLabel: '進行中流程',
@@ -62,6 +64,7 @@ export default function ReportsIndex({ summary }: ReportsIndexProps) {
             description: '系統使用情況和資源統計',
             icon: BarChart3,
             href: '/reports/system-stats',
+            exportHref: '/reports/export/system-stats',
             color: 'text-purple-600',
             statValue: summary.totalSubmissions.toLocaleString(),
             statLabel: '表單提交次數',
@@ -72,6 +75,7 @@ export default function ReportsIndex({ summary }: ReportsIndexProps) {
             description: '各部門活動和效能比較',
             icon: FileText,
             href: '/reports/department-analysis',
+            exportHref: null,
             color: 'text-orange-600',
             statValue: summary.totalWorkflowInstances.toLocaleString(),
             statLabel: '流程執行總數',
@@ -191,9 +195,15 @@ export default function ReportsIndex({ summary }: ReportsIndexProps) {
                                             查看報表
                                         </Link>
                                     </Button>
-                                    <Button variant="outline" size="sm">
-                                        <Download className="h-4 w-4" />
-                                    </Button>
+                                    {report.exportHref && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => router.post(report.exportHref as string)}
+                                        >
+                                            <Download className="h-4 w-4" />
+                                        </Button>
+                                    )}
                                 </div>
                             </CardContent>
                         </Card>
