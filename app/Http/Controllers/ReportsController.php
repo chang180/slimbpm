@@ -2,67 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Department;
+use App\Models\FormSubmission;
 use App\Models\FormTemplate;
+use App\Models\User;
+use App\Models\WorkflowInstance;
 use App\Models\WorkflowTemplate;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class ReportsController extends Controller
 {
-    protected ExportService $exportService;
+    public function __construct(protected ExportService $exportService) {}
 
-    public function __construct(ExportService $exportService)
-    {
-        $this->exportService = $exportService;
-    }
-
-    /**
-     * 顯示報表中心
-     */
     public function index(): Response
     {
         return Inertia::render('reports/Index');
     }
 
-    /**
-     * 顯示用戶活動報表
-     */
-    public function userActivity(): Response
+    public function userActivity(Request $request): Response
     {
-        // 獲取用戶活動統計
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $now = now();
+        $thisMonthStart = $now->copy()->startOfMonth();
+        $lastMonthStart = $now->copy()->subMonth()->startOfMonth();
+        $lastMonthEnd = $now->copy()->subMonth()->endOfMonth();
+
+        $totalUsers = $orgUserIds->count();
+        $newThisMonth = User::where('organization_id', $organization->id)
+            ->whereBetween('created_at', [$thisMonthStart, $now])
+            ->count();
+        $newLastMonth = User::where('organization_id', $organization->id)
+            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
+            ->count();
+
         $userStats = [
-            'totalUsers' => User::count(),
-            'activeUsers' => User::where('last_login_at', '>=', now()->subDay())->count(),
-            'newUsers' => User::where('created_at', '>=', now()->subMonth())->count(),
-            'avgSessionTime' => '2.5h', // 模擬資料
+            'totalUsers' => $totalUsers,
+            'newUsersThisMonth' => $newThisMonth,
+            'newUsersLastMonth' => $newLastMonth,
+            'totalSubmissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)->count(),
         ];
 
-        // 獲取用戶活動圖表資料 (模擬資料)
-        $activityData = [
-            ['date' => '1月', 'logins' => 120, 'actions' => 450, 'newUsers' => 15],
-            ['date' => '2月', 'logins' => 135, 'actions' => 520, 'newUsers' => 18],
-            ['date' => '3月', 'logins' => 148, 'actions' => 610, 'newUsers' => 22],
-            ['date' => '4月', 'logins' => 162, 'actions' => 730, 'newUsers' => 25],
-            ['date' => '5月', 'logins' => 175, 'actions' => 850, 'newUsers' => 28],
-            ['date' => '6月', 'logins' => 189, 'actions' => 920, 'newUsers' => 32],
-        ];
+        $activityData = $this->getMonthlyActivityData($organization->id, $orgUserIds);
 
-        // 獲取部門活動統計
-        $departmentStats = Department::withCount('users')
+        $departmentStats = Department::where('organization_id', $organization->id)
+            ->withCount('users')
             ->orderBy('users_count', 'desc')
-            ->limit(5)
+            ->limit(8)
             ->get()
-            ->map(function ($dept) {
-                return [
-                    'name' => $dept->name,
-                    'users_count' => $dept->users_count,
-                    'activity_percentage' => rand(60, 95), // 模擬活躍度
-                ];
-            });
+            ->map(fn ($dept) => [
+                'name' => $dept->name,
+                'users_count' => $dept->users_count,
+                'percentage' => $totalUsers > 0
+                    ? round(($dept->users_count / $totalUsers) * 100, 1)
+                    : 0,
+            ]);
 
         return Inertia::render('reports/UserActivity', [
             'userStats' => $userStats,
@@ -71,90 +70,150 @@ class ReportsController extends Controller
         ]);
     }
 
-    /**
-     * 顯示流程效能報表
-     */
-    public function workflowPerformance(): Response
+    public function workflowPerformance(Request $request): Response
     {
-        // 獲取流程效能統計
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $completedInstances = WorkflowInstance::whereIn('started_by', $orgUserIds)
+            ->where('status', 'completed')
+            ->whereNotNull('completed_at')
+            ->whereNotNull('started_at')
+            ->get(['started_at', 'completed_at']);
+
+        $avgCompletionDays = $completedInstances->isEmpty()
+            ? null
+            : round($completedInstances->average(
+                fn ($i) => $i->started_at->diffInHours($i->completed_at) / 24
+            ), 1);
+
         $workflowStats = [
-            'totalWorkflows' => WorkflowTemplate::count(),
-            'activeWorkflows' => WorkflowTemplate::where('is_active', true)->count(),
-            'completedToday' => 45, // 模擬資料
-            'avgCompletionTime' => '2.3天', // 模擬資料
+            'totalTemplates' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->count(),
+            'activeTemplates' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->where('is_active', true)->count(),
+            'totalInstances' => WorkflowInstance::whereIn('started_by', $orgUserIds)->count(),
+            'completedToday' => WorkflowInstance::whereIn('started_by', $orgUserIds)
+                ->where('status', 'completed')
+                ->whereDate('completed_at', today())
+                ->count(),
+            'running' => WorkflowInstance::whereIn('started_by', $orgUserIds)->where('status', 'running')->count(),
+            'avgCompletionDays' => $avgCompletionDays,
         ];
 
-        // 獲取流程效能圖表資料 (模擬資料)
-        $performanceData = [
-            ['month' => '1月', 'completed' => 120, 'pending' => 45, 'avgTime' => 2.5],
-            ['month' => '2月', 'completed' => 135, 'pending' => 52, 'avgTime' => 2.3],
-            ['month' => '3月', 'completed' => 148, 'pending' => 61, 'avgTime' => 2.1],
-            ['month' => '4月', 'completed' => 162, 'pending' => 73, 'avgTime' => 2.0],
-            ['month' => '5月', 'completed' => 175, 'pending' => 85, 'avgTime' => 1.9],
-            ['month' => '6月', 'completed' => 189, 'pending' => 92, 'avgTime' => 1.8],
-        ];
+        $performanceData = $this->getMonthlyWorkflowData($orgUserIds);
+
+        $templateUsage = WorkflowTemplate::withCount('instances')
+            ->whereIn('created_by', $orgUserIds)
+            ->where('is_current', true)
+            ->orderBy('instances_count', 'desc')
+            ->limit(5)
+            ->get()
+            ->map(fn ($t) => [
+                'name' => $t->name,
+                'count' => $t->instances_count,
+            ]);
 
         return Inertia::render('reports/WorkflowPerformance', [
             'workflowStats' => $workflowStats,
             'performanceData' => $performanceData,
+            'templateUsage' => $templateUsage,
         ]);
     }
 
-    /**
-     * 顯示系統統計報表
-     */
-    public function systemStats(): Response
+    public function systemStats(Request $request): Response
     {
-        // 獲取系統統計
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
         $systemStats = [
-            'totalUsers' => User::count(),
-            'totalDepartments' => Department::count(),
-            'totalForms' => FormTemplate::count(),
-            'totalWorkflows' => WorkflowTemplate::count(),
-            'systemUptime' => '99.9%', // 模擬資料
-            'avgResponseTime' => '150ms', // 模擬資料
+            'totalUsers' => $orgUserIds->count(),
+            'totalDepartments' => Department::where('organization_id', $organization->id)->count(),
+            'totalForms' => FormTemplate::whereIn('created_by', $orgUserIds)->count(),
+            'totalWorkflows' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->count(),
+            'totalSubmissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)->count(),
+            'totalWorkflowInstances' => WorkflowInstance::whereIn('started_by', $orgUserIds)->count(),
         ];
 
-        // 獲取系統使用統計 (模擬資料)
-        $usageData = [
-            ['date' => '1月', 'forms' => 45, 'workflows' => 12, 'users' => 120],
-            ['date' => '2月', 'forms' => 52, 'workflows' => 18, 'users' => 135],
-            ['date' => '3月', 'forms' => 61, 'workflows' => 25, 'users' => 148],
-            ['date' => '4月', 'forms' => 73, 'workflows' => 31, 'users' => 162],
-            ['date' => '5月', 'forms' => 85, 'workflows' => 38, 'users' => 175],
-            ['date' => '6月', 'forms' => 92, 'workflows' => 42, 'users' => 189],
-        ];
+        $usageData = $this->getMonthlyActivityData($organization->id, $orgUserIds);
 
         return Inertia::render('reports/SystemStats', [
             'systemStats' => $systemStats,
             'usageData' => $usageData,
+            'orgName' => $organization->name,
         ]);
     }
 
-    /**
-     * 匯出用戶活動報表
-     */
     public function exportUserActivity(Request $request)
     {
         $filters = $request->only(['department_id', 'date_from', 'date_to']);
+
         return $this->exportService->exportUserActivityReport($filters);
     }
 
-    /**
-     * 匯出系統統計報表
-     */
     public function exportSystemStats(Request $request)
     {
         $filters = $request->only(['date_from', 'date_to']);
+
         return $this->exportService->exportSystemStatsReport($filters);
     }
 
-    /**
-     * 匯出流程效能報表
-     */
     public function exportWorkflowPerformance(Request $request)
     {
         $filters = $request->only(['status', 'date_from', 'date_to']);
+
         return $this->exportService->exportWorkflowPerformanceReport($filters);
+    }
+
+    private function getMonthlyActivityData(int $organizationId, Collection $orgUserIds): array
+    {
+        $data = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $base = now()->subMonths($i);
+            $start = $base->copy()->startOfMonth();
+            $end = $base->copy()->endOfMonth();
+
+            $data[] = [
+                'month' => $base->format('n月'),
+                'newUsers' => User::where('organization_id', $organizationId)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->count(),
+                'submissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)
+                    ->whereBetween('submitted_at', [$start, $end])
+                    ->count(),
+                'workflows' => WorkflowInstance::whereIn('started_by', $orgUserIds)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->count(),
+            ];
+        }
+
+        return $data;
+    }
+
+    private function getMonthlyWorkflowData(Collection $orgUserIds): array
+    {
+        $data = [];
+
+        for ($i = 5; $i >= 0; $i--) {
+            $base = now()->subMonths($i);
+            $start = $base->copy()->startOfMonth();
+            $end = $base->copy()->endOfMonth();
+
+            $data[] = [
+                'month' => $base->format('n月'),
+                'started' => WorkflowInstance::whereIn('started_by', $orgUserIds)
+                    ->whereBetween('created_at', [$start, $end])
+                    ->count(),
+                'completed' => WorkflowInstance::whereIn('started_by', $orgUserIds)
+                    ->where('status', 'completed')
+                    ->whereBetween('completed_at', [$start, $end])
+                    ->count(),
+                'cancelled' => WorkflowInstance::whereIn('started_by', $orgUserIds)
+                    ->where('status', 'cancelled')
+                    ->whereBetween('updated_at', [$start, $end])
+                    ->count(),
+            ];
+        }
+
+        return $data;
     }
 }
