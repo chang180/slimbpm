@@ -15,7 +15,7 @@ Command:
 npm run types
 ```
 
-Current status: **128 errors** (down from 164 after Phase 1B; 131 after Phase 1C).
+Current status: **38 errors** (down from 128 after Phase 1D; Phase 1 complete).
 
 Resolved in Phase 1A:
 
@@ -32,32 +32,19 @@ Resolved in Phase 1C:
 - Dashboard props/action mismatch and fake handlers
 - QuickActions union type and broken dashboard links
 
-Remaining error clusters (Phase 1D / Phase 2):
+Resolved in Phase 1D:
 
-- Organization prop/type mismatches and layout props → **Phase 1D**
-- Users create/edit missing Select imports → Phase 2
-- Departments JSX namespace → Phase 2
+- Organization scoping, persistence, camelCase stats, fake reports data
 
-## P1 Route Naming ✅ (Phase 1A complete)
+Remaining error clusters (Phase 2):
 
-Web `forms.*` / `workflows.*` and API `api.forms.*` / `api.workflows.*` are now separated. Wayfinder web routes point to Inertia controllers.
+- Users create/edit Select imports and form submit → **Phase 2A** (~30 errors)
+- Departments JSX namespace → Phase 2B (~4 errors)
+- Misc components (app-header, DynamicForm, enhanced-select) → Phase 2C (~4 errors)
 
-## P1 Forms Integration ✅ (Phase 1B complete)
+## P1 Organization Scoping And Persistence ✅ (Phase 1D complete)
 
-Forms pages wired to Wayfinder; `Forms/Edit.tsx` added; `FormPagesTest.php` covers web paths.
-
-## P1 Dashboard Real Actions ✅ (Phase 1C complete)
-
-`useDashboardActions.ts` uses invitation API and Wayfinder navigation. See `DashboardPageTest.php`.
-
-## P1 Organization Scoping And Persistence
-
-Required work:
-
-- Use `current_organization` from `org.access`.
-- Stop using `OrganizationSetting::first()` for org pages.
-- Persist settings/preferences into `organization_settings.settings` or a defined schema.
-- Replace simulated organization report data with real queries or remove the page.
+See `OrganizationController.php` and updated `OrganizationManagementTest.php`.
 
 ## P2 Reports Verification
 

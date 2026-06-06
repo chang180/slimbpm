@@ -45,26 +45,34 @@ Goal: make the three highest-risk areas usable without dead links, demo handlers
 
 **Result:** Dashboard TS errors 0; total TS 131 → 128; 221 tests pass.
 
-### 1D. Organization Module (Current)
+### 1D. Organization Module ✅ (2026-06-06)
 
-- Replace `OrganizationSetting::first()` with `current_organization` in `OrganizationController`.
-- Persist settings and preferences instead of validate-and-return-JSON-only.
-- Replace simulated data in `Organization/Reports.tsx` with real queries or remove the page.
+- [x] Use `current_organization`; persist settings/preferences
+- [x] Org-scoped camelCase stats; remove fake reports data
+- [x] Update `OrganizationManagementTest.php`
 
-**Exit criteria:** settings survive page reload; org pages respect current org context.
+**Result:** Organization TS errors 0; total TS 128 → 38; 223 tests pass.
 
-## Phase 2 — Module Hardening
+**Phase 1 complete.**
+
+## Phase 2 — Module Hardening (Current)
 
 Goal: raise Yellow modules to Green with tests and manual verification.
 
-| Module | Work |
-|--------|------|
-| Users | Fix Select imports and Inertia form typing in create/edit |
-| Departments | Fix JSX namespace errors; verify CRUD flows |
-| Invitations | Ensure dashboard and `/invitations` use the same API paths |
-| Notifications | Add Feature tests for mark-read, filters, unread badge refresh |
-| Workflows | Clean route naming; verify monitor cancel/suspend/resume UX |
-| Reports | Verify export buttons and date filters on all `/reports/*` pages |
+### 2A. Users Module (Next)
+
+- Fix Select imports and Inertia form typing in create/edit
+- See `.ai-dev/tasks/phase-2a-users/plan.md`
+
+| Module | Work | Phase |
+|--------|------|-------|
+| Users | Fix Select imports and Inertia form typing in create/edit | **2A** |
+| Departments | Fix JSX namespace errors; verify CRUD flows | 2B |
+| Invitations | Ensure dashboard and `/invitations` use the same API paths | 2C |
+| Notifications | Add Feature tests for mark-read, filters, unread badge refresh | 2C |
+| Workflows | Verify monitor cancel/suspend/resume UX | 2D |
+| Reports | Verify export buttons and date filters on all `/reports/*` pages | 2D |
+| Misc TS | app-header, DynamicForm, enhanced-select | 2E |
 
 ## Phase 3 — Quality And Release Prep
 

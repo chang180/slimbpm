@@ -106,16 +106,21 @@ Important files:
 
 ## Organization
 
-Status: Red
+Status: Yellow (was Red)
 
-Organization pages exist, but this module is not production-ready.
+Phase 1D complete (2026-06-06):
 
-Major gaps:
+- All methods use `current_organization` from `org.access`.
+- Settings and preferences persist in `organization.settings` JSON.
+- Stats are org-scoped with camelCase keys; `recentActivity` from real WorkflowHistory/FormSubmission.
+- Organization pages use `AppLayout`; TS errors cleared.
+- `Organization/Reports` shows real summary + link to `/reports` (no fake metrics).
 
-- `OrganizationController` uses `OrganizationSetting::first()` in multiple methods instead of `current_organization`.
-- `updateSettings()` and `updatePreferences()` validate and return JSON but do not persist settings.
-- `Organization/Reports.tsx` contains simulated chart data and hard-coded metrics.
-- Several Organization pages use prop names/types that do not match shared TypeScript types.
+Important files:
+
+- `app/Http/Controllers/OrganizationController.php`
+- `resources/js/pages/Organization/*`
+- `tests/Feature/OrganizationManagementTest.php`
 
 ## Users
 
