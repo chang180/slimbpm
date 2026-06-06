@@ -124,24 +124,24 @@ Important files:
 
 ## Users
 
-Status: Yellow/Red
+Status: Yellow
 
-Backend controllers and tests exist. Frontend list/show/create/edit pages exist, but `npm run types` reports missing Select imports and invalid Inertia form options in create/edit pages.
+Backend controllers and tests exist. Create/edit pages fixed in Phase 2A (TS 0). Index/Show still use `AuthenticatedLayout` instead of `AppLayout`.
 
 ## Departments
 
 Status: Yellow
 
-Backend and frontend pages exist. TypeScript reports JSX namespace errors in create/edit pages. Needs targeted verification.
+Create/edit fixed in Phase 2B (TS 0). Index/Show layout polish pending.
 
 ## Invitations
 
 Status: Yellow
 
-Dedicated invitation management page and API exist. Dashboard invitation widget does not call the real API because it uses `useDashboardActions.ts` fake handlers.
+Phase 2C: Wayfinder integration and page tests. Dashboard invitation widget wired in Phase 1C.
 
 ## Notifications
 
 Status: Yellow
 
-Notification center and notification bell call real API endpoints. Needs focused verification for filter, mark-read, and mark-all-read behavior.
+Phase 2C: page tests added. Mark-read UX verification deferred to Phase 3.

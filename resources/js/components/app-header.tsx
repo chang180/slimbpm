@@ -70,7 +70,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const { auth } = page.props;
     const getInitials = useInitials();
     const slug = useSlug();
-    const mainNavItems = getMainNavItems(slug);
+    const mainNavItems = getMainNavItems(slug ?? undefined);
     return (
         <>
             <div className="border-b border-sidebar-border/80">
@@ -148,7 +148,7 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                     </div>
 
                     <Link
-                        href={dashboard().url}
+                        href={slug ? dashboard(slug).url : '#'}
                         prefetch
                         className="flex items-center space-x-2"
                     >

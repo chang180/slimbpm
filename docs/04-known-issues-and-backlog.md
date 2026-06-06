@@ -7,7 +7,7 @@
 3. Update `03-module-status.md` whenever a module changes status.
 4. Track progress against `07-roadmap.md`.
 
-## P1 Frontend Typecheck
+## P1 Frontend Typecheck ✅ (Phase 2E complete)
 
 Command:
 
@@ -15,50 +15,40 @@ Command:
 npm run types
 ```
 
-Current status: **38 errors** (down from 128 after Phase 1D; Phase 1 complete).
+Current status: **0 errors** (176 → 0 across Phase 1–2).
 
-Resolved in Phase 1A:
+Resolved in Phase 2:
 
-- Wayfinder workflow route collision
-- auth/2FA `.form()` helper type mismatch
-
-Resolved in Phase 1B:
-
-- Forms route helper naming collision and missing `route()` imports
-- Forms layout/type errors in `resources/js/pages/Forms/*`
-
-Resolved in Phase 1C:
-
-- Dashboard props/action mismatch and fake handlers
-- QuickActions union type and broken dashboard links
-
-Resolved in Phase 1D:
-
-- Organization scoping, persistence, camelCase stats, fake reports data
-
-Remaining error clusters (Phase 2):
-
-- Users create/edit Select imports and form submit → **Phase 2A** (~30 errors)
-- Departments JSX namespace → Phase 2B (~4 errors)
-- Misc components (app-header, DynamicForm, enhanced-select) → Phase 2C (~4 errors)
+- Users create/edit Select and form typing (2A)
+- Departments JSX namespace (2B)
+- Invitations paginator types (2C)
+- Workflows Monitor + Reports Index (2D)
+- app-header, DynamicForm, enhanced-select (2E)
 
 ## P1 Organization Scoping And Persistence ✅ (Phase 1D complete)
 
 See `OrganizationController.php` and updated `OrganizationManagementTest.php`.
 
-## P2 Reports Verification
+## P2 Reports Verification ✅ (Phase 2D partial)
 
-Required work:
+Completed:
 
-- Verify export buttons submit correctly from all report pages.
-- Add tests for user activity/system stats Inertia props.
-- Add filter/date range tests if filters are retained.
+- Reports Index export buttons wired to POST routes.
+- UserActivity and SystemStats Inertia page tests added.
 
-## P2 Notifications Verification
+Remaining (Phase 3):
 
-Required work:
+- Filter/date range tests if filters are retained.
+- Manual verification on all `/reports/*` subpages.
 
-- Add Feature/Inertia tests for notification center page props.
+## P2 Notifications Verification ✅ (Phase 2C partial)
+
+Completed:
+
+- InvitationsPageTest + NotificationsPageTest added.
+
+Remaining (Phase 3):
+
 - Verify API mark-read and mark-all-read in frontend.
 - Confirm unread badge refresh behavior.
 

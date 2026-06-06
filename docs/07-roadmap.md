@@ -16,7 +16,7 @@ Finish frontend integration and org-scoped persistence before adding new feature
 - [x] Trim `.ai-dev/` to handoff-only
 - [x] Publish this roadmap
 
-## Phase 1 — Frontend Blockers (Current)
+## Phase 1 — Frontend Blockers ✅ (Complete)
 
 Goal: make the three highest-risk areas usable without dead links, demo handlers, or missing pages.
 
@@ -55,7 +55,7 @@ Goal: make the three highest-risk areas usable without dead links, demo handlers
 
 **Phase 1 complete.**
 
-## Phase 2 — Module Hardening (Current)
+## Phase 2 — Module Hardening ✅ (Complete)
 
 Goal: raise Yellow modules to Green with tests and manual verification.
 
@@ -81,21 +81,16 @@ Goal: raise Yellow modules to Green with tests and manual verification.
 - [x] Reports Index export buttons wired
 - Tests 234 → **236**
 
-### 2E. Misc TypeScript (Next)
+### 2E. Misc TypeScript ✅ (2026-06-06)
 
-- Clear remaining 4 TS errors (app-header, DynamicForm, enhanced-select)
-- See `.ai-dev/tasks/phase-2e-misc-typescript/plan.md`
+- [x] `app-header`: nullish slug + `dashboard(slug)` parameter
+- [x] `DynamicForm`: conditional field guard
+- [x] `enhanced-select`: wrap Select in div for className
+- TS 4 → **0**；236 tests pass
 
-| Module | Work | Phase |
-|--------|------|-------|
-| ~~Workflows~~ | Monitor UX verification | **2D** ✅ |
-| ~~Reports~~ | Export buttons and page tests | **2D** ✅ |
-| Misc TS | app-header, DynamicForm, enhanced-select | **2E** |
-| Workflows | Verify monitor cancel/suspend/resume UX | 2D |
-| Reports | Verify export buttons and date filters on all `/reports/*` pages | 2D |
-| Misc TS | app-header, DynamicForm, enhanced-select | 2E |
+**Phase 2 complete.**
 
-## Phase 3 — Quality And Release Prep
+## Phase 3 — Quality And Release Prep (Current)
 
 - Add low-cost Feature/Inertia regression tests for repaired modules.
 - Mobile/responsive review on dashboard, forms, and workflow pages.

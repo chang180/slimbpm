@@ -29,18 +29,19 @@ export function EnhancedSelect({
   };
 
   return (
-    <Select
-      value={normalizeSelectValue(value)}
-      onValueChange={handleValueChange}
-      className={className}
-    >
-      <SelectTrigger>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {children}
-      </SelectContent>
-    </Select>
+    <div className={className}>
+      <Select
+        value={normalizeSelectValue(value)}
+        onValueChange={handleValueChange}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {children}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
 

@@ -52,6 +52,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     if (!field.conditional) return true;
     
     const { field: triggerField, operator, value, action } = field.conditional;
+    if (!triggerField) return true;
     const triggerValue = watchedValues[triggerField];
     
     let conditionMet = false;

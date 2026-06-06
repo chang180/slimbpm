@@ -10,7 +10,7 @@ The previous documentation overstated completion. Treat the app as approximately
 
 ## Verified Facts
 
-- `php artisan test` passes with 209 tests / 1018 assertions after the Laravel 13 and Inertia 3 upgrade.
+- `php artisan test` passes with 236 tests / 1253 assertions after Phase 2 module hardening.
 - Recent targeted tests pass:
   - `tests/Feature/EndToEndWorkflowFeatureTest.php`
   - `tests/Feature/ReportsPagesTest.php`
@@ -22,7 +22,7 @@ The previous documentation overstated completion. Treat the app as approximately
 - `composer validate --strict` passes.
 - `php vendor/bin/pint --dirty` passes.
 - `npm audit --audit-level=moderate` reports 0 vulnerabilities.
-- `npm run types` fails with many TypeScript errors.
+- `npm run types` passes with 0 TypeScript errors (Phase 2E complete).
 - Composer and npm dependencies were upgraded on 2026-06-06:
   - `laravel/framework` 13.14.0
   - `laravel/boost` 2.4.9
