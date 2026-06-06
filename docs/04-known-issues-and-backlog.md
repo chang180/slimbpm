@@ -15,16 +15,24 @@ Command:
 npm run types
 ```
 
-Current status: fails.
+Current status: **164 errors** (down from 176 after Phase 1A).
 
-Main error clusters:
+Resolved in Phase 1A:
 
-- Dashboard props/action mismatch.
-- Forms route helper and missing component issues.
-- Organization prop/type mismatches.
-- Users create/edit missing Select imports.
-- Fortify/Wayfinder `.form()` helper type mismatch.
-- Generated Wayfinder workflow route collision.
+- Wayfinder workflow route collision
+- auth/2FA `.form()` helper type mismatch
+
+Remaining error clusters (Phase 1B–1D / Phase 2):
+
+- Forms route helper and missing component issues → **Phase 1B**
+- Dashboard props/action mismatch → Phase 1C
+- Organization prop/type mismatches → Phase 1D
+- Users create/edit missing Select imports → Phase 2
+- Departments JSX namespace → Phase 2
+
+## P1 Route Naming ✅ (Phase 1A complete)
+
+Web `forms.*` / `workflows.*` and API `api.forms.*` / `api.workflows.*` are now separated. Wayfinder web routes point to Inertia controllers.
 
 ## P1 Dashboard Real Actions
 

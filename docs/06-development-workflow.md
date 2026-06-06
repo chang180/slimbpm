@@ -34,6 +34,17 @@ npm run build
 
 Important: `npm run build` can pass while `npm run types` fails.
 
+## Coordinator Task Workflow
+
+For phased development, see `.ai-dev/tasks/`:
+
+1. Coordinator writes `plan.md` for each phase.
+2. Executor AI implements and fills `progress.md`.
+3. Coordinator reviews against exit criteria in the plan.
+4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
+
+Current active task: `.ai-dev/tasks/phase-1a-typescript-baseline/plan.md`
+
 ## Documentation Updates
 
 After meaningful changes:

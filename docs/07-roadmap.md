@@ -20,15 +20,15 @@ Finish frontend integration and org-scoped persistence before adding new feature
 
 Goal: make the three highest-risk areas usable without dead links, demo handlers, or missing pages.
 
-### 1A. TypeScript Baseline
+### 1A. TypeScript Baseline ✅ (2026-06-06)
 
-- Run `npm run types` and fix errors module by module.
-- Resolve Wayfinder route name collisions for `forms.*` and `workflows.*`.
-- Fix Fortify/Wayfinder `.form()` helper typing in auth and 2FA pages.
+- [x] Resolve Wayfinder route name collisions for `forms.*` and `workflows.*`
+- [x] Fix Fortify/Wayfinder `.form()` helper typing in auth and 2FA pages
+- [x] API routes prefixed with `api.*`; Wayfinder regenerated
 
-**Exit criteria:** `npm run types` passes, or only unrelated legacy errors remain outside the touched modules.
+**Result:** TS errors 176 → 164; 209 tests pass.
 
-### 1B. Forms Module
+### 1B. Forms Module (Current)
 
 - Add `resources/js/pages/Forms/Edit.tsx` or remove the edit route until it exists.
 - Stop using incomplete `resources/js/lib/route.ts` for `forms.*` routes.
