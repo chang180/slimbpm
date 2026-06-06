@@ -82,3 +82,18 @@ it('includes organization slug and user id in props', function () {
         ->where('user.id', $user->id)
     );
 });
+
+it('shares organization slug in auth on non-dashboard pages', function () {
+    $organization = OrganizationSetting::factory()->create();
+    $user = User::factory()->create([
+        'organization_id' => $organization->id,
+        'role' => 'admin',
+    ]);
+
+    $this->actingAs($user)
+        ->get('/forms')
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->where('auth.user.organization.slug', $organization->slug)
+        );
+});

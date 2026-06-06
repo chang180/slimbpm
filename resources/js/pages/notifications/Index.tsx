@@ -6,6 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { Bell, BellOff, CheckCheck, Mail, MessageSquare, Smartphone } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface NotificationRecord {
     id: number;
@@ -20,17 +21,7 @@ interface NotificationRecord {
 }
 
 interface NotificationsIndexProps {
-    notifications: {
-        data: NotificationRecord[];
-        links: Array<{ url: string | null; label: string; active: boolean }>;
-        meta: {
-            current_page: number;
-            last_page: number;
-            total: number;
-            from: number | null;
-            to: number | null;
-        };
-    };
+    notifications: LengthAwarePaginator<NotificationRecord>;
     unreadCount: number;
     filters: { status?: string; type?: string };
 }
@@ -195,10 +186,10 @@ export default function NotificationsIndex({ notifications, unreadCount, filters
                     </CardContent>
                 </Card>
 
-                {notifications.meta.last_page > 1 && (
+                {hasMultiplePages(notifications) && (
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>
-                            共 {notifications.meta.total} 則，顯示第 {notifications.meta.from} – {notifications.meta.to} 則
+                            共 {notifications.total} 則，顯示第 {notifications.from} – {notifications.to} 則
                         </span>
                         <div className="flex gap-1">
                             {notifications.links.map((link, i) => (

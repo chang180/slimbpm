@@ -7,6 +7,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { CheckCircle2, Clock, GitBranch, Loader2, PauseCircle, Play, XCircle } from 'lucide-react';
 import { useMemo } from 'react';
+import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface WorkflowInstanceSummary {
     id: number;
@@ -27,17 +28,7 @@ interface WorkflowInstanceSummary {
     } | null;
 }
 
-interface PaginatedInstances {
-    data: WorkflowInstanceSummary[];
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-    meta: {
-        current_page: number;
-        last_page: number;
-        total: number;
-        from: number | null;
-        to: number | null;
-    };
-}
+interface PaginatedInstances extends LengthAwarePaginator<WorkflowInstanceSummary> {}
 
 interface WorkflowsIndexProps {
     myInstances: PaginatedInstances;
@@ -148,10 +139,10 @@ function InstanceTable({
                 </table>
             </div>
 
-            {instances.meta.last_page > 1 && (
+            {hasMultiplePages(instances) && (
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                     <span>
-                        共 {instances.meta.total} 筆，顯示第 {instances.meta.from} – {instances.meta.to} 筆
+                        共 {instances.total} 筆，顯示第 {instances.from} – {instances.to} 筆
                     </span>
                     <div className="flex gap-1">
                         {instances.links.map((link, i) => (
@@ -180,7 +171,7 @@ export default function WorkflowsIndex({ myInstances, pendingSteps, filters }: W
         [],
     );
 
-    const defaultTab = filters.tab ?? (pendingSteps.meta.total > 0 ? 'pending' : 'mine');
+    const defaultTab = filters.tab ?? (pendingSteps.total > 0 ? 'pending' : 'mine');
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -203,14 +194,14 @@ export default function WorkflowsIndex({ myInstances, pendingSteps, filters }: W
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                     <Card>
                         <CardContent className="p-4">
-                            <div className="text-2xl font-bold">{myInstances.meta.total}</div>
+                            <div className="text-2xl font-bold">{myInstances.total}</div>
                             <div className="text-sm text-muted-foreground">我的申請</div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardContent className="p-4">
                             <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                                {pendingSteps.meta.total}
+                                {pendingSteps.total}
                             </div>
                             <div className="text-sm text-muted-foreground">待我審批</div>
                         </CardContent>
@@ -239,17 +230,17 @@ export default function WorkflowsIndex({ myInstances, pendingSteps, filters }: W
                             <TabsList>
                                 <TabsTrigger value="mine">
                                     我的申請
-                                    {myInstances.meta.total > 0 && (
+                                    {myInstances.total > 0 && (
                                         <Badge variant="secondary" className="ml-1.5">
-                                            {myInstances.meta.total}
+                                            {myInstances.total}
                                         </Badge>
                                     )}
                                 </TabsTrigger>
                                 <TabsTrigger value="pending">
                                     待我審批
-                                    {pendingSteps.meta.total > 0 && (
+                                    {pendingSteps.total > 0 && (
                                         <Badge className="ml-1.5 bg-yellow-500 text-white">
-                                            {pendingSteps.meta.total}
+                                            {pendingSteps.total}
                                         </Badge>
                                     )}
                                 </TabsTrigger>

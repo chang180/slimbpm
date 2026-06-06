@@ -140,7 +140,7 @@ export default function InvitationsIndex({ invitations }: InvitationsIndexProps)
                 <div className="grid grid-cols-3 gap-4">
                     <Card>
                         <CardContent className="p-4">
-                            <div className="text-2xl font-bold">{invitations.meta.total}</div>
+                            <div className="text-2xl font-bold">{invitations.total}</div>
                             <div className="text-sm text-muted-foreground">總邀請數</div>
                         </CardContent>
                     </Card>

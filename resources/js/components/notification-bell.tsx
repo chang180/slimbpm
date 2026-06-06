@@ -35,6 +35,7 @@ export function NotificationBell() {
     const fetchUnreadCount = useCallback(async () => {
         try {
             const res = await fetch('/api/v1/notifications/unread-count', {
+                credentials: 'same-origin',
                 headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             });
             if (res.ok) {
@@ -50,6 +51,7 @@ export function NotificationBell() {
         setLoading(true);
         try {
             const res = await fetch('/api/v1/notifications?per_page=8', {
+                credentials: 'same-origin',
                 headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             });
             if (res.ok) {
@@ -84,6 +86,7 @@ export function NotificationBell() {
         try {
             await fetch(`/api/v1/notifications/${id}/mark-as-read`, {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     Accept: 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -104,6 +107,7 @@ export function NotificationBell() {
         try {
             await fetch('/api/v1/notifications/mark-all-as-read', {
                 method: 'POST',
+                credentials: 'same-origin',
                 headers: {
                     Accept: 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',

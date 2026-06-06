@@ -15,6 +15,7 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface InstanceRow {
     id: number;
@@ -29,17 +30,7 @@ interface InstanceRow {
     starter: { id: number; name: string; email: string } | null;
 }
 
-interface PaginatedInstances {
-    data: InstanceRow[];
-    links: Array<{ url: string | null; label: string; active: boolean }>;
-    meta: {
-        current_page: number;
-        last_page: number;
-        total: number;
-        from: number | null;
-        to: number | null;
-    };
-}
+interface PaginatedInstances extends LengthAwarePaginator<InstanceRow> {}
 
 interface MonitorStats {
     total: number;
@@ -348,10 +339,10 @@ export default function WorkflowMonitor({ instances, stats, filters }: WorkflowM
                 </Card>
 
                 {/* Pagination */}
-                {instances.meta.last_page > 1 && (
+                {hasMultiplePages(instances) && (
                     <div className="flex items-center justify-between text-sm text-muted-foreground">
                         <span>
-                            共 {instances.meta.total} 筆，第 {instances.meta.from}–{instances.meta.to} 筆
+                            共 {instances.total} 筆，第 {instances.from}–{instances.to} 筆
                         </span>
                         <div className="flex gap-1">
                             {instances.links.map((link, i) => (

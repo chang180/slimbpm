@@ -1,22 +1,18 @@
 import { usePage } from '@inertiajs/react';
+import { type SharedData } from '@/types';
 
 /**
- * 從當前路由中獲取 slug 參數
+ * 取得目前組織 slug，供儀表板等需 `/dashboard/{slug}` 的連結使用。
  */
 export function useSlug(): string | null {
-    const page = usePage();
-    
-    // 從 URL 中提取 slug
-    const url = window.location.pathname;
-    const slugMatch = url.match(/\/([^\/]+)\/?$/);
-    
-    // 檢查是否是有效的 UUID 格式的 slug
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const potentialSlug = slugMatch?.[1];
-    
-    if (potentialSlug && uuidRegex.test(potentialSlug)) {
-        return potentialSlug;
+    const { auth } = usePage<SharedData>().props;
+
+    const organizationSlug = auth?.user?.organization?.slug;
+    if (organizationSlug) {
+        return organizationSlug;
     }
-    
-    return null;
+
+    const dashboardMatch = window.location.pathname.match(/\/dashboard\/([^/]+)/);
+
+    return dashboardMatch?.[1] ?? null;
 }

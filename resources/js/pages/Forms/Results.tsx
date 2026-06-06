@@ -20,19 +20,11 @@ import {
   Filter,
   Search
 } from 'lucide-react';
+import { type LengthAwarePaginator, hasMultiplePages } from '@/lib/pagination';
 
 interface FormResultsProps {
   form: FormTemplate;
-  submissions: {
-    data: FormSubmission[];
-    links: any[];
-    meta: {
-      current_page: number;
-      last_page: number;
-      per_page: number;
-      total: number;
-    };
-  };
+  submissions: LengthAwarePaginator<FormSubmission>;
   statistics: {
     total_submissions: number;
     submissions_today: number;
@@ -304,7 +296,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
               </Card>
 
               {/* 分頁 */}
-              {submissions.meta.last_page > 1 && (
+              {hasMultiplePages(submissions) && (
                 <div className="mt-6 flex justify-center">
                   <div className="flex space-x-2">
                     {submissions.links.map((link, index) => (

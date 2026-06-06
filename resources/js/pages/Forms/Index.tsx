@@ -9,18 +9,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Search, Plus, Copy, Eye, Edit, Trash2, BarChart3 } from 'lucide-react';
+import { type LengthAwarePaginator, hasMultiplePages } from '@/lib/pagination';
 
 interface FormsIndexProps {
-  forms: {
-    data: FormTemplate[];
-    links: any[];
-    meta: {
-      current_page: number;
-      last_page: number;
-      per_page: number;
-      total: number;
-    };
-  };
+  forms: LengthAwarePaginator<FormTemplate>;
   categories: string[];
   filters: {
     search?: string;
@@ -276,7 +268,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
           )}
 
           {/* 分頁 */}
-          {forms.meta.last_page > 1 && (
+          {hasMultiplePages(forms) && (
             <div className="mt-8 flex justify-center">
               <div className="flex space-x-2">
                 {forms.links.map((link, index) => (

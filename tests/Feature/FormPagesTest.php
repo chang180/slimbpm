@@ -24,7 +24,12 @@ it('renders the forms index page', function () {
     $this->actingAs($user)
         ->get('/forms')
         ->assertOk()
-        ->assertInertia(fn (Assert $page) => $page->component('Forms/Index'));
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('Forms/Index')
+            ->has('forms.data')
+            ->where('forms.last_page', 1)
+            ->where('forms.total', 0)
+        );
 });
 
 it('renders the forms create page', function () {

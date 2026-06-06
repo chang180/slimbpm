@@ -339,10 +339,10 @@ const UsersIndex: React.FC<UsersIndexProps> = ({ auth, users, filters }) => {
                             </div>
 
                             {/* 分頁 */}
-                            {users.meta && (
+                            {users.from != null && users.to != null && (
                                 <div className="flex items-center justify-between mt-4">
                                     <div className="text-sm text-gray-600">
-                                        顯示 {users.meta.from} 到 {users.meta.to} 共 {users.meta.total} 筆記錄
+                                        顯示 {users.from} 到 {users.to} 共 {users.total} 筆記錄
                                     </div>
                                     <div className="flex gap-2">
                                         {users.links.map((link, index) => (
