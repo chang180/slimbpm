@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { FormTemplate, FormSubmission } from '../../types/FormTypes';
-import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
+import AppLayout from '@/layouts/app-layout';
+import formsRoutes from '@/routes/forms';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
@@ -105,7 +106,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
   });
 
   return (
-    <AuthenticatedLayout>
+    <AppLayout>
       <Head title={`${form.name} - 提交結果`} />
 
       <div className="py-12">
@@ -116,7 +117,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.get(forms.show.url({ form: form.id }))}
+                onClick={() => router.get(formsRoutes.show.url({ form: Number(form.id) }))}
                 className="mr-4"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -135,7 +136,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                   <Download className="w-4 h-4 mr-2" />
                   匯出 CSV
                 </Button>
-                <Link href={forms.submit.url({ form: form.id })}>
+                <Link href={formsRoutes.submit.url({ form: Number(form.id) })}>
                   <Button>
                     <FileText className="w-4 h-4 mr-2" />
                     填寫表單
@@ -291,7 +292,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                       <p className="text-gray-600 mb-4">
                         {searchTerm || statusFilter ? '嘗試調整篩選條件' : '此表單還沒有任何提交記錄'}
                       </p>
-                      <Link href={forms.submit.url({ form: form.id })}>
+                      <Link href={formsRoutes.submit.url({ form: Number(form.id) })}>
                         <Button variant="outline">
                           <FileText className="w-4 h-4 mr-2" />
                           填寫表單
@@ -396,7 +397,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
           )}
         </div>
       </div>
-    </AuthenticatedLayout>
+    </AppLayout>
   );
 };
 

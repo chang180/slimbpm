@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { FormTemplate, FormSubmission } from '../../types/FormTypes';
+import formsRoutes from '@/routes/forms';
 import DynamicForm from '../../components/DynamicForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -21,7 +22,7 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
     setSubmitError(null);
 
     try {
-      router.post(route('forms.process-submit', form.id), data, {
+      router.post(formsRoutes.processSubmit.url({ form: Number(form.id) }), data, {
         onSuccess: () => {
           setSubmitSuccess(true);
         },
@@ -65,7 +66,7 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={() => router.get(route('forms.show', form.id))}
+                  onClick={() => router.get(formsRoutes.show.url({ form: Number(form.id) }))}
                   className="w-full"
                 >
                   返回表單詳情
@@ -94,7 +95,7 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
             </div>
             <Button
               variant="ghost"
-              onClick={() => router.get(route('forms.show', form.id))}
+              onClick={() => router.get(formsRoutes.show.url({ form: Number(form.id) }))}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               返回

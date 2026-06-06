@@ -1,18 +1,20 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { FormTemplate } from '../../types/FormTypes';
-import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
+import AppLayout from '@/layouts/app-layout';
+import formsRoutes from '@/routes/forms';
 import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Separator } from '../../components/ui/separator';
-import { 
-  ArrowLeft, 
-  Edit, 
-  Copy, 
-  Trash2, 
-  Plus, 
-  BarChart3, 
+import {
+  ArrowLeft,
+  Edit,
+  Copy,
+  Trash2,
+  Plus,
+  BarChart3,
   Eye,
   Calendar,
   User,
@@ -27,8 +29,10 @@ interface FormShowProps {
 }
 
 const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
+  const formId = Number(form.id);
+
   const handleDuplicate = () => {
-    router.post(route('forms.duplicate', form.id), {}, {
+    router.post(formsRoutes.duplicate.url({ form: formId }), {}, {
       onSuccess: () => {
         // 成功後會重導向到新表單
       }
@@ -37,7 +41,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
 
   const handleDelete = () => {
     if (confirm('確定要刪除此表單嗎？此操作無法復原。')) {
-      router.delete(route('forms.destroy', form.id), {
+      router.delete(formsRoutes.destroy.url({ form: formId }), {
         onSuccess: () => {
           // 成功後會重導向到表單列表
         }
@@ -73,7 +77,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
   };
 
   return (
-    <AuthenticatedLayout>
+    <AppLayout>
       <Head title={form.name} />
 
       <div className="py-12">
@@ -84,14 +88,14 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => router.get(route('forms.index'))}
+                onClick={() => router.get(formsRoutes.index.url())}
                 className="mr-4"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 返回表單列表
               </Button>
             </div>
-            
+
             <div className="flex justify-between items-start">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -114,29 +118,29 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                   {form.description || '無描述'}
                 </p>
               </div>
-              
+
               <div className="flex gap-2">
-                <Link href={route('forms.submit', form.id)}>
+                <Link href={formsRoutes.submit.url({ form: formId })}>
                   <Button variant="outline">
                     <Eye className="w-4 h-4 mr-2" />
                     預覽
                   </Button>
                 </Link>
-                
+
                 {canEdit && (
-                  <Link href={route('forms.edit', form.id)}>
+                  <Link href={formsRoutes.edit.url({ form: formId })}>
                     <Button variant="outline">
                       <Edit className="w-4 h-4 mr-2" />
                       編輯
                     </Button>
                   </Link>
                 )}
-                
+
                 <Button variant="outline" onClick={handleDuplicate}>
                   <Copy className="w-4 h-4 mr-2" />
                   複製
                 </Button>
-                
+
                 {canEdit && (
                   <Button variant="outline" onClick={handleDelete} className="text-red-600 hover:text-red-700">
                     <Trash2 className="w-4 h-4 mr-2" />
@@ -234,7 +238,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                     <div className="text-center py-8 text-gray-500">
                       <p>此表單還沒有任何欄位</p>
                       {canEdit && (
-                        <Link href={route('forms.edit', form.id)} className="inline-block mt-2">
+                        <Link href={formsRoutes.edit.url({ form: formId })} className="inline-block mt-2">
                           <Button variant="outline" size="sm">
                             開始設計表單
                           </Button>
@@ -288,22 +292,22 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                   <CardTitle>快速操作</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Link href={route('forms.submit', form.id)} className="block">
+                  <Link href={formsRoutes.submit.url({ form: formId })} className="block">
                     <Button className="w-full justify-start">
                       <Plus className="w-4 h-4 mr-2" />
                       填寫表單
                     </Button>
                   </Link>
-                  
-                  <Link href={route('forms.results', form.id)} className="block">
+
+                  <Link href={formsRoutes.results.url({ form: formId })} className="block">
                     <Button variant="outline" className="w-full justify-start">
                       <BarChart3 className="w-4 h-4 mr-2" />
                       查看結果
                     </Button>
                   </Link>
-                  
+
                   {canEdit && (
-                    <Link href={route('forms.edit', form.id)} className="block">
+                    <Link href={formsRoutes.edit.url({ form: formId })} className="block">
                       <Button variant="outline" className="w-full justify-start">
                         <Edit className="w-4 h-4 mr-2" />
                         編輯表單
@@ -325,7 +329,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                       </label>
                       <div className="flex gap-2">
                         <Input
-                          value={`${window.location.origin}${route('forms.submit', form.id)}`}
+                          value={`${window.location.origin}${formsRoutes.submit.url({ form: formId })}`}
                           readOnly
                           className="text-sm"
                         />
@@ -333,21 +337,21 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                           variant="outline"
                           size="sm"
                           onClick={() => {
-                            navigator.clipboard.writeText(`${window.location.origin}${route('forms.submit', form.id)}`);
+                            navigator.clipboard.writeText(`${window.location.origin}${formsRoutes.submit.url({ form: formId })}`);
                           }}
                         >
                           複製
                         </Button>
                       </div>
                     </div>
-                    
+
                     {form.isPublic && (
                       <div className="text-sm text-green-600 bg-green-50 p-3 rounded-lg">
                         <Globe className="w-4 h-4 inline mr-1" />
                         此表單為公開表單，任何人都可以填寫
                       </div>
                     )}
-                    
+
                     {!form.isPublic && (
                       <div className="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg">
                         <Lock className="w-4 h-4 inline mr-1" />
@@ -361,7 +365,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
           </div>
         </div>
       </div>
-    </AuthenticatedLayout>
+    </AppLayout>
   );
 };
 

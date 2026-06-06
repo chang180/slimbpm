@@ -62,7 +62,21 @@ export default function FormBuilder() {
   return (
     <>
       <Head title="表單設計器" />
-      
+
+      {/* 開發中提示 */}
+      <div className="bg-amber-50 border-b border-amber-200 px-4 py-3">
+        <div className="max-w-7xl mx-auto flex items-center gap-3">
+          <span className="text-amber-800 font-medium">⚠ 開發中 / Demo</span>
+          <span className="text-amber-700 text-sm">
+            此頁面為 localStorage 展示用途，資料不會儲存至伺服器。
+            正式建立表單請使用
+          </span>
+          <a href="/forms/create" className="text-amber-900 underline font-medium text-sm hover:text-amber-700">
+            表單管理 → 新增表單
+          </a>
+        </div>
+      </div>
+
       <div className="min-h-screen bg-gray-50">
         {/* 頂部導航 */}
         <div className="bg-white border-b border-gray-200">

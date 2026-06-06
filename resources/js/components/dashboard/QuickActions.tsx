@@ -79,10 +79,10 @@ export default function QuickActions({
 
   const managerActions = [
     {
-      title: '表單設計',
+      title: '新增表單',
       description: '創建新的表單模板',
       icon: FileText,
-      href: '/form-builder',
+      href: '/forms/create',
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-50 dark:bg-indigo-900/20',
       hoverColor: 'hover:bg-indigo-100 dark:hover:bg-indigo-900/30'

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
 import { FormTemplate } from '../../types/FormTypes';
-import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
+import AppLayout from '@/layouts/app-layout';
+import formsRoutes from '@/routes/forms';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
@@ -34,10 +35,10 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   const [isPublic, setIsPublic] = useState(filters.is_public);
 
   const handleFilter = () => {
-    router.get(forms.index.url(), {
+    router.get(formsRoutes.index.url(), {
       search: search || undefined,
       category: category === 'all' ? undefined : category || undefined,
-      is_public: isPublic === 'all' ? undefined : isPublic,
+      is_public: isPublic,
     }, {
       preserveState: true,
       replace: true,
@@ -45,7 +46,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   };
 
   const handleDuplicate = (formId: string) => {
-    router.post(forms.duplicate.url({ form: formId }), {}, {
+    router.post(formsRoutes.duplicate.url({ form: Number(formId) }), {}, {
       onSuccess: () => {
         // 成功後會重導向到新表單
       }
@@ -54,7 +55,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
 
   const handleDelete = (formId: string) => {
     if (confirm('確定要刪除此表單嗎？此操作無法復原。')) {
-      router.delete(forms.destroy.url({ form: formId }), {
+      router.delete(formsRoutes.destroy.url({ form: Number(formId) }), {
         onSuccess: () => {
           // 成功後會重導向到表單列表
         }
@@ -73,7 +74,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   };
 
   return (
-    <AuthenticatedLayout>
+    <AppLayout>
       <Head title="表單管理" />
 
       <div className="py-12">
@@ -85,7 +86,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                 <h1 className="text-3xl font-bold text-gray-900">表單管理</h1>
                 <p className="mt-2 text-gray-600">建立和管理您的表單模板</p>
               </div>
-              <Link href={forms.create.url()}>
+              <Link href={formsRoutes.create.url()}>
                 <Button>
                   <Plus className="w-4 h-4 mr-2" />
                   新增表單
@@ -113,7 +114,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                     className="w-full"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     分類
@@ -137,8 +138,8 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     可見性
                   </label>
-                  <Select 
-                    value={isPublic === undefined ? '' : isPublic.toString()} 
+                  <Select
+                    value={isPublic === undefined ? '' : isPublic.toString()}
                     onValueChange={(value) => setIsPublic(value === '' ? undefined : value === 'true')}
                   >
                     <SelectTrigger>
@@ -179,7 +180,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                     </Badge>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent>
                   <div className="space-y-3">
                     {/* 表單資訊 */}
@@ -202,34 +203,34 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
 
                     {/* 操作按鈕 */}
                     <div className="flex flex-wrap gap-2 pt-2">
-                      <Link href={forms.show.url({ form: form.id })}>
+                      <Link href={formsRoutes.show.url({ form: Number(form.id) })}>
                         <Button variant="outline" size="sm">
                           <Eye className="w-3 h-3 mr-1" />
                           查看
                         </Button>
                       </Link>
-                      
-                      <Link href={forms.edit.url({ form: form.id })}>
+
+                      <Link href={formsRoutes.edit.url({ form: Number(form.id) })}>
                         <Button variant="outline" size="sm">
                           <Edit className="w-3 h-3 mr-1" />
                           編輯
                         </Button>
                       </Link>
-                      
-                      <Link href={forms.submit.url({ form: form.id })}>
+
+                      <Link href={formsRoutes.submit.url({ form: Number(form.id) })}>
                         <Button variant="outline" size="sm">
                           <Plus className="w-3 h-3 mr-1" />
                           提交
                         </Button>
                       </Link>
-                      
-                      <Link href={forms.results.url({ form: form.id })}>
+
+                      <Link href={formsRoutes.results.url({ form: Number(form.id) })}>
                         <Button variant="outline" size="sm">
                           <BarChart3 className="w-3 h-3 mr-1" />
                           結果
                         </Button>
                       </Link>
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
@@ -238,7 +239,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                         <Copy className="w-3 h-3 mr-1" />
                         複製
                       </Button>
-                      
+
                       <Button
                         variant="outline"
                         size="sm"
@@ -263,7 +264,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                   <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <h3 className="text-lg font-medium mb-2">沒有找到表單</h3>
                   <p className="mb-4">嘗試調整篩選條件或建立新的表單</p>
-                  <Link href={forms.create.url()}>
+                  <Link href={formsRoutes.create.url()}>
                     <Button>
                       <Plus className="w-4 h-4 mr-2" />
                       建立第一個表單
@@ -294,7 +295,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
           )}
         </div>
       </div>
-    </AuthenticatedLayout>
+    </AppLayout>
   );
 };
 
