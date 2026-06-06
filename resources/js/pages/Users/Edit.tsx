@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Save, Key } from 'lucide-react';
-import { Link } from '@inertiajs/react';
 
 interface Department {
     id: number;
@@ -25,7 +23,7 @@ interface User {
     id: number;
     name: string;
     email: string;
-    role: 'admin' | 'manager' | 'user';
+    role: string;
     is_active: boolean;
     organization_id?: number;
     departments: Array<{
@@ -34,37 +32,39 @@ interface User {
     }>;
 }
 
-interface UsersEditProps extends PageProps {
+interface UsersEditProps {
     user: User;
     departments: Department[];
     organizations: Organization[];
+    errors?: Record<string, string>;
 }
 
-const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organizations }) => {
-    const { data, setData, put, processing, errors, reset } = useForm({
+const UsersEdit: React.FC<UsersEditProps> = ({ user, departments, organizations, errors = {} }) => {
+    const { data, setData, reset } = useForm({
         name: user.name,
         email: user.email,
         password: '',
         password_confirmation: '',
-        organization_id: user.organization_id?.toString() || '',
+        organization_id: user.organization_id?.toString() ?? '',
         role: user.role,
         is_active: user.is_active,
         departments: user.departments.map(d => d.id),
     });
 
     const [showPasswordFields, setShowPasswordFields] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const submitData = {
             ...data,
             organization_id: data.organization_id === '' ? null : data.organization_id,
         };
-        put(`/users/${user.id}`, {
-            data: submitData,
-            onSuccess: () => {
-                reset();
-            },
+        router.put(`/users/${user.id}`, submitData, {
+            preserveState: true,
+            onSuccess: () => reset(),
+            onFinish: () => setIsSubmitting(false),
         });
     };
 
@@ -77,26 +77,23 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href="/users">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            返回
-                        </Link>
-                    </Button>
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        編輯用戶 - {user.name}
-                    </h2>
-                </div>
-            }
-        >
+        <AppLayout>
             <Head title={`編輯用戶 - ${user.name}`} />
 
             <div className="py-12">
                 <div className="max-w-2xl mx-auto sm:px-6 lg:px-8">
+                    <div className="mb-6 flex items-center gap-4">
+                        <Button variant="ghost" size="sm" asChild>
+                            <Link href="/users">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                返回
+                            </Link>
+                        </Button>
+                        <h2 className="font-semibold text-xl leading-tight">
+                            編輯用戶 - {user.name}
+                        </h2>
+                    </div>
+
                     <Card>
                         <CardHeader>
                             <CardTitle>用戶資訊</CardTitle>
@@ -148,7 +145,7 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
                                             {showPasswordFields ? '取消重設' : '重設密碼'}
                                         </Button>
                                     </div>
-                                    
+
                                     {showPasswordFields && (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-md">
                                             <div>
@@ -205,19 +202,15 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
 
                                     <div>
                                         <Label htmlFor="role">角色 *</Label>
-                                        <Select
+                                        <SafeSelect
                                             value={data.role}
                                             onValueChange={(value) => setData('role', value)}
+                                            placeholder="選擇角色"
                                         >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="選擇角色" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="user">用戶</SelectItem>
-                                                <SelectItem value="manager">主管</SelectItem>
-                                                <SelectItem value="admin">管理員</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                            <SafeSelectItem value="user">用戶</SafeSelectItem>
+                                            <SafeSelectItem value="manager">主管</SafeSelectItem>
+                                            <SafeSelectItem value="admin">管理員</SafeSelectItem>
+                                        </SafeSelect>
                                         {errors.role && (
                                             <p className="mt-1 text-sm text-red-600">{errors.role}</p>
                                         )}
@@ -233,7 +226,7 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
                                                 <Checkbox
                                                     id={`dept-${dept.id}`}
                                                     checked={data.departments.includes(dept.id)}
-                                                    onCheckedChange={(checked) => 
+                                                    onCheckedChange={(checked) =>
                                                         handleDepartmentChange(dept.id, checked as boolean)
                                                     }
                                                 />
@@ -268,19 +261,12 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
 
                                 {/* 提交按鈕 */}
                                 <div className="flex justify-end gap-4">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        asChild
-                                    >
+                                    <Button type="button" variant="outline" asChild>
                                         <Link href="/users">取消</Link>
                                     </Button>
-                                    <Button
-                                        type="submit"
-                                        disabled={processing}
-                                    >
+                                    <Button type="submit" disabled={isSubmitting}>
                                         <Save className="w-4 h-4 mr-2" />
-                                        {processing ? '更新中...' : '更新用戶'}
+                                        {isSubmitting ? '更新中...' : '更新用戶'}
                                     </Button>
                                 </div>
                             </form>
@@ -288,7 +274,7 @@ const UsersEdit: React.FC<UsersEditProps> = ({ auth, user, departments, organiza
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 

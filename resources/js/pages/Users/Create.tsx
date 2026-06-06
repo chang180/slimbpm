@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { Head, useForm } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +8,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Save } from 'lucide-react';
-import { Link } from '@inertiajs/react';
 
 interface Department {
     id: number;
@@ -21,13 +19,14 @@ interface Organization {
     name: string;
 }
 
-interface UsersCreateProps extends PageProps {
+interface UsersCreateProps {
     departments: Department[];
     organizations: Organization[];
+    errors?: Record<string, string>;
 }
 
-const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizations }) => {
-    const { data, setData, post, processing, errors, reset } = useForm({
+const UsersCreate: React.FC<UsersCreateProps> = ({ departments, organizations, errors = {} }) => {
+    const { data, setData, reset } = useForm({
         name: '',
         email: '',
         password: '',
@@ -37,18 +36,19 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
         is_active: true,
         departments: [] as number[],
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        setIsSubmitting(true);
         const submitData = {
             ...data,
             organization_id: data.organization_id === '' ? null : data.organization_id,
         };
-        post('/users', {
-            data: submitData,
-            onSuccess: () => {
-                reset();
-            },
+        router.post('/users', submitData, {
+            preserveState: true,
+            onSuccess: () => reset(),
+            onFinish: () => setIsSubmitting(false),
         });
     };
 
@@ -61,26 +61,23 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="sm" asChild>
-                        <Link href="/users">
-                            <ArrowLeft className="w-4 h-4 mr-2" />
-                            返回
-                        </Link>
-                    </Button>
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        新增用戶
-                    </h2>
-                </div>
-            }
-        >
+        <AppLayout>
             <Head title="新增用戶" />
 
             <div className="py-12">
                 <div className="max-w-2xl mx-auto sm:px-6 lg:px-8">
+                    <div className="mb-6 flex items-center gap-4">
+                        <Button variant="ghost" size="sm" asChild>
+                            <Link href="/users">
+                                <ArrowLeft className="w-4 h-4 mr-2" />
+                                返回
+                            </Link>
+                        </Button>
+                        <h2 className="font-semibold text-xl leading-tight">
+                            新增用戶
+                        </h2>
+                    </div>
+
                     <Card>
                         <CardHeader>
                             <CardTitle>用戶資訊</CardTitle>
@@ -171,19 +168,15 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
 
                                     <div>
                                         <Label htmlFor="role">角色 *</Label>
-                                        <Select
+                                        <SafeSelect
                                             value={data.role}
                                             onValueChange={(value) => setData('role', value)}
+                                            placeholder="選擇角色"
                                         >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="選擇角色" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="user">用戶</SelectItem>
-                                                <SelectItem value="manager">主管</SelectItem>
-                                                <SelectItem value="admin">管理員</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                            <SafeSelectItem value="user">用戶</SafeSelectItem>
+                                            <SafeSelectItem value="manager">主管</SafeSelectItem>
+                                            <SafeSelectItem value="admin">管理員</SafeSelectItem>
+                                        </SafeSelect>
                                         {errors.role && (
                                             <p className="mt-1 text-sm text-red-600">{errors.role}</p>
                                         )}
@@ -199,7 +192,7 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
                                                 <Checkbox
                                                     id={`dept-${dept.id}`}
                                                     checked={data.departments.includes(dept.id)}
-                                                    onCheckedChange={(checked) => 
+                                                    onCheckedChange={(checked) =>
                                                         handleDepartmentChange(dept.id, checked as boolean)
                                                     }
                                                 />
@@ -234,19 +227,12 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
 
                                 {/* 提交按鈕 */}
                                 <div className="flex justify-end gap-4">
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        asChild
-                                    >
+                                    <Button type="button" variant="outline" asChild>
                                         <Link href="/users">取消</Link>
                                     </Button>
-                                    <Button
-                                        type="submit"
-                                        disabled={processing}
-                                    >
+                                    <Button type="submit" disabled={isSubmitting}>
                                         <Save className="w-4 h-4 mr-2" />
-                                        {processing ? '建立中...' : '建立用戶'}
+                                        {isSubmitting ? '建立中...' : '建立用戶'}
                                     </Button>
                                 </div>
                             </form>
@@ -254,7 +240,7 @@ const UsersCreate: React.FC<UsersCreateProps> = ({ auth, departments, organizati
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 

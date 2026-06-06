@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
 import { Search, Plus, Copy, Eye, Edit, Trash2, BarChart3 } from 'lucide-react';
-import { type LengthAwarePaginator, hasMultiplePages } from '@/lib/pagination';
+import { type LengthAwarePaginator, formatPaginationLabel, hasMultiplePages } from '@/lib/pagination';
 
 interface FormsIndexProps {
   forms: LengthAwarePaginator<FormTemplate>;
@@ -279,7 +279,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                     onClick={() => link.url && router.get(link.url)}
                     disabled={!link.url}
                   >
-                    {link.label}
+                    {formatPaginationLabel(link.label)}
                   </Button>
                 ))}
               </div>

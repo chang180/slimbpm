@@ -59,15 +59,20 @@ Goal: make the three highest-risk areas usable without dead links, demo handlers
 
 Goal: raise Yellow modules to Green with tests and manual verification.
 
-### 2A. Users Module (Next)
+### 2A. Users Module ✅ (2026-06-06)
 
-- Fix Select imports and Inertia form typing in create/edit
-- See `.ai-dev/tasks/phase-2a-users/plan.md`
+- [x] Fix Select imports and Inertia form typing in create/edit
+- Users TS 30 → 0；全專案 TS 38 → 9
+
+### 2B. Departments Module (Next)
+
+- Fix JSX namespace errors; verify CRUD flows
+- See `.ai-dev/tasks/phase-2b-departments/plan.md`
 
 | Module | Work | Phase |
 |--------|------|-------|
-| Users | Fix Select imports and Inertia form typing in create/edit | **2A** |
-| Departments | Fix JSX namespace errors; verify CRUD flows | 2B |
+| ~~Users~~ | Fix Select imports and Inertia form typing in create/edit | **2A** ✅ |
+| Departments | Fix JSX namespace errors; verify CRUD flows | **2B** |
 | Invitations | Ensure dashboard and `/invitations` use the same API paths | 2C |
 | Notifications | Add Feature tests for mark-read, filters, unread badge refresh | 2C |
 | Workflows | Verify monitor cancel/suspend/resume UX | 2D |

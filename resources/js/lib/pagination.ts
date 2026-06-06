@@ -20,3 +20,23 @@ export interface LengthAwarePaginator<T> {
 export function hasMultiplePages(pagination: Pick<LengthAwarePaginator<unknown>, 'last_page'>): boolean {
     return pagination.last_page > 1;
 }
+
+/** Laravel paginator labels are HTML (`&laquo; Previous`); render as plain 繁中. */
+export function formatPaginationLabel(label: string): string {
+    const normalized = label
+        .replace(/&laquo;/gi, '«')
+        .replace(/&raquo;/gi, '»')
+        .replace(/&amp;/g, '&')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+
+    if (/previous|上一頁/i.test(normalized) || normalized.startsWith('«')) {
+        return '上一頁';
+    }
+
+    if (/next|下一頁/i.test(normalized) || normalized.endsWith('»')) {
+        return '下一頁';
+    }
+
+    return normalized;
+}

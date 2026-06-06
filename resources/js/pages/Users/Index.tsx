@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { SafeSelect, SafeSelectItem } from '@/components/ui/safe-select';
 import { Search, Plus, Edit, Trash2, Eye, Download, Filter } from 'lucide-react';
+import { formatPaginationLabel } from '@/lib/pagination';
 
 interface User {
     id: number;
@@ -31,8 +32,11 @@ interface User {
 interface UsersIndexProps extends PageProps {
     users: {
         data: User[];
-        links: any[];
-        meta: any;
+        links: Array<{ url: string | null; label: string; active: boolean }>;
+        meta: Record<string, unknown>;
+        from: number | null;
+        to: number | null;
+        total: number;
     };
     filters: {
         search: string;
@@ -353,7 +357,7 @@ const UsersIndex: React.FC<UsersIndexProps> = ({ auth, users, filters }) => {
                                                 disabled={!link.url}
                                                 onClick={() => link.url && router.get(link.url)}
                                             >
-                                                {link.label}
+                                                {formatPaginationLabel(link.label)}
                                             </Button>
                                         ))}
                                     </div>

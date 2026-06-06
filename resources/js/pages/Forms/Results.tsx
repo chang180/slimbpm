@@ -20,7 +20,7 @@ import {
   Filter,
   Search
 } from 'lucide-react';
-import { type LengthAwarePaginator, hasMultiplePages } from '@/lib/pagination';
+import { type LengthAwarePaginator, formatPaginationLabel, hasMultiplePages } from '@/lib/pagination';
 
 interface FormResultsProps {
   form: FormTemplate;
@@ -307,7 +307,7 @@ const FormResults: React.FC<FormResultsProps> = ({ form, submissions, statistics
                         onClick={() => link.url && router.get(link.url)}
                         disabled={!link.url}
                       >
-                        {link.label}
+                        {formatPaginationLabel(link.label)}
                       </Button>
                     ))}
                   </div>
