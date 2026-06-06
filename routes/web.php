@@ -131,6 +131,7 @@ Route::middleware(['auth', 'verified', 'org.access'])->group(function () {
     Route::prefix('workflows')->name('workflows.')->group(function () {
         Route::get('/', [App\Http\Controllers\WorkflowInstanceController::class, 'index'])->name('index');
         Route::get('/start', [App\Http\Controllers\WorkflowInstanceController::class, 'create'])->name('start');
+        Route::get('/monitor', [App\Http\Controllers\WorkflowMonitorController::class, 'index'])->name('monitor');
         Route::get('/designer', function () {
             return Inertia::render('workflows/designer', [
                 'workflow' => null,

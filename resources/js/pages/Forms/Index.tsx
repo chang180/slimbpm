@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { forms } from '../../routes/forms';
 import { FormTemplate } from '../../types/FormTypes';
 import AuthenticatedLayout from '../../layouts/AuthenticatedLayout';
 import { Button } from '../../components/ui/button';

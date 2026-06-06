@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\WorkflowInstance;
 use App\Models\WorkflowTemplate;
 use Illuminate\Http\Request;
@@ -47,8 +48,10 @@ class WorkflowInstanceController extends Controller
     {
         $organization = $request->get('current_organization');
 
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
         $templates = WorkflowTemplate::query()
-            ->where('organization_id', $organization->id)
+            ->whereIn('created_by', $orgUserIds)
             ->where('is_active', true)
             ->where('is_current', true)
             ->orderBy('name')
