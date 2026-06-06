@@ -171,5 +171,3 @@ php vendor/bin/pint --dirty         # 通過
 ---
 
 *Phase 2C 已驗收。下一階段：Phase 2D → `.ai-dev/tasks/phase-2d-workflows-reports/plan.md`*
-
-> **注意：** Phase 2C 程式尚未 commit；派工前請 commit/push。
