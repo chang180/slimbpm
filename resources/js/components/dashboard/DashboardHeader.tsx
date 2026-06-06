@@ -42,7 +42,7 @@ export default function DashboardHeader({
   };
 
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex flex-wrap items-start justify-between gap-3 mb-8">
       <div className="space-y-2">
         <div className="flex items-center gap-3">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

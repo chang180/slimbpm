@@ -201,9 +201,9 @@ export default function WorkflowMenu({
           ) : (
             <div className="space-y-3">
               {workflowInstances.slice(0, 5).map((instance) => (
-                <div 
+                <div
                   key={instance.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     {getStatusIcon(instance.status)}
@@ -217,15 +217,15 @@ export default function WorkflowMenu({
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center gap-3">
+
+                  <div className="flex flex-wrap items-center gap-2">
                     <Badge className={getPriorityColor(instance.priority)}>
                       {getPriorityText(instance.priority)}
                     </Badge>
                     <Badge className={getStatusColor(instance.status)}>
                       {getStatusText(instance.status)}
                     </Badge>
-                    
+
                     <div className="flex gap-2">
                       <Button
                         size="sm"

@@ -119,7 +119,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                 </p>
               </div>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Link href={formsRoutes.submit.url({ form: formId })}>
                   <Button variant="outline">
                     <Eye className="w-4 h-4 mr-2" />
@@ -160,7 +160,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                   <CardTitle>表單資訊</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       <span className="text-gray-600">建立時間:</span>
@@ -255,7 +255,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                   <CardTitle>表單設定</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                     <div className="flex items-center gap-2">
                       <span className="text-gray-600">允許多次提交:</span>
                       <Badge variant={form.definition.settings.allowMultipleSubmissions ? "default" : "secondary"}>

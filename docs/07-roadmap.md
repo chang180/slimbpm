@@ -121,22 +121,33 @@ Goal: regression coverage, UX polish, deployment readiness. Task plans live unde
 - [x] Date filter Feature tests in ReportsPagesTest
 - [x] `formatPaginationLabel` on workflows Index
 
-### 3F. Responsive Review (Next)
+## Phase 3 — Quality And Release Prep ✅ (Complete)
 
-- [ ] Audit dashboard, forms, workflows at 375px / 768px; fix obvious overflow
+Goal: regression coverage, UX polish, deployment readiness.
 
-### 3G. Deployment Guide
+### 3A–3E ✅ (2026-06-06)
 
-- [ ] Add `docs/08-deployment.md`; link from docs README
+See prior sections in git history / task progress files.
+
+### 3F. Responsive Review ✅ (2026-06-06)
+
+- [x] Audit dashboard, forms, workflows at 375px / 768px
+- [x] Fix DashboardHeader, WorkflowMenu, Forms/Show overflow/wrap issues
+
+### 3G. Deployment Guide ✅ (2026-06-06)
+
+- [x] Add `docs/08-deployment.md`; link from docs README and inventory
+
+**Phase 3 complete.** 253 tests · TS 0 errors · deployment guide published.
 
 ### 3H. Browser Smoke (Optional)
 
 - Requires explicit approval for Pest Browser + Playwright dependencies
 - See `.ai-dev/tasks/phase-3h-browser-smoke-optional/plan.md`
 
-## Phase 4 — Product Expansion (Deferred)
+## Phase 4 — Product Expansion (Current — optional)
 
-Do not start until Phase 1–3 exit criteria are met.
+Phase 1–3 exit criteria met (except optional 3H Browser smoke).
 
 - Scheduled reports and advanced export formats
 - PWA / mobile-first improvements

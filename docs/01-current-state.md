@@ -6,11 +6,11 @@ Last audited: 2026-06-06
 
 SlimBPM is a Laravel 13 + React 19 + Inertia 3 application for lightweight BPM/workflow management. The project has many backend models, controllers, API endpoints, and feature tests. However, the frontend is not consistently wired to those backend capabilities.
 
-The previous documentation overstated completion. Treat the app as approximately 60% complete until the frontend integration blockers are resolved.
+The previous documentation overstated completion. Treat the app as approximately 60% overall. Phase 1–3 quality/release prep is complete (253 tests, TS 0 errors, deployment guide published); product expansion remains in Phase 4.
 
 ## Verified Facts
 
-- `php artisan test` passes with 253 tests / 1420 assertions after Phase 3E.
+- `php artisan test` passes with 253 tests / 1420 assertions after Phase 3 completion.
 - Recent targeted tests pass:
   - `tests/Feature/EndToEndWorkflowFeatureTest.php`
   - `tests/Feature/ReportsPagesTest.php`
@@ -66,9 +66,9 @@ Before calling a module complete, require all of:
 
 ## Current Next Priority
 
-Documentation Phase 0 is complete. See `07-roadmap.md` for the full plan. Immediate code work starts at Phase 1:
+Phases 0–3 are complete. See `07-roadmap.md` Phase 4 for product expansion, or address known follow-ups:
 
-1. Fix TypeScript and Wayfinder route collisions (Phase 1A).
-2. Repair Forms module: missing Edit page, route helpers, `/form-builder` decision (Phase 1B).
-3. Wire Dashboard quick actions to real routes/APIs (Phase 1C).
-4. Fix Organization scoping and persistence (Phase 1D).
+1. Department org scoping on web routes.
+2. Stabilize flaky `UserManagementUITest` search assertion.
+3. Optional Pest Browser smoke (Phase 3H, requires dependency approval).
+4. Staging deployment trial using `08-deployment.md`.

@@ -13,6 +13,7 @@ The older `.ai-dev/` directory now contains only `handoff.md` (Chinese short-ter
 5. `07-roadmap.md`
 6. `05-documentation-inventory.md`
 7. `06-development-workflow.md`
+8. `08-deployment.md`
 
 ## Current Operating Principle
 

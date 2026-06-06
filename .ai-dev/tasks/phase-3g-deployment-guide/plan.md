@@ -3,7 +3,7 @@
 | 項目 | 內容 |
 |------|------|
 | **階段** | Phase 3G |
-| **狀態** | 可派工 |
+| **狀態** | ✅ 已驗收 |
 | **協調者** | Cursor |
 | **前置** | 無（純文件；可與 3A–3F 並行） |
 | **前置閱讀** | `.env.example`、`composer.json`、`package.json`、`docs/02-project-structure.md` |

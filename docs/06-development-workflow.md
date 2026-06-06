@@ -43,7 +43,7 @@ For phased development, see `.ai-dev/tasks/`:
 3. Coordinator reviews against exit criteria in the plan.
 4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
 
-Current active tasks: `.ai-dev/tasks/INDEX.md` (Phase 3A–3G)
+Current active tasks: Phase 3 complete. See `docs/07-roadmap.md` Phase 4 or optional `phase-3h-browser-smoke-optional`.
 
 ## Documentation Updates
 

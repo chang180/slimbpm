@@ -47,7 +47,11 @@ Completed:
 
 Remaining:
 
-- Manual responsive verification on report subpages → **Phase 3F**
+- Broader manual responsive pass on report subpages → covered partially by 3F static audit
+
+## P2 Deployment Documentation ✅ (Phase 3G complete)
+
+See `docs/08-deployment.md` for staging/production deployment steps.
 
 ## P2 Notifications Verification ✅ (Phase 3D complete)
 

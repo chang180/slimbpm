@@ -13,6 +13,7 @@ Use these first:
 | `docs/04-known-issues-and-backlog.md` | Active blockers by priority |
 | `docs/07-roadmap.md` | Development plan and phases |
 | `docs/06-development-workflow.md` | How AI/humans should work in this repo |
+| `docs/08-deployment.md` | Staging and production deployment guide |
 | `.ai-dev/handoff.md` | Short-term Chinese handoff for the human owner |
 
 ## Removed Historical Documents (2026-06-06)
