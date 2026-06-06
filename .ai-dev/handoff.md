@@ -5,7 +5,7 @@
 
 ---
 
-## 📅 最後更新：2026-06-06（立即任務改為建立 AI-first 開發文件庫）
+## 📅 最後更新：2026-06-06（Laravel 13 / Inertia 3 / Composer 全量升級）
 
 ---
 
@@ -13,6 +13,39 @@
 
 > 先前 handoff 寫成「核心業務功能 100% / 報表系統 100%」不準確。
 > 目前比較接近「後端多數 CRUD/API 已有雛形，前端多處仍是 demo、壞連結或未接 API」。
+
+### 2026-06-06 系統升級狀態
+
+- Composer lock 已重新解析並升級到 Laravel 13 系列。
+- 主要後端套件目前版本：
+  - `laravel/framework` 13.14.0
+  - `laravel/boost` 2.4.9
+  - `laravel/tinker` 3.0.2
+  - `inertiajs/inertia-laravel` 3.1.0
+  - `laravel/fortify` 1.37.2
+  - `laravel/wayfinder` 0.1.20
+  - `pestphp/pest` 4.7.2
+  - `phpunit/phpunit` 12.5.28
+- 主要前端套件目前版本：
+  - `@inertiajs/react` 3.3.1
+  - `@inertiajs/vite` 3.3.1
+- 依 Laravel 13 upgrade guide 初步檢查：
+  - 未找到 `VerifyCsrfToken` / `ValidateCsrfToken`、舊 Queue event 屬性、舊 pagination view name、`array_first()` / `array_last()` 的直接使用。
+  - `config/cache.php` 已補上 `serializable_classes => false`。
+  - `AGENTS.md`、`CLAUDE.md`、`.cursor/rules/laravel-boost.mdc` 已同步為 Laravel 13 / Inertia 3。
+- 依 Inertia 3 upgrade guide 初步處理：
+  - `config/inertia.php` 已重新 publish。
+  - Blade head 的 `<title inertia>` 已改為 `<title data-inertia>`。
+  - `resources/js/app.tsx` / `resources/js/ssr.tsx` 改用 `resources/js/lib/resolve-page.ts`，修正 Inertia React 3 resolver 型別。
+  - 已掃描且未找到 Axios import from Inertia、`router.cancel()`、舊 `invalid`/`exception` event、`Inertia::lazy()`、舊 testing traits、React arrow layout assignment。
+- 本段驗證：
+  - `composer validate --strict` 通過。
+  - `php vendor/bin/pint --dirty` 通過。
+  - `npm run build` 通過。
+  - `npm run build:ssr` 通過。
+  - `npm audit --audit-level=moderate` 通過，0 vulnerabilities。
+  - `php artisan test` 通過：209 tests / 1018 assertions。
+  - `npm run types` 仍失敗，但 Inertia v3 新增的 `app.tsx` / `ssr.tsx` resolver 型別錯誤已修正；剩餘為既有 Forms / Organization / Dashboard / Wayfinder 等前端型別債。
 
 ### 核心功能盤點
 
@@ -45,7 +78,7 @@
 | CSV 匯出 (ExportService) | ✅ 已有 org scoping 測試 |
 
 ### 測試統計
-- **205 個測試 / 970 個斷言** — 全部通過 (100%)
+- **209 個測試 / 1018 個斷言** — 全部通過 (100%)
 - 執行時間約 7.71 秒
 
 ### 2026-06-06 本段新增
@@ -239,7 +272,7 @@ npm run build
 - Pint dirty 通過
 - `npm run types` 失敗（大量前端型別/route/helper 問題，見「高優先級問題」）
 - `npm run build` 通過（但不代表 typecheck 通過）
-- 尚未重跑全套測試；上次全套紀錄仍為 205 個測試 / 970 個斷言通過
+- 全套 PHP 測試已重跑：209 個測試 / 1018 個斷言通過
 
 ---
 

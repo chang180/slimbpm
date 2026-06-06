@@ -3,7 +3,7 @@
 ## Root
 
 - `app/`: Laravel application code.
-- `bootstrap/`: Laravel 12 bootstrap configuration.
+- `bootstrap/`: Laravel 13 bootstrap configuration.
 - `config/`: Laravel configuration.
 - `database/`: migrations, factories, seeders.
 - `resources/js/`: React/Inertia frontend.

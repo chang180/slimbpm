@@ -1,27 +1,27 @@
 # SlimBPM
 
-一個基於 Laravel 12 和 React 的現代化商業流程管理系統。
+一個基於 Laravel 13 和 React 的現代化商業流程管理系統。
 
 ## 🚀 技術棧
 
 ### 後端
-- **Laravel 12.32.5** - PHP 框架
+- **Laravel 13.14.0** - PHP 框架
 - **PHP 8.4.12** - 程式語言
 - **SQLite** - 資料庫
 - **Laravel Fortify** - 身份驗證
 - **Laravel Wayfinder** - 路由管理
 
 ### 前端
-- **React 19.1.1** - UI 框架
-- **Inertia.js 2.1.4** - SPA 框架
+- **React 19** - UI 框架
+- **Inertia.js 3.3.1** - SPA 框架
 - **TypeScript 5.7.2** - 類型安全
 - **Tailwind CSS 4.1.12** - 樣式框架
 - **Radix UI** - 無障礙 UI 元件
 - flux ui pro版元件，計畫於11月黑色星期五特價時購買，現在先使用類似的替代品建構，待購入後將其代入置換
 
 ### 開發工具
-- **Vite 7.0.4** - 建構工具
-- **Pest 4.1.1** - 測試框架
+- **Vite 7.3.5** - 建構工具
+- **Pest 4.7.2** - 測試框架
 - **Laravel Pint** - 程式碼格式化
 - **ESLint & Prettier** - 程式碼品質
 - **Laravel Boost** - 開發輔助
@@ -188,7 +188,7 @@ php artisan view:cache
 
 ## 📚 學習資源
 
-- [Laravel 12 文件](https://laravel.com/docs)
+- [Laravel 13 文件](https://laravel.com/docs)
 - [Inertia.js 文件](https://inertiajs.com)
 - [React 文件](https://react.dev)
 - [Tailwind CSS 文件](https://tailwindcss.com)
