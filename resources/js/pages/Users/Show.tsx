@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { PageProps, type BreadcrumbItem } from '@/types';
+import { useSlug } from '@/hooks/useSlug';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -30,7 +31,17 @@ interface UsersShowProps extends PageProps {
     user: User;
 }
 
-const UsersShow: React.FC<UsersShowProps> = ({ auth, user }) => {
+const UsersShow: React.FC<UsersShowProps> = ({ user }) => {
+    const slug = useSlug();
+    const breadcrumbs = useMemo<BreadcrumbItem[]>(
+        () => [
+            { title: '儀表板', href: slug ? `/dashboard/${slug}` : '/dashboard-redirect' },
+            { title: '用戶管理', href: '/users' },
+            { title: user.name, href: `/users/${user.id}` },
+        ],
+        [slug, user],
+    );
+
     const getRoleBadgeColor = (role: string) => {
         switch (role) {
             case 'admin':
@@ -58,42 +69,38 @@ const UsersShow: React.FC<UsersShowProps> = ({ auth, user }) => {
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="sm" asChild>
-                            <Link href="/users">
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                返回
-                            </Link>
-                        </Button>
-                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                            用戶詳情 - {user.name}
-                        </h2>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline" asChild>
-                            <Link href={`/users/${user.id}/edit`}>
-                                <Edit className="w-4 h-4 mr-2" />
-                                編輯
-                            </Link>
-                        </Button>
-                        <Button variant="destructive" asChild>
-                            <Link href={`/users/${user.id}`} method="delete" as="button">
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                刪除
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            }
-        >
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`用戶詳情 - ${user.name}`} />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-4">
+                            <Button variant="ghost" size="sm" asChild>
+                                <Link href="/users">
+                                    <ArrowLeft className="w-4 h-4 mr-2" />
+                                    返回
+                                </Link>
+                            </Button>
+                            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                                用戶詳情 - {user.name}
+                            </h2>
+                        </div>
+                        <div className="flex gap-2">
+                            <Button variant="outline" asChild>
+                                <Link href={`/users/${user.id}/edit`}>
+                                    <Edit className="w-4 h-4 mr-2" />
+                                    編輯
+                                </Link>
+                            </Button>
+                            <Button variant="destructive" asChild>
+                                <Link href={`/users/${user.id}`} method="delete" as="button">
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    刪除
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* 左側：用戶基本資訊 */}
                         <div className="lg:col-span-1">
@@ -278,7 +285,7 @@ const UsersShow: React.FC<UsersShowProps> = ({ auth, user }) => {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 

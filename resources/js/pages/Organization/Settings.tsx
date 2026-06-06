@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationSettingsFormData } from '@/types';
-import { route } from '@/lib/route';
+import organizationSettings from '@/routes/organization/settings';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,7 +75,7 @@ const OrganizationSettings: React.FC<OrganizationSettingsProps> = ({ organizatio
     setIsLoading(true);
     setMessage(null);
 
-    put(route('organization.settings.update'), {
+    put(organizationSettings.update.url(), {
       onSuccess: () => {
         setMessage({ type: 'success', text: '組織設定已成功更新！' });
         setIsLoading(false);

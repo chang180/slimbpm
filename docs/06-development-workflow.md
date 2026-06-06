@@ -43,7 +43,7 @@ For phased development, see `.ai-dev/tasks/`:
 3. Coordinator reviews against exit criteria in the plan.
 4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
 
-Current active task: `.ai-dev/tasks/phase-1a-typescript-baseline/plan.md`
+Current active tasks: `.ai-dev/tasks/INDEX.md` (Phase 3A–3G)
 
 ## Documentation Updates
 

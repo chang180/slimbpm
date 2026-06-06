@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationStats } from '@/types';
-import { route } from '@/lib/route';
+import reportsRoutes from '@/routes/reports';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -82,7 +82,7 @@ const OrganizationReports: React.FC<OrganizationReportsProps> = ({ organization,
                   </div>
                 </div>
                 <Button asChild>
-                  <Link href={route('reports.index')}>
+                  <Link href={reportsRoutes.index.url()}>
                     <ExternalLink className="h-4 w-4 mr-2" />
                     前往報表中心
                   </Link>
@@ -195,25 +195,25 @@ const OrganizationReports: React.FC<OrganizationReportsProps> = ({ organization,
             <CardContent>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Button variant="outline" asChild className="justify-start">
-                  <Link href={route('reports.user-activity')}>
+                  <Link href={reportsRoutes.userActivity.url()}>
                     <Users className="h-4 w-4 mr-2" />
                     用戶活動報表
                   </Link>
                 </Button>
                 <Button variant="outline" asChild className="justify-start">
-                  <Link href={route('reports.workflow-performance')}>
+                  <Link href={reportsRoutes.workflowPerformance.url()}>
                     <Workflow className="h-4 w-4 mr-2" />
                     工作流程效能
                   </Link>
                 </Button>
                 <Button variant="outline" asChild className="justify-start">
-                  <Link href={route('reports.department-analysis')}>
+                  <Link href={reportsRoutes.departmentAnalysis.url()}>
                     <FolderOpen className="h-4 w-4 mr-2" />
                     部門分析
                   </Link>
                 </Button>
                 <Button variant="outline" asChild className="justify-start">
-                  <Link href={route('reports.system-stats')}>
+                  <Link href={reportsRoutes.systemStats.url()}>
                     <BarChart3 className="h-4 w-4 mr-2" />
                     系統統計
                   </Link>

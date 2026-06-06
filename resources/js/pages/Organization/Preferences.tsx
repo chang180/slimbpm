@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Head, useForm, router } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization } from '@/types';
-import { route } from '@/lib/route';
+import organizationPreferences from '@/routes/organization/preferences';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -99,7 +99,7 @@ const OrganizationPreferences: React.FC<OrganizationPreferencesProps> = ({
       },
     };
 
-    router.put(route('organization.preferences.update'), submitData, {
+    router.put(organizationPreferences.update.url(), submitData, {
       onSuccess: () => {
         setMessage({ type: 'success', text: '偏好設定已成功更新！' });
         setIsLoading(false);

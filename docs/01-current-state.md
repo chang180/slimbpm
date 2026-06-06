@@ -10,7 +10,7 @@ The previous documentation overstated completion. Treat the app as approximately
 
 ## Verified Facts
 
-- `php artisan test` passes with 236 tests / 1253 assertions after Phase 2 module hardening.
+- `php artisan test` passes with 244 tests / 1354 assertions after Phase 3C.
 - Recent targeted tests pass:
   - `tests/Feature/EndToEndWorkflowFeatureTest.php`
   - `tests/Feature/ReportsPagesTest.php`

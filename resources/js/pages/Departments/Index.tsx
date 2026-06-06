@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps, Department } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { PageProps, Department, type BreadcrumbItem } from '@/types';
+import { useSlug } from '@/hooks/useSlug';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +18,16 @@ interface DepartmentsIndexProps extends PageProps {
     };
 }
 
-const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ auth, departments, filters }) => {
+const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ departments, filters }) => {
+    const slug = useSlug();
+    const breadcrumbs = useMemo<BreadcrumbItem[]>(
+        () => [
+            { title: '儀表板', href: slug ? `/dashboard/${slug}` : '/dashboard-redirect' },
+            { title: '部門管理', href: '/departments' },
+        ],
+        [slug],
+    );
+
     const [search, setSearch] = useState(filters.search || '');
     const [statusFilter, setStatusFilter] = useState(filters.status || '');
     const [expandedDepts, setExpandedDepts] = useState<Set<number>>(new Set());
@@ -132,28 +142,24 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ auth, departments, 
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex justify-between items-center">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                        部門管理
-                    </h2>
-                    <div className="flex gap-2">
-                        <Button asChild>
-                            <Link href="/departments/create">
-                                <Plus className="w-4 h-4 mr-2" />
-                                新增部門
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            }
-        >
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="部門管理" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                            部門管理
+                        </h2>
+                        <div className="flex gap-2">
+                            <Button asChild>
+                                <Link href="/departments/create">
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    新增部門
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
                     {/* 搜尋和篩選 */}
                     <Card className="mb-6">
                         <CardHeader>
@@ -248,7 +254,7 @@ const DepartmentsIndex: React.FC<DepartmentsIndexProps> = ({ auth, departments, 
                     </Card>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 

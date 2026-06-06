@@ -108,13 +108,14 @@ Important files:
 
 Status: Yellow (was Red)
 
-Phase 1D complete (2026-06-06):
+Phase 1D complete (2026-06-06); Phase 3A (2026-06-06):
 
 - All methods use `current_organization` from `org.access`.
 - Settings and preferences persist in `organization.settings` JSON.
 - Stats are org-scoped with camelCase keys; `recentActivity` from real WorkflowHistory/FormSubmission.
 - Organization pages use `AppLayout`; TS errors cleared.
 - `Organization/Reports` shows real summary + link to `/reports` (no fake metrics).
+- **Phase 3A:** All Organization pages use Wayfinder (`@/routes/organization`, `@/routes/reports`); no `@/lib/route.ts` for org navigation or PUT targets.
 
 Important files:
 
@@ -126,13 +127,13 @@ Important files:
 
 Status: Yellow
 
-Backend controllers and tests exist. Create/edit pages fixed in Phase 2A (TS 0). Index/Show still use `AuthenticatedLayout` instead of `AppLayout`.
+Create/edit and index/show pages use `AppLayout` (Phase 2A, **3B**). `UserManagementUITest` covers Inertia paths.
 
 ## Departments
 
 Status: Yellow
 
-Create/edit fixed in Phase 2B (TS 0). Index/Show layout polish pending.
+Create/edit and index/show use `AppLayout` (Phase 2B, **3B**). **Phase 3C:** `DepartmentPagesTest.php` (8 Inertia tests). Controller does not yet scope by `organization_id` — documented in 3C progress.
 
 ## Invitations
 

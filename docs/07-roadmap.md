@@ -92,10 +92,45 @@ Goal: raise Yellow modules to Green with tests and manual verification.
 
 ## Phase 3 — Quality And Release Prep (Current)
 
-- Add low-cost Feature/Inertia regression tests for repaired modules.
-- Mobile/responsive review on dashboard, forms, and workflow pages.
-- Production deployment guide: env vars, queue, mail, SQLite → production DB.
-- Optional: Pest Browser smoke tests after explicit dependency approval.
+Goal: regression coverage, UX polish, deployment readiness. Task plans live under `.ai-dev/tasks/phase-3*/`.
+
+### 3A. Organization Wayfinder ✅ (2026-06-06)
+
+- [x] Migrate `Organization/*.tsx` from broken `@/lib/route.ts` to Wayfinder
+- [x] OrganizationManagementTest 12 tests pass (existing coverage sufficient)
+
+### 3B. Users/Departments Layout ✅ (2026-06-06)
+
+- [x] Migrate Index/Show pages to `AppLayout` + breadcrumbs
+- UserManagementUITest 13/13 pass
+
+### 3C. Department Regression Tests ✅ (2026-06-06)
+
+- [x] Add `DepartmentPagesTest.php` (8 tests)
+- Tests 236 → **244**
+
+### 3D. Notifications Verification (Next)
+
+- [ ] mark-read / mark-all Feature tests
+- [ ] Replace pagination `dangerouslySetInnerHTML` on notifications Index
+
+### 3E. Reports Filters And Pagination
+
+- [ ] Date filter Feature tests on report subpages
+- [ ] `formatPaginationLabel` on workflows Index
+
+### 3F. Responsive Review
+
+- [ ] Audit dashboard, forms, workflows at 375px / 768px; fix obvious overflow
+
+### 3G. Deployment Guide
+
+- [ ] Add `docs/08-deployment.md`; link from docs README
+
+### 3H. Browser Smoke (Optional)
+
+- Requires explicit approval for Pest Browser + Playwright dependencies
+- See `.ai-dev/tasks/phase-3h-browser-smoke-optional/plan.md`
 
 ## Phase 4 — Product Expansion (Deferred)
 
@@ -113,7 +148,8 @@ Do not start until Phase 1–3 exit criteria are met.
 3. Phase 1C (Dashboard) — most misleading UX
 4. Phase 1D (Organization) — data integrity risk
 5. Phase 2 module hardening — parallelizable by module
-6. Phase 3 release prep
+6. Phase 3 quality and release prep — see `.ai-dev/tasks/INDEX.md` (3A–3G)
+7. Phase 4 product expansion (deferred)
 
 ## Tracking
 

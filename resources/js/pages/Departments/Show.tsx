@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Head, Link } from '@inertiajs/react';
-import AuthenticatedLayout from '@/layouts/AuthenticatedLayout';
-import { PageProps, Department } from '@/types';
+import AppLayout from '@/layouts/app-layout';
+import { PageProps, Department, type BreadcrumbItem } from '@/types';
+import { useSlug } from '@/hooks/useSlug';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -12,7 +13,17 @@ interface DepartmentsShowProps extends PageProps {
     department: Department;
 }
 
-const DepartmentsShow: React.FC<DepartmentsShowProps> = ({ auth, department }) => {
+const DepartmentsShow: React.FC<DepartmentsShowProps> = ({ department }) => {
+    const slug = useSlug();
+    const breadcrumbs = useMemo<BreadcrumbItem[]>(
+        () => [
+            { title: '儀表板', href: slug ? `/dashboard/${slug}` : '/dashboard-redirect' },
+            { title: '部門管理', href: '/departments' },
+            { title: department.name, href: `/departments/${department.id}` },
+        ],
+        [slug, department],
+    );
+
     const renderDepartmentTree = (dept: Department, level: number = 0) => {
         return (
             <div key={dept.id} style={{ marginLeft: `${level * 1.5}rem` }} className="mb-2">
@@ -33,42 +44,38 @@ const DepartmentsShow: React.FC<DepartmentsShowProps> = ({ auth, department }) =
     };
 
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="sm" asChild>
-                            <Link href="/departments">
-                                <ArrowLeft className="w-4 h-4 mr-2" />
-                                返回
-                            </Link>
-                        </Button>
-                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                            部門詳情 - {department.name}
-                        </h2>
-                    </div>
-                    <div className="flex gap-2">
-                        <Button variant="outline" asChild>
-                            <Link href={`/departments/${department.id}/edit`}>
-                                <Edit className="w-4 h-4 mr-2" />
-                                編輯
-                            </Link>
-                        </Button>
-                        <Button variant="destructive" asChild>
-                            <Link href={`/departments/${department.id}`} method="delete" as="button">
-                                <Trash2 className="w-4 h-4 mr-2" />
-                                刪除
-                            </Link>
-                        </Button>
-                    </div>
-                </div>
-            }
-        >
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`部門詳情 - ${department.name}`} />
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-4">
+                            <Button variant="ghost" size="sm" asChild>
+                                <Link href="/departments">
+                                    <ArrowLeft className="w-4 h-4 mr-2" />
+                                    返回
+                                </Link>
+                            </Button>
+                            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                                部門詳情 - {department.name}
+                            </h2>
+                        </div>
+                        <div className="flex gap-2">
+                            <Button variant="outline" asChild>
+                                <Link href={`/departments/${department.id}/edit`}>
+                                    <Edit className="w-4 h-4 mr-2" />
+                                    編輯
+                                </Link>
+                            </Button>
+                            <Button variant="destructive" asChild>
+                                <Link href={`/departments/${department.id}`} method="delete" as="button">
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    刪除
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         {/* 左側：部門基本資訊 */}
                         <div className="lg:col-span-1">
@@ -208,7 +215,7 @@ const DepartmentsShow: React.FC<DepartmentsShowProps> = ({ auth, department }) =
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </AppLayout>
     );
 };
 

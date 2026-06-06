@@ -2,7 +2,7 @@ import React from 'react';
 import { Head, Link } from '@inertiajs/react';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, Organization, OrganizationStats } from '@/types';
-import { route } from '@/lib/route';
+import organizationRoutes from '@/routes/organization';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -56,28 +56,28 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ organization, sta
       title: '組織設定',
       description: '管理組織基本資訊和系統設定',
       icon: Settings,
-      href: route('organization.settings'),
+      href: organizationRoutes.settings.url(),
       color: 'blue',
     },
     {
       title: '組織資訊',
       description: '查看組織詳細資訊和統計資料',
       icon: Building2,
-      href: route('organization.info'),
+      href: organizationRoutes.info.url(),
       color: 'green',
     },
     {
       title: '偏好設定',
       description: '設定系統偏好和通知選項',
       icon: Bell,
-      href: route('organization.preferences'),
+      href: organizationRoutes.preferences.url(),
       color: 'purple',
     },
     {
       title: '統計報表',
       description: '查看組織使用統計和分析報表',
       icon: BarChart3,
-      href: route('organization.reports'),
+      href: organizationRoutes.reports.url(),
       color: 'orange',
     },
   ];
@@ -121,13 +121,13 @@ const OrganizationIndex: React.FC<OrganizationIndexProps> = ({ organization, sta
             </h2>
             <div className="flex items-center space-x-2">
               <Button variant="outline" size="sm" asChild>
-                <Link href={route('organization.settings')}>
+                <Link href={organizationRoutes.settings.url()}>
                   <Edit className="h-4 w-4 mr-2" />
                   編輯設定
                 </Link>
               </Button>
               <Button variant="outline" size="sm" asChild>
-                <Link href={route('organization.reports')}>
+                <Link href={organizationRoutes.reports.url()}>
                   <Download className="h-4 w-4 mr-2" />
                   匯出報表
                 </Link>
