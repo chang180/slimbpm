@@ -72,9 +72,9 @@ Workflow templates, instances, engine, start page, show page, and monitor page h
 
 Known issues:
 
-- Dashboard workflow quick actions are fake.
-- Route name collisions affect generated `resources/js/routes/workflows/index.ts`.
 - No dedicated workflow template edit page route exists beyond create/designer behavior.
+
+Phase 2D/3E: Monitor UX improved; workflows Index uses `formatPaginationLabel` for pagination.
 
 Important files:
 
@@ -88,13 +88,11 @@ Important files:
 
 Status: Yellow
 
-The `/reports/*` area is relatively strong compared to other frontend areas. Controllers use real data and recent tests cover org scoping for key pages and CSV exports.
+Phase 2D/3E complete (2026-06-06):
 
-Still verify:
-
-- Frontend export buttons and filters.
-- User activity and system stats page interactions.
-- Date filtering behavior in ExportService.
+- Index export buttons wired; UserActivity/SystemStats Inertia tests.
+- `ReportsController` supports `date_from`/`date_to` on userActivity and workflowPerformance with Feature tests.
+- Export subpages verified against `ReportsExportTest`.
 
 Important files:
 
@@ -145,4 +143,4 @@ Phase 2C: Wayfinder integration and page tests. Dashboard invitation widget wire
 
 Status: Yellow
 
-Phase 2C: page tests added. Mark-read UX verification deferred to Phase 3.
+Phase 2C + **3D** (2026-06-06): InvitationsPageTest, NotificationsPageTest, `NotificationMarkReadTest` (7 tests). Pagination uses `formatPaginationLabel`.

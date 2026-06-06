@@ -3,7 +3,7 @@
 | 項目 | 內容 |
 |------|------|
 | **階段** | Phase 3E |
-| **狀態** | 可派工 |
+| **狀態** | ✅ 已驗收 |
 | **協調者** | Cursor |
 | **前置** | Phase 2D 已驗收 |
 | **前置閱讀** | `tests/Feature/ReportsPagesTest.php`、`tests/Feature/ReportsExportTest.php` |

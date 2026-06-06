@@ -7,7 +7,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import { CheckCircle2, Clock, GitBranch, Loader2, PauseCircle, Play, XCircle } from 'lucide-react';
 import { useMemo } from 'react';
-import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
+import { formatPaginationLabel, hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface WorkflowInstanceSummary {
     id: number;
@@ -152,8 +152,9 @@ function InstanceTable({
                                 size="sm"
                                 disabled={!link.url}
                                 onClick={() => link.url && router.get(link.url)}
-                                dangerouslySetInnerHTML={{ __html: link.label }}
-                            />
+                            >
+                                {formatPaginationLabel(link.label)}
+                            </Button>
                         ))}
                     </div>
                 </div>

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\WorkflowInstance;
 use App\Models\WorkflowTemplate;
 use App\Services\ExportService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,7 @@ class ReportsController extends Controller
     {
         $organization = $request->get('current_organization');
         $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+        $filters = $this->dateFilters($request);
 
         $now = now();
         $thisMonthStart = $now->copy()->startOfMonth();
@@ -45,21 +47,20 @@ class ReportsController extends Controller
         $lastMonthEnd = $now->copy()->subMonth()->endOfMonth();
 
         $totalUsers = $orgUserIds->count();
-        $newThisMonth = User::where('organization_id', $organization->id)
-            ->whereBetween('created_at', [$thisMonthStart, $now])
-            ->count();
-        $newLastMonth = User::where('organization_id', $organization->id)
-            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd])
-            ->count();
+        $newThisMonthQuery = User::where('organization_id', $organization->id)
+            ->whereBetween('created_at', [$thisMonthStart, $now]);
+        $newLastMonthQuery = User::where('organization_id', $organization->id)
+            ->whereBetween('created_at', [$lastMonthStart, $lastMonthEnd]);
+        $totalSubmissionsQuery = FormSubmission::whereIn('submitted_by', $orgUserIds);
 
         $userStats = [
             'totalUsers' => $totalUsers,
-            'newUsersThisMonth' => $newThisMonth,
-            'newUsersLastMonth' => $newLastMonth,
-            'totalSubmissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)->count(),
+            'newUsersThisMonth' => $this->applyDateFilters($newThisMonthQuery, 'created_at', $filters)->count(),
+            'newUsersLastMonth' => $this->applyDateFilters($newLastMonthQuery, 'created_at', $filters)->count(),
+            'totalSubmissions' => $this->applyDateFilters($totalSubmissionsQuery, 'submitted_at', $filters)->count(),
         ];
 
-        $activityData = $this->getMonthlyActivityData($organization->id, $orgUserIds);
+        $activityData = $this->getMonthlyActivityData($organization->id, $orgUserIds, $filters);
 
         $departmentStats = Department::where('organization_id', $organization->id)
             ->withCount('users')
@@ -78,6 +79,7 @@ class ReportsController extends Controller
             'userStats' => $userStats,
             'activityData' => $activityData,
             'departmentStats' => $departmentStats,
+            'filters' => $filters,
         ]);
     }
 
@@ -85,12 +87,20 @@ class ReportsController extends Controller
     {
         $organization = $request->get('current_organization');
         $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+        $filters = $this->dateFilters($request);
 
         $completedInstances = WorkflowInstance::whereIn('started_by', $orgUserIds)
             ->where('status', 'completed')
             ->whereNotNull('completed_at')
-            ->whereNotNull('started_at')
-            ->get(['started_at', 'completed_at']);
+            ->whereNotNull('started_at');
+        $this->applyDateFilters($completedInstances, 'completed_at', $filters);
+        $completedInstances = $completedInstances->get(['started_at', 'completed_at']);
+
+        $totalInstancesQuery = WorkflowInstance::whereIn('started_by', $orgUserIds);
+        $completedTodayQuery = WorkflowInstance::whereIn('started_by', $orgUserIds)
+            ->where('status', 'completed')
+            ->whereDate('completed_at', today());
+        $runningQuery = WorkflowInstance::whereIn('started_by', $orgUserIds)->where('status', 'running');
 
         $avgCompletionDays = $completedInstances->isEmpty()
             ? null
@@ -101,18 +111,18 @@ class ReportsController extends Controller
         $workflowStats = [
             'totalTemplates' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->count(),
             'activeTemplates' => WorkflowTemplate::whereIn('created_by', $orgUserIds)->where('is_current', true)->where('is_active', true)->count(),
-            'totalInstances' => WorkflowInstance::whereIn('started_by', $orgUserIds)->count(),
-            'completedToday' => WorkflowInstance::whereIn('started_by', $orgUserIds)
-                ->where('status', 'completed')
-                ->whereDate('completed_at', today())
-                ->count(),
-            'running' => WorkflowInstance::whereIn('started_by', $orgUserIds)->where('status', 'running')->count(),
+            'totalInstances' => $this->applyDateFilters($totalInstancesQuery, 'created_at', $filters)->count(),
+            'completedToday' => $this->applyDateFilters($completedTodayQuery, 'completed_at', $filters)->count(),
+            'running' => $this->applyDateFilters($runningQuery, 'created_at', $filters)->count(),
             'avgCompletionDays' => $avgCompletionDays,
         ];
 
-        $performanceData = $this->getMonthlyWorkflowData($orgUserIds);
+        $performanceData = $this->getMonthlyWorkflowData($orgUserIds, $filters);
 
-        $templateUsage = WorkflowTemplate::withCount('instances')
+        $templateUsage = WorkflowTemplate::withCount([
+            'instances' => fn (Builder $query) => $this->applyDateFilters($query, 'created_at', $filters)
+                ->whereIn('started_by', $orgUserIds),
+        ])
             ->whereIn('created_by', $orgUserIds)
             ->where('is_current', true)
             ->orderBy('instances_count', 'desc')
@@ -127,6 +137,7 @@ class ReportsController extends Controller
             'workflowStats' => $workflowStats,
             'performanceData' => $performanceData,
             'templateUsage' => $templateUsage,
+            'filters' => $filters,
         ]);
     }
 
@@ -226,7 +237,31 @@ class ReportsController extends Controller
         return $this->exportService->exportWorkflowPerformanceReport($organization, $orgUserIds, $filters);
     }
 
-    private function getMonthlyActivityData(int $organizationId, Collection $orgUserIds): array
+    /**
+     * @return array{date_from: string|null, date_to: string|null}
+     */
+    private function dateFilters(Request $request): array
+    {
+        return [
+            'date_from' => $request->filled('date_from') ? (string) $request->input('date_from') : null,
+            'date_to' => $request->filled('date_to') ? (string) $request->input('date_to') : null,
+        ];
+    }
+
+    /**
+     * @param  array{date_from?: string|null, date_to?: string|null}  $filters
+     */
+    private function applyDateFilters(Builder $query, string $column, array $filters): Builder
+    {
+        return $query
+            ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->where($column, '>=', $date.' 00:00:00'))
+            ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->where($column, '<=', $date.' 23:59:59'));
+    }
+
+    /**
+     * @param  array{date_from?: string|null, date_to?: string|null}  $filters
+     */
+    private function getMonthlyActivityData(int $organizationId, Collection $orgUserIds, array $filters = []): array
     {
         $data = [];
 
@@ -237,22 +272,31 @@ class ReportsController extends Controller
 
             $data[] = [
                 'month' => $base->format('n月'),
-                'newUsers' => User::where('organization_id', $organizationId)
-                    ->whereBetween('created_at', [$start, $end])
-                    ->count(),
-                'submissions' => FormSubmission::whereIn('submitted_by', $orgUserIds)
-                    ->whereBetween('submitted_at', [$start, $end])
-                    ->count(),
-                'workflows' => WorkflowInstance::whereIn('started_by', $orgUserIds)
-                    ->whereBetween('created_at', [$start, $end])
-                    ->count(),
+                'newUsers' => $this->applyDateFilters(
+                    User::where('organization_id', $organizationId)->whereBetween('created_at', [$start, $end]),
+                    'created_at',
+                    $filters
+                )->count(),
+                'submissions' => $this->applyDateFilters(
+                    FormSubmission::whereIn('submitted_by', $orgUserIds)->whereBetween('submitted_at', [$start, $end]),
+                    'submitted_at',
+                    $filters
+                )->count(),
+                'workflows' => $this->applyDateFilters(
+                    WorkflowInstance::whereIn('started_by', $orgUserIds)->whereBetween('created_at', [$start, $end]),
+                    'created_at',
+                    $filters
+                )->count(),
             ];
         }
 
         return $data;
     }
 
-    private function getMonthlyWorkflowData(Collection $orgUserIds): array
+    /**
+     * @param  array{date_from?: string|null, date_to?: string|null}  $filters
+     */
+    private function getMonthlyWorkflowData(Collection $orgUserIds, array $filters = []): array
     {
         $data = [];
 
@@ -263,17 +307,25 @@ class ReportsController extends Controller
 
             $data[] = [
                 'month' => $base->format('n月'),
-                'started' => WorkflowInstance::whereIn('started_by', $orgUserIds)
-                    ->whereBetween('created_at', [$start, $end])
-                    ->count(),
-                'completed' => WorkflowInstance::whereIn('started_by', $orgUserIds)
-                    ->where('status', 'completed')
-                    ->whereBetween('completed_at', [$start, $end])
-                    ->count(),
-                'cancelled' => WorkflowInstance::whereIn('started_by', $orgUserIds)
-                    ->where('status', 'cancelled')
-                    ->whereBetween('updated_at', [$start, $end])
-                    ->count(),
+                'started' => $this->applyDateFilters(
+                    WorkflowInstance::whereIn('started_by', $orgUserIds)->whereBetween('created_at', [$start, $end]),
+                    'created_at',
+                    $filters
+                )->count(),
+                'completed' => $this->applyDateFilters(
+                    WorkflowInstance::whereIn('started_by', $orgUserIds)
+                        ->where('status', 'completed')
+                        ->whereBetween('completed_at', [$start, $end]),
+                    'completed_at',
+                    $filters
+                )->count(),
+                'cancelled' => $this->applyDateFilters(
+                    WorkflowInstance::whereIn('started_by', $orgUserIds)
+                        ->where('status', 'cancelled')
+                        ->whereBetween('updated_at', [$start, $end]),
+                    'updated_at',
+                    $filters
+                )->count(),
             ];
         }
 

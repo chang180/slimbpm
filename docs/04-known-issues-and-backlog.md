@@ -37,28 +37,24 @@ Organization pages previously called `route('organization.*')` via `@/lib/route.
 
 See `OrganizationController.php` and updated `OrganizationManagementTest.php`.
 
-## P2 Reports Verification ✅ (Phase 2D partial)
+## P2 Reports Verification ✅ (Phase 3E complete)
 
 Completed:
 
 - Reports Index export buttons wired to POST routes.
-- UserActivity and SystemStats Inertia page tests added.
+- UserActivity and SystemStats Inertia page tests.
+- **Phase 3E:** `date_from`/`date_to` filter props + Feature tests; workflows Index pagination labels.
 
-Remaining (Phase 3):
+Remaining:
 
-- Filter/date range tests → **Phase 3E**
-- Manual verification on all `/reports/*` subpages → **Phase 3F**
+- Manual responsive verification on report subpages → **Phase 3F**
 
-## P2 Notifications Verification ✅ (Phase 2C partial)
+## P2 Notifications Verification ✅ (Phase 3D complete)
 
 Completed:
 
-- InvitationsPageTest + NotificationsPageTest added.
-
-Remaining (Phase 3):
-
-- Verify API mark-read and mark-all-read in frontend → **Phase 3D**
-- Confirm unread badge refresh behavior → **Phase 3D**
+- InvitationsPageTest + NotificationsPageTest (2C).
+- **Phase 3D:** `NotificationMarkReadTest.php` (mark single/all, 401, 403); pagination labels on notifications Index.
 
 ## P3 Browser E2E
 

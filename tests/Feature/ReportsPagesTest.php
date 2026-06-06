@@ -129,6 +129,44 @@ it('renders user activity report page with correct props', function () {
         );
 });
 
+it('filters user activity report props by date range', function () {
+    CarbonImmutable::setTestNow('2026-06-15 10:00:00');
+
+    $organization = OrganizationSetting::factory()->create();
+    $admin = User::factory()->create([
+        'organization_id' => $organization->id,
+        'role' => 'admin',
+        'created_at' => '2026-06-01 09:00:00',
+    ]);
+    $member = User::factory()->create([
+        'organization_id' => $organization->id,
+        'created_at' => '2026-06-10 09:00:00',
+    ]);
+
+    FormSubmission::factory()->submitted()->create([
+        'submitted_by' => $member->id,
+        'submitted_at' => '2026-06-12 09:00:00',
+    ]);
+    FormSubmission::factory()->submitted()->create([
+        'submitted_by' => $member->id,
+        'submitted_at' => '2026-05-12 09:00:00',
+    ]);
+
+    actingAs($admin)
+        ->get('/reports/user-activity?date_from=2026-06-01&date_to=2026-06-30')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('reports/UserActivity')
+            ->where('filters.date_from', '2026-06-01')
+            ->where('filters.date_to', '2026-06-30')
+            ->where('userStats.totalUsers', 2)
+            ->where('userStats.newUsersThisMonth', 2)
+            ->where('userStats.totalSubmissions', 1)
+            ->where('activityData.5.newUsers', 2)
+            ->where('activityData.5.submissions', 1)
+        );
+});
+
 it('renders system stats report page with correct props', function () {
     $organization = OrganizationSetting::factory()->create();
     $admin = User::factory()->create(['organization_id' => $organization->id, 'role' => 'admin']);
@@ -143,6 +181,57 @@ it('renders system stats report page with correct props', function () {
             ->has('orgName')
             ->where('systemStats.totalUsers', 1)
             ->where('orgName', $organization->name)
+        );
+});
+
+it('filters workflow performance report props by date range', function () {
+    CarbonImmutable::setTestNow('2026-06-15 10:00:00');
+
+    $organization = OrganizationSetting::factory()->create();
+    $admin = User::factory()->create(['organization_id' => $organization->id, 'role' => 'manager']);
+
+    $template = WorkflowTemplate::factory()->create([
+        'created_by' => $admin->id,
+        'name' => 'June Approval',
+        'is_current' => true,
+        'is_active' => true,
+    ]);
+
+    WorkflowInstance::factory()->running()->create([
+        'started_by' => $admin->id,
+        'template_id' => $template->id,
+        'created_at' => '2026-06-10 09:00:00',
+    ]);
+    WorkflowInstance::factory()->completed()->create([
+        'started_by' => $admin->id,
+        'template_id' => $template->id,
+        'started_at' => '2026-06-11 09:00:00',
+        'completed_at' => '2026-06-13 09:00:00',
+        'created_at' => '2026-06-11 09:00:00',
+    ]);
+    WorkflowInstance::factory()->completed()->create([
+        'started_by' => $admin->id,
+        'template_id' => $template->id,
+        'started_at' => '2026-05-11 09:00:00',
+        'completed_at' => '2026-05-13 09:00:00',
+        'created_at' => '2026-05-11 09:00:00',
+    ]);
+
+    actingAs($admin)
+        ->get('/reports/workflow-performance?date_from=2026-06-01&date_to=2026-06-30')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('reports/WorkflowPerformance')
+            ->where('filters.date_from', '2026-06-01')
+            ->where('filters.date_to', '2026-06-30')
+            ->where('workflowStats.totalInstances', 2)
+            ->where('workflowStats.running', 1)
+            ->where('workflowStats.avgCompletionDays', 2)
+            ->where('performanceData.5.started', 2)
+            ->where('performanceData.5.completed', 1)
+            ->has('templateUsage', 1)
+            ->where('templateUsage.0.name', 'June Approval')
+            ->where('templateUsage.0.count', 2)
         );
 });
 

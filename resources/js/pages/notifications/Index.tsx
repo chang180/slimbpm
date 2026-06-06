@@ -6,7 +6,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { Bell, BellOff, CheckCheck, Mail, MessageSquare, Smartphone } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
+import { formatPaginationLabel, hasMultiplePages, type LengthAwarePaginator } from '@/lib/pagination';
 
 interface NotificationRecord {
     id: number;
@@ -199,8 +199,9 @@ export default function NotificationsIndex({ notifications, unreadCount, filters
                                     size="sm"
                                     disabled={!link.url}
                                     onClick={() => link.url && router.get(link.url)}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
+                                >
+                                    {formatPaginationLabel(link.label)}
+                                </Button>
                             ))}
                         </div>
                     </div>

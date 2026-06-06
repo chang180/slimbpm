@@ -109,17 +109,19 @@ Goal: regression coverage, UX polish, deployment readiness. Task plans live unde
 - [x] Add `DepartmentPagesTest.php` (8 tests)
 - Tests 236 → **244**
 
-### 3D. Notifications Verification (Next)
+### 3D. Notifications Verification ✅ (2026-06-06)
 
-- [ ] mark-read / mark-all Feature tests
-- [ ] Replace pagination `dangerouslySetInnerHTML` on notifications Index
+- [x] `NotificationMarkReadTest.php` (7 tests)
+- [x] `formatPaginationLabel` on notifications Index
+- Tests 244 → **253**
 
-### 3E. Reports Filters And Pagination
+### 3E. Reports Filters And Pagination ✅ (2026-06-06)
 
-- [ ] Date filter Feature tests on report subpages
-- [ ] `formatPaginationLabel` on workflows Index
+- [x] `date_from` / `date_to` on userActivity & workflowPerformance
+- [x] Date filter Feature tests in ReportsPagesTest
+- [x] `formatPaginationLabel` on workflows Index
 
-### 3F. Responsive Review
+### 3F. Responsive Review (Next)
 
 - [ ] Audit dashboard, forms, workflows at 375px / 768px; fix obvious overflow
 
