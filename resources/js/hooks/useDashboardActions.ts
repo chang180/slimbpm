@@ -1,87 +1,76 @@
+import { router } from '@inertiajs/react';
 import { useCallback } from 'react';
+import apiInvitations from '@/routes/api/invitations';
+import invitationsRoutes from '@/routes/invitations';
+import workflowsRoutes from '@/routes/workflows';
 
 export function useDashboardActions() {
-  // 處理邀請功能
-  const handleSendInvitation = useCallback(async (data: {
-    emails: string[],
-    role: string,
-    message?: string
-  }) => {
-    try {
-      // 這裡應該調用 API 發送邀請
-      console.log('發送邀請:', data);
-      // await api.post('/invitations', data);
-    } catch (error) {
-      console.error('發送邀請失敗:', error);
-      throw error;
-    }
-  }, []);
+    const onSendInvitation = useCallback(
+        (data: { emails: string[]; role: string; message?: string }) => {
+            router.post(apiInvitations.store.url(), data, {
+                onSuccess: () => router.reload({ only: ['invitations', 'stats'] }),
+                onError: (errors) => console.error('發送邀請失敗:', errors),
+            });
+        },
+        [],
+    );
 
-  const handleResendInvitation = useCallback(async (id: string) => {
-    try {
-      console.log('重新發送邀請:', id);
-      // await api.post(`/invitations/${id}/resend`);
-    } catch (error) {
-      console.error('重新發送邀請失敗:', error);
-    }
-  }, []);
+    const onResendInvitation = useCallback((id: string) => {
+        router.post(
+            apiInvitations.resend.url(Number(id)),
+            {},
+            {
+                onSuccess: () => router.reload({ only: ['invitations'] }),
+                onError: (errors) => console.error('重新發送邀請失敗:', errors),
+            },
+        );
+    }, []);
 
-  const handleCancelInvitation = useCallback(async (id: string) => {
-    try {
-      console.log('取消邀請:', id);
-      // await api.delete(`/invitations/${id}`);
-    } catch (error) {
-      console.error('取消邀請失敗:', error);
-    }
-  }, []);
+    const onCancelInvitation = useCallback((id: string) => {
+        router.delete(apiInvitations.destroy.url(Number(id)), {
+            onSuccess: () => router.reload({ only: ['invitations', 'stats'] }),
+            onError: (errors) => console.error('取消邀請失敗:', errors),
+        });
+    }, []);
 
-  // 處理工作流程功能
-  const handleStartWorkflow = useCallback((templateId: string) => {
-    console.log('啟動工作流程:', templateId);
-    // 導航到工作流程啟動頁面
-  }, []);
+    const onStartWorkflow = useCallback((_templateId: string) => {
+        router.visit(workflowsRoutes.start.url());
+    }, []);
 
-  const handleViewWorkflow = useCallback((instanceId: string) => {
-    console.log('查看工作流程:', instanceId);
-    // 導航到工作流程詳情頁面
-  }, []);
+    const onViewWorkflow = useCallback((instanceId: string) => {
+        router.visit(workflowsRoutes.show.url(Number(instanceId)));
+    }, []);
 
-  const handleEditWorkflow = useCallback((instanceId: string) => {
-    console.log('編輯工作流程:', instanceId);
-    // 導航到工作流程編輯頁面
-  }, []);
+    const onEditWorkflow = useCallback((instanceId: string) => {
+        router.visit(workflowsRoutes.show.url(Number(instanceId)));
+    }, []);
 
-  const handleApproveWorkflow = useCallback((instanceId: string) => {
-    console.log('批准工作流程:', instanceId);
-    // 調用 API 批准工作流程
-  }, []);
+    const onApproveWorkflow = useCallback((instanceId: string) => {
+        router.visit(workflowsRoutes.show.url(Number(instanceId)));
+    }, []);
 
-  const handleRejectWorkflow = useCallback((instanceId: string) => {
-    console.log('拒絕工作流程:', instanceId);
-    // 調用 API 拒絕工作流程
-  }, []);
+    const onRejectWorkflow = useCallback((instanceId: string) => {
+        router.visit(workflowsRoutes.show.url(Number(instanceId)));
+    }, []);
 
-  // 處理快速操作
-  const handleInviteMembers = useCallback(() => {
-    console.log('邀請成員');
-    // 顯示邀請表單或導航到邀請頁面
-  }, []);
+    const onInviteMembers = useCallback(() => {
+        router.visit(invitationsRoutes.index.url());
+    }, []);
 
-  const handleSendBulkInvites = useCallback(() => {
-    console.log('批量邀請');
-    // 顯示批量邀請表單
-  }, []);
+    const onSendBulkInvites = useCallback(() => {
+        router.visit(invitationsRoutes.index.url());
+    }, []);
 
-  return {
-    handleSendInvitation,
-    handleResendInvitation,
-    handleCancelInvitation,
-    handleStartWorkflow,
-    handleViewWorkflow,
-    handleEditWorkflow,
-    handleApproveWorkflow,
-    handleRejectWorkflow,
-    handleInviteMembers,
-    handleSendBulkInvites,
-  };
+    return {
+        onSendInvitation,
+        onResendInvitation,
+        onCancelInvitation,
+        onStartWorkflow,
+        onViewWorkflow,
+        onEditWorkflow,
+        onApproveWorkflow,
+        onRejectWorkflow,
+        onInviteMembers,
+        onSendBulkInvites,
+    };
 }

@@ -10,9 +10,9 @@ interface DashboardProps {
         totalForms: number;
         totalWorkflows: number;
         activeWorkflows: number;
-    pendingInvitations: number;
-    sentInvitations: number;
-    systemHealth: number;
+        pendingInvitations: number;
+        sentInvitations: number;
+        systemHealth: number;
     };
     recentActivities: Array<{
         id: number;
@@ -32,93 +32,136 @@ interface DashboardProps {
         users_count: number;
         percentage: number;
     }>;
-  workflowInstances: Array<{
-    id: string;
-    name: string;
-    status: 'pending' | 'in_progress' | 'completed' | 'rejected' | 'cancelled';
-    currentStep: string;
-    assignee: string;
-    dueDate: string;
-    priority: 'low' | 'medium' | 'high' | 'urgent';
-    createdAt: string;
-  }>;
-  workflowTemplates: Array<{
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    isActive: boolean;
-    usageCount: number;
-  }>;
-  invitations: Array<{
-    id: string;
-    email: string;
-    role: string;
-    status: 'pending' | 'sent' | 'accepted' | 'expired';
-    sentAt: string;
-    expiresAt: string;
-  }>;
-  organization: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-  user: {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-  };
+    workflowInstances: Array<{
+        id: string;
+        name: string;
+        status: 'pending' | 'in_progress' | 'completed' | 'rejected' | 'cancelled';
+        currentStep: string;
+        assignee: string;
+        dueDate: string;
+        priority: 'low' | 'medium' | 'high' | 'urgent';
+        createdAt: string;
+    }>;
+    workflowTemplates: Array<{
+        id: string;
+        name: string;
+        description: string;
+        category: string;
+        isActive: boolean;
+        usageCount: number;
+    }>;
+    invitations: Array<{
+        id: string;
+        email: string;
+        role: string;
+        status: 'pending' | 'sent' | 'accepted' | 'expired';
+        sentAt: string;
+        expiresAt: string;
+    }>;
+    organization: {
+        id: number;
+        name: string;
+        slug: string;
+    };
+    user: {
+        id: number;
+        name: string;
+        email: string;
+        role: string;
+    };
 }
 
 export default function Dashboard({
     stats,
-    recentActivities,
-    chartData,
-    departmentStats,
     workflowInstances,
     workflowTemplates,
     invitations,
     organization,
-    user
+    user,
 }: DashboardProps) {
-  const maxUsers = 50;
-  const actions = useDashboardActions();
+    const {
+        onSendInvitation,
+        onResendInvitation,
+        onCancelInvitation,
+        onStartWorkflow,
+        onViewWorkflow,
+        onEditWorkflow,
+        onApproveWorkflow,
+        onRejectWorkflow,
+        onInviteMembers,
+        onSendBulkInvites,
+    } = useDashboardActions();
 
-  // 提供安全的預設值
-  const safeProps = {
-    user: user || { id: 0, name: '', email: '', role: 'user' },
-    organization: organization || { id: 0, name: '未知組織', slug: '' },
-    stats: stats || { totalUsers: 0, totalDepartments: 0, totalForms: 0, totalWorkflows: 0, activeWorkflows: 0 },
-    workflowInstances: workflowInstances || [],
-    workflowTemplates: workflowTemplates || [],
-    invitations: invitations || [],
-  };
+    if (!user) {
+        return (
+            <div className="flex h-full flex-1 flex-col items-center justify-center">
+                <div className="text-center">
+                    <h1 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">載入中...</h1>
+                    <p className="text-gray-600 dark:text-gray-400">正在載入用戶資料，請稍候</p>
+                </div>
+            </div>
+        );
+    }
 
-  if (!user) {
+    const isUser = user.role === 'user';
+    const pageTitle = `${isUser ? '公文流程' : '企業管理後台'} - SlimBPM`;
+
+    const safeUser = user ?? { id: 0, name: '', email: '', role: 'user' };
+    const safeOrganization = organization ?? { id: 0, name: '未知組織', slug: '' };
+    const safeStats = stats ?? {
+        totalUsers: 0,
+        totalDepartments: 0,
+        totalForms: 0,
+        totalWorkflows: 0,
+        activeWorkflows: 0,
+        pendingInvitations: 0,
+        sentInvitations: 0,
+        systemHealth: 0,
+    };
+    const safeWorkflowInstances = workflowInstances ?? [];
+    const safeWorkflowTemplates = workflowTemplates ?? [];
+    const safeInvitations = invitations ?? [];
+
     return (
-      <div className="flex h-full flex-1 flex-col items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">載入中...</h1>
-          <p className="text-gray-600 dark:text-gray-400">正在載入用戶資料，請稍候</p>
-        </div>
-      </div>
+        <AppLayout>
+            <Head title={pageTitle} />
+            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-6">
+                {isUser ? (
+                    <UserDashboard
+                        user={safeUser}
+                        organizationSlug={safeOrganization.slug}
+                        workflowInstances={safeWorkflowInstances}
+                        workflowTemplates={safeWorkflowTemplates}
+                        onStartWorkflow={onStartWorkflow}
+                        onViewWorkflow={onViewWorkflow}
+                        onEditWorkflow={onEditWorkflow}
+                        onApproveWorkflow={onApproveWorkflow}
+                        onRejectWorkflow={onRejectWorkflow}
+                        onInviteMembers={onInviteMembers}
+                        onSendBulkInvites={onSendBulkInvites}
+                    />
+                ) : (
+                    <ManagerDashboard
+                        user={safeUser}
+                        organization={safeOrganization}
+                        stats={safeStats}
+                        workflowInstances={safeWorkflowInstances}
+                        workflowTemplates={safeWorkflowTemplates}
+                        invitations={safeInvitations}
+                        maxUsers={50}
+                        onSendInvitation={onSendInvitation}
+                        onResendInvitation={onResendInvitation}
+                        onCancelInvitation={onCancelInvitation}
+                        onStartWorkflow={onStartWorkflow}
+                        onViewWorkflow={onViewWorkflow}
+                        onEditWorkflow={onEditWorkflow}
+                        onApproveWorkflow={onApproveWorkflow}
+                        onRejectWorkflow={onRejectWorkflow}
+                        onInviteMembers={onInviteMembers}
+                        onSendBulkInvites={onSendBulkInvites}
+                    />
+                )}
+            </div>
+        </AppLayout>
     );
-  }
-
-  const isUser = user.role === 'user';
-  const pageTitle = `${isUser ? '公文流程' : '企業管理後台'} - SlimBPM`;
-
-  return (
-    <AppLayout>
-      <Head title={pageTitle} />
-      <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-6">
-        {isUser ? (
-          <UserDashboard {...safeProps} {...actions} maxUsers={maxUsers} />
-        ) : (
-          <ManagerDashboard {...safeProps} {...actions} maxUsers={maxUsers} />
-        )}
-      </div>
-    </AppLayout>
-  );
 }

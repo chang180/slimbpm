@@ -167,14 +167,14 @@ export default function WorkflowMenu({
               </Button>
             </Link>
             
-            <Link href="/workflows/instances">
+            <Link href="/workflows">
               <Button variant="outline" className="w-full h-20 flex flex-col items-center gap-2">
                 <Clock className="w-6 h-6" />
                 <span>我的流程</span>
               </Button>
             </Link>
-            
-            <Link href="/workflows/reports">
+
+            <Link href="/reports/workflow-performance">
               <Button variant="outline" className="w-full h-20 flex flex-col items-center gap-2">
                 <Eye className="w-6 h-6" />
                 <span>流程報表</span>
@@ -271,8 +271,8 @@ export default function WorkflowMenu({
               
               {workflowInstances.length > 5 && (
                 <div className="text-center pt-4">
-                  <Link 
-                    href="/workflows/instances"
+                  <Link
+                    href="/workflows"
                     className="text-blue-600 hover:text-blue-700 text-sm"
                   >
                     查看全部 {workflowInstances.length} 個流程 →
