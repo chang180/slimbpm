@@ -2,7 +2,7 @@
 
 This directory is the canonical development documentation for the current codebase.
 
-The older `.ai-dev/` files are kept as historical planning notes and handoff records, but many of them are stale. When the two disagree, prefer this `docs/` directory unless a newer handoff explicitly says otherwise.
+The older `.ai-dev/` directory now contains only `handoff.md` (Chinese short-term notes for the human owner). When the two disagree, prefer this `docs/` directory.
 
 ## Read Order For AI Agents
 
@@ -10,8 +10,9 @@ The older `.ai-dev/` files are kept as historical planning notes and handoff rec
 2. `02-project-structure.md`
 3. `03-module-status.md`
 4. `04-known-issues-and-backlog.md`
-5. `05-documentation-inventory.md`
-6. `06-development-workflow.md`
+5. `07-roadmap.md`
+6. `05-documentation-inventory.md`
+7. `06-development-workflow.md`
 
 ## Current Operating Principle
 

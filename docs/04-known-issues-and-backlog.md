@@ -3,8 +3,9 @@
 ## P0 Documentation Work
 
 1. Keep this `docs/` directory as the current source of truth.
-2. Do not rely on `.ai-dev/README.md` or root `README.md` completion percentages until they are rewritten.
+2. Do not rely on outdated completion percentages from historical notes.
 3. Update `03-module-status.md` whenever a module changes status.
+4. Track progress against `07-roadmap.md`.
 
 ## P1 Frontend Typecheck
 

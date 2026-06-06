@@ -66,9 +66,9 @@ Before calling a module complete, require all of:
 
 ## Current Next Priority
 
-Build and maintain this documentation library first, then use it to drive module repair. The immediate code priorities after documentation are:
+Documentation Phase 0 is complete. See `07-roadmap.md` for the full plan. Immediate code work starts at Phase 1:
 
-1. Fix frontend route/helper/type blockers in Forms, Dashboard, and Organization.
-2. Replace dashboard fake handlers and missing links with real navigation/API calls.
-3. Decide whether `/form-builder` is removed, renamed as demo, or integrated with `FormTemplate`.
-4. Make organization settings/preferences use `current_organization` and persist values.
+1. Fix TypeScript and Wayfinder route collisions (Phase 1A).
+2. Repair Forms module: missing Edit page, route helpers, `/form-builder` decision (Phase 1B).
+3. Wire Dashboard quick actions to real routes/APIs (Phase 1C).
+4. Fix Organization scoping and persistence (Phase 1D).

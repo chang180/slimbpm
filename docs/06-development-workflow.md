@@ -40,7 +40,8 @@ After meaningful changes:
 
 - Update `docs/03-module-status.md` if module completion changes.
 - Update `docs/04-known-issues-and-backlog.md` if blockers are added/resolved.
-- Update `.ai-dev/handoff.md` with short-term handoff notes.
+- Update `docs/07-roadmap.md` checkboxes when phase items complete.
+- Update `.ai-dev/handoff.md` with short-term handoff notes (Chinese).
 
 ## Commit Guidance
 

@@ -1,364 +1,55 @@
 # SlimBPM (快簽)
 
-> 專為中小企業設計的輕量級工作流程管理系統
+專為中小團隊設計的輕量級 BPM / 工作流程管理系統。**專案仍在積極開發中，尚未達到可上線使用的程度。**
 
-[![Laravel](https://img.shields.io/badge/Laravel-12.32.5-red.svg)](https://laravel.com)
-[![React](https://img.shields.io/badge/React-19-blue.svg)](https://reactjs.org)
-[![PHP](https://img.shields.io/badge/PHP-8.4.12-purple.svg)](https://php.net)
-[![Tests](https://img.shields.io/badge/Tests-205%20passed-green.svg)](#)
+## 技術棧
 
-## 🎯 專案概述
+- Laravel 13 · PHP 8.4
+- React 19 · TypeScript · Inertia.js 3 · Tailwind CSS 4
+- Pest 4 測試框架
 
-SlimBPM (快簽) 是一個專為中小企業 (50人以下) 設計的輕量級 BPM (Business Process Management) 系統，提供直觀的工作流程管理、表單設計、審批流程等功能。
+## 目前狀態（2026-06-06）
 
-### 核心特色
-- 🚀 **輕量快速**: 針對中小企業優化，部署簡單
-- 🎨 **現代化 UI**: 基於 React 19 + Tailwind CSS 4 的響應式設計
-- 📝 **表單設計器**: 拖拽式表單設計，支援 11 種欄位類型
-- 🔄 **工作流程**: 彈性審批流程，支援條件分支
-- 👥 **用戶管理**: 完整的組織架構和權限管理
-- 📱 **響應式設計**: 支援桌面和行動裝置
+| 面向 | 說明 |
+|------|------|
+| 後端 | 已有大量 Controller、API 與 Model；**209 個測試全部通過** |
+| 前端 | 部分頁面仍為 demo、路由未接好或缺頁；**`npm run types` 尚未通過** |
+| 整體 | 約 **60%** 完成度 — 請勿參考舊文件宣稱的 90–100% |
 
-## 🏗️ 技術架構
+近期工作：已升級至 Laravel 13 與 Inertia 3（2026 年 6 月）。
 
-### 後端技術棧
-- **Laravel 12.32.5** - PHP 框架
-- **PHP 8.4.12** - 程式語言
-- **SQLite** - 資料庫 (開發環境)
-- **Pest 4** - 測試框架
-- **Laravel Pint** - 程式碼格式化
+## 開發文件
 
-### 前端技術棧
-- **React 19** - UI 框架
-- **TypeScript** - 類型安全
-- **Inertia.js 2** - SPA 體驗
-- **Tailwind CSS 4** - 樣式框架
-- **Vite + Wayfinder** - 建置工具
+給 AI / 開發者查閱的正式文件在 [`docs/`](docs/README.md)（英文）：
 
-## 📊 專案進度
+- [目前開發狀態](docs/01-current-state.md)
+- [各模組現況](docs/03-module-status.md)
+- [已知問題與待辦](docs/04-known-issues-and-backlog.md)
+- [開發路線圖](docs/07-roadmap.md)
 
-### 整體進度: 90% 完成 ✨
+給專案負責人的中文交接： [`.ai-dev/handoff.md`](.ai-dev/handoff.md)
 
-SlimBPM 核心業務功能已全部完成，用戶可以進行完整的工作流程管理、表單設計、審批操作、通知管理、成員邀請及報表查看。
+## 快速開始
 
-### ✅ 已完成功能 (100%)
-#### 核心系統
-- ✅ **基礎架構**: 資料庫設計、模型關係、API 路由
-- ✅ **身份驗證**: 企業註冊、登入、郵件驗證、密碼重置、雙因素認證
-- ✅ **用戶管理**: 用戶 CRUD、角色管理 (admin/manager/user)、完整 UI
-- ✅ **部門管理**: 層級架構、部門 CRUD、完整 UI
-- ✅ **組織管理**: 組織設定、偏好設定、完整 UI
-
-#### 業務功能
-- ✅ **表單設計器**: 拖拽式設計、11種欄位類型、條件邏輯、驗證規則
-- ✅ **表單管理**: 表單 CRUD、提交記錄、結果查看
-- ✅ **工作流程設計器**: 視覺化設計、版本管理、匯入匯出
-- ✅ **工作流程執行**: 啟動、審批、暫停、恢復、取消、歷史記錄
-- ✅ **工作流程監控**: admin/manager 即時監控所有流程狀態
-- ✅ **成員邀請**: 發送邀請、接受流程、邀請管理頁面
-- ✅ **通知系統**: 通知中心、下拉選單、未讀徽章
-- ✅ **儀表板**: 真實資料查詢、6 個月趨勢圖表
-- ✅ **歡迎頁面**: 響應式設計、深色模式支援
-
-#### 報表系統 (95%)
-- ✅ **報表中心**: 組織統計總覽
-- ✅ **用戶活動報表**: 真實資料 + 月趨勢圖表 + 部門分布
-- ✅ **流程效能報表**: 真實資料 + 月趨勢圖表 + 模板使用排行
-- ✅ **系統統計報表**: 真實資料 + 月趨勢圖表
-- ✅ **部門分析報表**: 部門人員/提交/流程執行分析
-
-#### 個人設定
-- ✅ **個人資料**: 資料修改、頭像上傳
-- ✅ **安全性**: 密碼變更、雙因素認證
-- ✅ **外觀**: 深色/淺色模式切換
-
-### 📋 待開發功能
-- 📋 **報表進階**: 排程報表、完整匯出實作
-- 📋 **行動端優化**: PWA 支援、觸控優化
-- 📋 **E2E 測試**: Pest 4 瀏覽器測試
-- 📋 **生產部署**: 部署文件、環境配置
-
-## 🚀 快速開始
-
-### 系統要求
-- PHP 8.4+
-- Node.js 18+
-- Composer
-- NPM/Yarn
-
-### 安裝步驟
-
-1. **克隆專案**
 ```bash
-git clone <repository-url>
-cd slimbpm
-```
-
-2. **安裝依賴**
-```bash
-# 後端依賴
 composer install
-
-# 前端依賴
 npm install
-```
-
-3. **環境設定**
-```bash
-# 複製環境設定檔
 cp .env.example .env
-
-# 生成應用程式金鑰
 php artisan key:generate
-```
-
-4. **資料庫設定**
-```bash
-# 執行遷移
 php artisan migrate
-
-# 執行種子資料 (可選)
-php artisan db:seed
+composer run dev   # 或分別執行 php artisan serve 與 npm run dev
 ```
 
-5. **啟動開發伺服器**
-```bash
-# 啟動 Laravel 伺服器
-php artisan serve
+瀏覽 `http://localhost:8000`。
 
-# 啟動前端建置 (新終端)
-npm run dev
-```
-
-6. **訪問應用程式**
-- 前端: http://localhost:8000
-- API: http://localhost:8000/api/v1
-
-## 🧪 測試
-
-SlimBPM 採用 **Pest 4** 測試框架，具備完整的測試覆蓋。
+## 測試
 
 ```bash
-# 執行所有測試
 php artisan test
-
-# 執行特定測試檔案
-php artisan test tests/Feature/UserManagementTest.php
-
-# 使用篩選器執行特定測試
-php artisan test --filter=WorkflowTest
-
-# 執行瀏覽器測試
-php artisan test tests/Browser/
-
-# 執行測試並生成覆蓋率報告
-php artisan test --coverage
+npm run types   # 目前仍失敗，詳見 docs/04-known-issues-and-backlog.md
+npm run build
 ```
 
-**測試統計**:
-- 📊 總測試數: **193 個測試**
-- ✓ 總斷言數: **945 個斷言**
-- ⚡ 執行時間: **~6.91 秒**
-- ✅ 成功率: **100%**
+## 授權
 
-**測試覆蓋範圍**:
-- ✅ 身份驗證 (註冊、登入、驗證、密碼重置)
-- ✅ 用戶管理 (CRUD + 權限)
-- ✅ 部門管理 (CRUD + 層級結構)
-- ✅ 組織管理 (設定 + 偏好)
-- ✅ 表單系統 (設計器 + 動態渲染 + 提交)
-- ✅ 工作流程 (模板 + 實例 + 引擎)
-- ✅ 工作流程監控 (org 隔離 + 篩選 + 統計)
-- ✅ 通知系統 (基礎 + 進階)
-- ✅ 成員邀請系統 (發送 + 接受 + 管理)
-- ✅ 瀏覽器測試 (UI 互動測試)
-
-## 📚 API 文檔
-
-### 主要端點
-
-#### 組織與用戶管理
-- `GET|POST|PUT|DELETE /api/v1/organizations` - 組織管理 (完整 CRUD)
-- `GET|POST|PUT|DELETE /api/v1/departments` - 部門管理 (完整 CRUD)
-- `GET|POST|PUT|DELETE /api/v1/users` - 用戶管理 (完整 CRUD)
-
-#### 工作流程管理
-- `GET|POST|PUT|DELETE /api/v1/workflows` - 工作流程模板 (完整 CRUD)
-- `POST /api/v1/workflows/{id}/duplicate` - 複製工作流程模板
-- `GET /api/v1/workflows/{id}/export` - 匯出工作流程
-- `POST /api/v1/workflows/import` - 匯入工作流程
-- `GET|POST|PUT|DELETE /api/v1/workflow-instances` - 工作流程實例
-- `PATCH /api/v1/workflow-instances/{id}/steps/{step}` - 更新工作流程步驟
-
-#### 表單管理
-- `GET|POST|PUT|DELETE /api/v1/forms` - 表單管理 (完整 CRUD)
-- `POST /api/v1/forms/{id}/duplicate` - 複製表單
-- `POST /api/v1/forms/{id}/submit` - 提交表單
-- `GET /api/v1/forms/{id}/submissions` - 查詢表單提交記錄
-- `GET|POST|PUT|DELETE /api/v1/form-submissions` - 表單提交管理
-
-#### 通知管理
-- `GET|POST|PUT|DELETE /api/v1/notifications` - 通知管理
-- `GET /api/v1/notifications/unread-count` - 未讀通知數量
-- `POST /api/v1/notifications/mark-all-as-read` - 標記所有為已讀
-- `POST /api/v1/notifications/{id}/mark-as-read` - 標記單一通知為已讀
-- `GET|POST|PUT|DELETE /api/v1/notification-settings` - 通知設定
-- `POST /api/v1/notification-settings/reset` - 重置通知設定
-
-### 認證方式
-所有 API 端點都需要認證。SlimBPM 使用 Laravel Sanctum 進行 API 認證。
-
-**請求標頭**:
-```http
-Authorization: Bearer {your-token}
-Accept: application/json
-Content-Type: application/json
-```
-
-**取得認證 Token**:
-```bash
-POST /login/{slug}
-{
-  "email": "user@example.com",
-  "password": "password"
-}
-```
-
-## 🎨 核心功能展示
-
-### 🎯 表單設計器
-SlimBPM 提供強大的拖拽式表單設計器，讓您輕鬆建立各種表單。
-
-**功能特色**:
-- 🎨 拖拽式介面設計
-- 📝 支援 11 種欄位類型：
-  - 文字欄位、多行文字、數字、日期、時間
-  - 下拉選單、單選、多選、檔案上傳
-  - 評分、簽名
-- 👁️ 即時預覽功能
-- ✅ 完整的表單驗證設定
-- 🔗 條件邏輯支援 (顯示/隱藏欄位)
-- 📊 自動儲存與進度追蹤
-
-### 👥 用戶與部門管理
-完整的組織架構管理系統，支援多層級部門結構。
-
-**功能特色**:
-- 🏢 組織架構管理
-- 🌳 無限層級部門結構
-- 👤 三種角色類型 (admin/manager/user)
-- 🔐 完整的權限控制
-- 📝 批量操作支援
-- 📊 部門統計分析
-
-### 🔄 工作流程設計器
-視覺化的工作流程設計工具，讓您快速建立業務流程。
-
-**功能特色**:
-- 🎨 視覺化流程設計
-- 👥 彈性審批者指派
-- 🔀 條件分支支援
-- 📋 多種節點類型
-- 📦 版本管理與歷史記錄
-- 💾 匯入/匯出功能
-- 📊 流程監控與追蹤
-
-### 📊 儀表板
-根據角色顯示不同的儀表板內容。
-
-**管理員/經理看到的內容**:
-- 📈 企業統計數據
-- 👥 成員邀請管理
-- 🔄 工作流程概覽
-- 📊 部門統計圖表
-
-**一般用戶看到的內容**:
-- 📝 我的工作流程
-- ✅ 待處理事項
-- 📋 最近活動
-- 🚀 快速操作
-
-## 💡 技術亮點
-
-### 現代化技術棧
-- ⚡ **Laravel 12**: 最新版 Laravel 框架，簡化結構
-- ⚛️ **React 19**: 最新版 React，提供流暢的 UI 體驗
-- 🎨 **Tailwind CSS 4**: 最新版 Tailwind，現代化樣式
-- 🔄 **Inertia.js 2**: 無需 API 的 SPA 體驗
-- 🧪 **Pest 4**: 現代化測試框架，包含瀏覽器測試
-
-### 開發體驗
-- 📝 **TypeScript**: 完整的類型安全
-- 🎯 **代碼品質**: Laravel Pint + ESLint + Prettier
-- 🧪 **測試驅動**: 110+ 測試案例，100% 通過率
-- 🔧 **開發工具**: Vite + Wayfinder 快速建置
-- 📊 **專案管理**: Linear.app 整合
-
-### 安全性
-- 🔐 **身份驗證**: Laravel Fortify + Sanctum
-- ✉️ **郵件驗證**: 完整的郵件驗證流程
-- 🔑 **雙因素認證**: 增強帳戶安全性
-- 🛡️ **權限控制**: 基於角色的存取控制
-- 🔒 **密碼安全**: BCrypt 雜湊演算法
-
-## 📖 開發文件
-
-### 專案文件位置
-- **開發指南**: `.ai-dev/README.md` - 完整的開發進度與技術文件
-- **架構設計**: `.ai-dev/architecture/` - 資料庫設計與技術決策
-- **功能規格**: `.ai-dev/features/` - 詳細的功能規格文件
-- **開發流程**: `.ai-dev/development/` - 開發流程與指示
-
-### 當前開發狀態
-- 🟢 **生產就緒**: 90% 的核心功能已完成並可用
-- 🟡 **待完善**: 報表進階功能 (排程/自訂)
-- 🔴 **計劃中**: 行動端優化、E2E 測試、生產部署
-
-詳細的開發計畫請參閱 `.ai-dev/README.md`
-
-## 🤝 貢獻指南
-
-我們歡迎各種形式的貢獻！
-
-### 開發流程
-1. Fork 專案
-2. 建立功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 撰寫測試並確保通過 (`php artisan test`)
-4. 執行程式碼格式化 (`vendor/bin/pint`)
-5. 提交變更 (`git commit -m 'Add some AmazingFeature'`)
-6. 推送到分支 (`git push origin feature/AmazingFeature`)
-7. 開啟 Pull Request
-
-### 程式碼規範
-- 遵循 Laravel 最佳實踐
-- 所有新功能必須包含測試
-- 使用 Laravel Pint 格式化 PHP 代碼
-- 使用 ESLint + Prettier 格式化 TypeScript/React 代碼
-- 提交訊息使用清楚的描述
-
-## 📄 授權條款
-
-本專案採用 MIT 授權條款 - 詳見 [LICENSE](LICENSE) 檔案。
-
-## 📞 聯絡資訊
-
-- **專案維護者**: 開發團隊
-- **Linear 專案**: [SlimBPM (快簽)](https://linear.app/devstream-core/project/slimbpm-快簽)
-- **技術文件**: `.ai-dev/README.md`
-
-## 🙏 致謝
-
-特別感謝所有參與開發的團隊成員：
-- **Cursor**: 架構設計與專案協調
-- **Claude Code**: 功能開發
-- **Codex**: 功能開發
-
----
-
-<div align="center">
-
-**SlimBPM (快簽)** - 讓工作流程管理變得簡單高效 🚀
-
-Made with ❤️ by the SlimBPM Team
-
-</div>
+MIT — 見 [LICENSE](LICENSE)。

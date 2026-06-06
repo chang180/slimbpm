@@ -86,4 +86,50 @@ Recent low-cost regression tests:
 - `tests/Feature/EndToEndWorkflowFeatureTest.php`
 - `tests/Feature/ReportsPagesTest.php`
 
-There is no installed Pest Browser plugin. Browser E2E is optional and not the current strategy.
+There is no installed Pest Browser plugin. The `tests/Browser/` directory does not exist. Browser E2E is optional and not the current strategy.
+
+## Architecture Notes
+
+### Organization Scoping
+
+`workflow_templates`, `workflow_instances`, and `form_templates` do **not** have an `organization_id` column. Filter through users instead:
+
+```php
+$orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+WorkflowInstance::whereIn('started_by', $orgUserIds);
+WorkflowTemplate::whereIn('created_by', $orgUserIds);
+FormTemplate::whereIn('created_by', $orgUserIds);
+FormSubmission::whereIn('submitted_by', $orgUserIds);
+```
+
+Controllers that need org context should read `$request->get('current_organization')`, injected by the `org.access` middleware.
+
+### WorkflowInstance Status Values
+
+The database CHECK constraint allows only: `running`, `completed`, `cancelled`, `suspended`. There is no `pending` status.
+
+### Laravel Paginator JSON Shape
+
+Paginator props are flat, not nested under `meta`:
+
+- Use `instances.total`, not `instances.meta.total`
+- Use `instances.current_page`, not `instances.meta.current_page`
+
+### Wayfinder And Route Name Collisions
+
+If API and web controllers share route names, Wayfinder may emit duplicate exports and TypeScript errors. Do not edit generated Wayfinder files as a long-term fix; resolve naming or imports at the route level.
+
+In Feature tests, `route('forms.show')` and `route('workflows.index')` may resolve to API routes. Prefer explicit paths such as `/forms/{id}` and `/workflows`.
+
+### Frontend Route Helper
+
+`resources/js/lib/route.ts` is a small hand-written helper for a few auth/dashboard routes. It does not define `forms.*`, `organization.*`, or most module routes. Use Wayfinder-generated helpers or explicit paths instead.
+
+### WorkflowHistory Timestamp
+
+Use `performed_at`, not `created_at`.
+
+### Authentication
+
+The app uses Laravel Fortify for web authentication. There is no Laravel Sanctum dependency in `composer.json`; API routes rely on session/auth middleware, not bearer tokens.

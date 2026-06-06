@@ -4,53 +4,42 @@
 
 Use these first:
 
-- `docs/README.md`
-- `docs/01-current-state.md`
-- `docs/02-project-structure.md`
-- `docs/03-module-status.md`
-- `docs/04-known-issues-and-backlog.md`
-- `docs/05-documentation-inventory.md`
-- `docs/06-development-workflow.md`
-- `.ai-dev/handoff.md` for short-term latest handoff only.
+| File | Purpose |
+|------|---------|
+| `docs/README.md` | Entry point and read order |
+| `docs/01-current-state.md` | Verified facts and quality gates |
+| `docs/02-project-structure.md` | Code layout and architecture notes |
+| `docs/03-module-status.md` | Per-module Red/Yellow/Green status |
+| `docs/04-known-issues-and-backlog.md` | Active blockers by priority |
+| `docs/07-roadmap.md` | Development plan and phases |
+| `docs/06-development-workflow.md` | How AI/humans should work in this repo |
+| `.ai-dev/handoff.md` | Short-term Chinese handoff for the human owner |
 
-## Historical Or Stale Documents
+## Removed Historical Documents (2026-06-06)
 
-These files contain useful context but should not be trusted for completion status:
+The following `.ai-dev/` files were deleted after their useful content was migrated into `docs/`:
 
-- `README.md`
-  - Still claims around 90% completion.
-  - Mentions browser tests and completion levels that do not match current audit.
-- `.ai-dev/README.md`
-  - Claims most phases are 100%.
-  - Should be treated as historical planning/status, not current truth.
-- `.ai-dev/development/dev-50-dashboard-refactor.md`
-  - Claims dashboard actions and TypeScript were complete.
-  - Current audit shows dashboard handlers are mostly `console.log` and `npm run types` fails.
-- `.ai-dev/development/phase7-integration-instructions.md`
-  - Useful as a testing strategy sketch.
-  - Not an accurate record of implemented tests.
-- `.ai-dev/features/workflow-designer.md`
-  - Useful original feature spec.
-  - Some planned node types/features are not necessarily implemented.
-- `.ai-dev/scratch/project-structure.md`
-  - Useful high-level technology notes.
-  - Not current enough for module status.
-- `.ai-dev/scratch/sparkle.md`
-  - Product concept and original planning notes only.
+- `.ai-dev/README.md` — overstated 100% phase completion
+- `.ai-dev/UPDATE-2025-10-12.md` — outdated status snapshot
+- `.ai-dev/development/dev-50-dashboard-refactor.md` — dashboard still has fake handlers
+- `.ai-dev/development/phase7-integration-instructions.md` — testing sketch, not implemented state
+- `.ai-dev/features/workflow-designer.md` — original spec, partially implemented
+- `.ai-dev/scratch/project-structure.md` — superseded by `docs/02-project-structure.md`
+- `.ai-dev/scratch/sparkle.md` — product concept notes only
+
+If you need historical context, use git history.
 
 ## Documentation Debt
 
-High priority:
+Medium priority:
 
-- Rewrite root `README.md` to stop overstating completion.
-- Rewrite or archive `.ai-dev/README.md`.
 - Add a route map once route name collisions are cleaned up.
-- Add an architecture doc for organization scoping and multi-tenancy.
+- Expand architecture doc if multi-tenancy grows beyond user-based org scoping.
 
-## How To Use Old Files Safely
+## How To Verify Claims
 
-When reading old files:
+When reading any document:
 
-1. Extract intent and historical context.
-2. Verify against code with `rg`, `php artisan route:list`, tests, and controller/page files.
-3. Do not copy completion percentages or checkmarks into new docs without re-auditing.
+1. Extract intent, not completion percentages.
+2. Verify against code with `rg`, `php artisan route:list`, tests, and page/controller files.
+3. Run `php artisan test` and `npm run types` before trusting frontend readiness claims.
