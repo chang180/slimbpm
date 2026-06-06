@@ -5,7 +5,7 @@
 [![Laravel](https://img.shields.io/badge/Laravel-12.32.5-red.svg)](https://laravel.com)
 [![React](https://img.shields.io/badge/React-19-blue.svg)](https://reactjs.org)
 [![PHP](https://img.shields.io/badge/PHP-8.4.12-purple.svg)](https://php.net)
-[![Tests](https://img.shields.io/badge/Tests-193%20passed-green.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-205%20passed-green.svg)](#)
 
 ## 🎯 專案概述
 

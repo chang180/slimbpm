@@ -11,6 +11,7 @@ use App\Models\WorkflowTemplate;
 use App\Services\ExportService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -195,23 +196,34 @@ class ReportsController extends Controller
 
     public function exportUserActivity(Request $request)
     {
+        abort_unless(in_array(Auth::user()->role, ['admin', 'manager']), 403);
+
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
         $filters = $request->only(['department_id', 'date_from', 'date_to']);
 
-        return $this->exportService->exportUserActivityReport($filters);
+        return $this->exportService->exportUserActivityReport($organization, $orgUserIds, $filters);
     }
 
     public function exportSystemStats(Request $request)
     {
-        $filters = $request->only(['date_from', 'date_to']);
+        abort_unless(in_array(Auth::user()->role, ['admin', 'manager']), 403);
 
-        return $this->exportService->exportSystemStatsReport($filters);
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        return $this->exportService->exportSystemStatsReport($organization, $orgUserIds);
     }
 
     public function exportWorkflowPerformance(Request $request)
     {
+        abort_unless(in_array(Auth::user()->role, ['admin', 'manager']), 403);
+
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
         $filters = $request->only(['status', 'date_from', 'date_to']);
 
-        return $this->exportService->exportWorkflowPerformanceReport($filters);
+        return $this->exportService->exportWorkflowPerformanceReport($organization, $orgUserIds, $filters);
     }
 
     private function getMonthlyActivityData(int $organizationId, Collection $orgUserIds): array
