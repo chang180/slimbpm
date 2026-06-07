@@ -3,20 +3,22 @@ import { Head, router } from '@inertiajs/react';
 import { FormTemplate } from '../../types/FormTypes';
 import AppLayout from '@/layouts/app-layout';
 import formsRoutes from '@/routes/forms';
+import { FormMetadataFields } from '@/components/forms/form-metadata-fields';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Textarea } from '../../components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
-import { Badge } from '../../components/ui/badge';
 import { Switch } from '../../components/ui/switch';
 import { Label } from '../../components/ui/label';
 import { ArrowLeft, Save } from 'lucide-react';
 
 interface EditFormProps {
   form: FormTemplate;
+  categories: string[];
+  suggestedTags: string[];
 }
 
-const EditForm: React.FC<EditFormProps> = ({ form }) => {
+const EditForm: React.FC<EditFormProps> = ({ form, categories, suggestedTags }) => {
   const formId = Number(form.id);
 
   const [formData, setFormData] = useState({
@@ -24,10 +26,8 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
     description: form.description || '',
     category: form.category,
     tags: form.tags || [],
-    isPublic: form.isPublic,
+    isPublic: form.is_public,
   });
-
-  const [tagInput, setTagInput] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,34 +35,10 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
     router.put(formsRoutes.update.url({ form: formId }), {
       name: formData.name,
       description: formData.description,
-      category: formData.category,
+      category: formData.category || '未分類',
       tags: formData.tags,
       is_public: formData.isPublic,
     });
-  };
-
-  const addTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData({
-        ...formData,
-        tags: [...formData.tags, tagInput.trim()],
-      });
-      setTagInput('');
-    }
-  };
-
-  const removeTag = (tagToRemove: string) => {
-    setFormData({
-      ...formData,
-      tags: formData.tags.filter(tag => tag !== tagToRemove),
-    });
-  };
-
-  const handleTagKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      addTag();
-    }
   };
 
   return (
@@ -71,7 +47,6 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
 
       <div className="py-12">
         <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
-          {/* 頁面標題 */}
           <div className="mb-8">
             <div className="flex items-center mb-4">
               <Button
@@ -90,7 +65,6 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
 
           <form onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* 主要設定 */}
               <div className="lg:col-span-2 space-y-6">
                 <Card>
                   <CardHeader>
@@ -125,63 +99,16 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
                       />
                     </div>
 
-                    <div>
-                      <Label htmlFor="category">分類</Label>
-                      <Input
-                        id="category"
-                        type="text"
-                        placeholder="例如：申請表、調查表、回饋表"
-                        value={formData.category}
-                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                        className="mt-1"
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>標籤</CardTitle>
-                    <CardDescription>
-                      為表單添加標籤，方便分類和搜尋
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        type="text"
-                        placeholder="輸入標籤名稱"
-                        value={tagInput}
-                        onChange={(e) => setTagInput(e.target.value)}
-                        onKeyPress={handleTagKeyPress}
-                        className="flex-1"
-                      />
-                      <Button type="button" onClick={addTag} variant="outline">
-                        新增
-                      </Button>
-                    </div>
-
-                    {formData.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2">
-                        {formData.tags.map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                            {tag}
-                            <button
-                              type="button"
-                              onClick={() => removeTag(tag)}
-                              className="ml-1 text-gray-500 hover:text-gray-700"
-                            >
-                              ×
-                            </button>
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
+                    <FormMetadataFields
+                      categories={categories}
+                      suggestedTags={suggestedTags}
+                      values={{ category: formData.category, tags: formData.tags }}
+                      onChange={({ category, tags }) => setFormData({ ...formData, category, tags })}
+                    />
                   </CardContent>
                 </Card>
               </div>
 
-              {/* 側邊欄設定 */}
               <div className="space-y-6">
                 <Card>
                   <CardHeader>
@@ -195,7 +122,7 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
                       <div className="space-y-0.5">
                         <Label htmlFor="isPublic">公開表單</Label>
                         <p className="text-sm text-gray-500">
-                          允許其他用戶查看和使用此表單
+                          允許組織內其他用戶查看和使用此表單
                         </p>
                       </div>
                       <Switch
@@ -207,7 +134,6 @@ const EditForm: React.FC<EditFormProps> = ({ form }) => {
                   </CardContent>
                 </Card>
 
-                {/* 提交按鈕 */}
                 <div className="flex gap-3">
                   <Button type="submit" className="flex-1">
                     <Save className="w-4 h-4 mr-2" />

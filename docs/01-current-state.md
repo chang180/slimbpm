@@ -6,7 +6,7 @@ Last audited: 2026-06-07
 
 SlimBPM is a Laravel 13 + React 19 + Inertia 3 application for lightweight BPM/workflow management.
 
-**Phase 3.5A–D is complete.** All 10 core modules are Green per `03-module-status.md`. Only **Phase 3.5E** (staging deployment trial) remains before Phase 3.5 can be closed and Phase 4 can begin.
+**Phase 3.5A–D is complete.** All 10 core modules are **Green (technical)** per `03-module-status.md`. **Phase 3.5E** (staging trial) remains. **Forms Designer UX v2** is a **P0 mandatory follow-up** before Phase 4 — see `04-known-issues-and-backlog.md`.
 
 ## Verified Facts
 
@@ -32,9 +32,11 @@ Progress log: [`.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`](../.ai-dev
 
 Documented in `03-module-status.md`:
 
-- `/form-builder`: localStorage demo with warning banner — no misleading entry points
+- `/form-builder`: localStorage demo with warning banner — supersede with `/forms/{id}/design` after UX v2
 - No dedicated workflow template edit page — designer/create flow only
 - Dashboard approve/reject navigates to workflow show — by design
+
+**P0 (not an acceptable long-term exception):** Form field designer UX — prototype canvas on `/forms/{id}/design`. Task: [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../.ai-dev/tasks/forms-designer-ux-v2/plan.md)
 
 ## Current Quality Gate
 
@@ -48,5 +50,6 @@ Before calling a module complete, require all of:
 
 ## Current Next Priority
 
-1. **Phase 3.5E** — Staging deployment trial per `08-deployment.md`; record smoke checklist in `progress.md`.
-2. **Phase 4** — Product expansion (deferred until 3.5E complete). See `07-roadmap.md`.
+1. **Phase 3.5E** — Staging deployment trial per `08-deployment.md`; record smoke checklist in `progress.md` (note form designer UX limitation).
+2. **Forms Designer UX v2 (P0)** — Rework field designer; required before meaningful E2E and Phase 4. Plan: `.ai-dev/tasks/forms-designer-ux-v2/plan.md`.
+3. **Phase 4** — Product expansion (deferred until 3.5E **and** Forms Designer UX v2). See `07-roadmap.md`.

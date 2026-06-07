@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { FormTemplate } from '../../types/FormTypes';
 import AppLayout from '@/layouts/app-layout';
 import formsRoutes from '@/routes/forms';
 import { Button } from '../../components/ui/button';
@@ -10,9 +9,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../..
 import { Badge } from '../../components/ui/badge';
 import { Search, Plus, Copy, Eye, Edit, Trash2, BarChart3 } from 'lucide-react';
 import { type LengthAwarePaginator, formatPaginationLabel, hasMultiplePages } from '@/lib/pagination';
+import { formatFormDate, formCreatorName, type FormTemplateListItem } from '@/lib/form-template';
 
 interface FormsIndexProps {
-  forms: LengthAwarePaginator<FormTemplate>;
+  forms: LengthAwarePaginator<FormTemplateListItem>;
   categories: string[];
   filters: {
     search?: string;
@@ -29,7 +29,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
   const handleFilter = () => {
     router.get(formsRoutes.index.url(), {
       search: search || undefined,
-      category: category === 'all' ? undefined : category || undefined,
+      category: category === 'all' || !category ? undefined : category,
       is_public: isPublic,
     }, {
       preserveState: true,
@@ -37,17 +37,17 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
     });
   };
 
-  const handleDuplicate = (formId: string) => {
-    router.post(formsRoutes.duplicate.url({ form: Number(formId) }), {}, {
+  const handleDuplicate = (formId: number) => {
+    router.post(formsRoutes.duplicate.url({ form: formId }), {}, {
       onSuccess: () => {
         // 成功後會重導向到新表單
       }
     });
   };
 
-  const handleDelete = (formId: string) => {
+  const handleDelete = (formId: number) => {
     if (confirm('確定要刪除此表單嗎？此操作無法復原。')) {
-      router.delete(formsRoutes.destroy.url({ form: Number(formId) }), {
+      router.delete(formsRoutes.destroy.url({ form: formId }), {
         onSuccess: () => {
           // 成功後會重導向到表單列表
         }
@@ -55,15 +55,7 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-TW', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const formatDate = formatFormDate;
 
   return (
     <AppLayout>
@@ -131,8 +123,14 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                     可見性
                   </label>
                   <Select
-                    value={isPublic === undefined ? '' : isPublic.toString()}
-                    onValueChange={(value) => setIsPublic(value === '' ? undefined : value === 'true')}
+                    value={isPublic === undefined ? 'all' : isPublic.toString()}
+                    onValueChange={(value) => {
+                      if (value === 'all') {
+                        setIsPublic(undefined);
+                      } else {
+                        setIsPublic(value === 'true');
+                      }
+                    }}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="選擇可見性" />
@@ -167,8 +165,8 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                         {form.description || '無描述'}
                       </CardDescription>
                     </div>
-                    <Badge variant={form.isPublic ? "default" : "secondary"}>
-                      {form.isPublic ? '公開' : '私人'}
+                    <Badge variant={form.is_public ? "default" : "secondary"}>
+                      {form.is_public ? '公開' : '私人'}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -178,8 +176,8 @@ const FormsIndex: React.FC<FormsIndexProps> = ({ forms, categories, filters }) =
                     {/* 表單資訊 */}
                     <div className="text-sm text-gray-600">
                       <div>分類: {form.category}</div>
-                      <div>建立者: {form.createdBy}</div>
-                      <div>更新時間: {formatDate(form.updatedAt)}</div>
+                      <div>建立者: {formCreatorName(form)}</div>
+                      <div>更新時間: {formatDate(form.updated_at)}</div>
                     </div>
 
                     {/* 標籤 */}

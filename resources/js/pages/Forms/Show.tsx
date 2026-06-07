@@ -3,6 +3,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { FormTemplate } from '../../types/FormTypes';
 import AppLayout from '@/layouts/app-layout';
 import formsRoutes from '@/routes/forms';
+import { formatFormDate, formCreatorName } from '@/lib/form-template';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
@@ -20,7 +21,8 @@ import {
   User,
   Tag,
   Globe,
-  Lock
+  Lock,
+  Palette,
 } from 'lucide-react';
 
 interface FormShowProps {
@@ -49,15 +51,7 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-TW', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+  const formatDate = formatFormDate;
 
   const getFieldTypeLabel = (type: string) => {
     const typeLabels: Record<string, string> = {
@@ -100,8 +94,8 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h1 className="text-3xl font-bold text-gray-900">{form.name}</h1>
-                  <Badge variant={form.isPublic ? "default" : "secondary"}>
-                    {form.isPublic ? (
+                  <Badge variant={form.is_public ? "default" : "secondary"}>
+                    {form.is_public ? (
                       <>
                         <Globe className="w-3 h-3 mr-1" />
                         公開
@@ -164,17 +158,17 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       <span className="text-gray-600">建立時間:</span>
-                      <span>{formatDate(form.createdAt)}</span>
+                      <span>{formatDate(form.created_at)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-gray-500" />
                       <span className="text-gray-600">更新時間:</span>
-                      <span>{formatDate(form.updatedAt)}</span>
+                      <span>{formatDate(form.updated_at)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4 text-gray-500" />
                       <span className="text-gray-600">建立者:</span>
-                      <span>{form.createdBy}</span>
+                      <span>{formCreatorName(form)}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Tag className="w-4 h-4 text-gray-500" />
@@ -204,10 +198,22 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
               {/* 表單欄位 */}
               <Card>
                 <CardHeader>
-                  <CardTitle>表單欄位 ({form.definition.fields.length})</CardTitle>
-                  <CardDescription>
-                    此表單包含的欄位和設定
-                  </CardDescription>
+                  <div className="flex items-center justify-between gap-4">
+                    <div>
+                      <CardTitle>表單欄位 ({form.definition.fields.length})</CardTitle>
+                      <CardDescription>
+                        此表單包含的欄位和設定
+                      </CardDescription>
+                    </div>
+                    {canEdit && form.definition.fields.length > 0 && (
+                      <Link href={formsRoutes.design.url({ form: formId })}>
+                        <Button variant="outline" size="sm">
+                          <Palette className="w-4 h-4 mr-2" />
+                          編輯欄位設計
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
                 </CardHeader>
                 <CardContent>
                   {form.definition.fields.length > 0 ? (
@@ -238,8 +244,9 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                     <div className="text-center py-8 text-gray-500">
                       <p>此表單還沒有任何欄位</p>
                       {canEdit && (
-                        <Link href={formsRoutes.edit.url({ form: formId })} className="inline-block mt-2">
+                        <Link href={formsRoutes.design.url({ form: formId })} className="inline-block mt-2">
                           <Button variant="outline" size="sm">
+                            <Palette className="w-4 h-4 mr-2" />
                             開始設計表單
                           </Button>
                         </Link>
@@ -307,6 +314,15 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                   </Link>
 
                   {canEdit && (
+                    <Link href={formsRoutes.design.url({ form: formId })} className="block">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Palette className="w-4 h-4 mr-2" />
+                        設計欄位
+                      </Button>
+                    </Link>
+                  )}
+
+                  {canEdit && (
                     <Link href={formsRoutes.edit.url({ form: formId })} className="block">
                       <Button variant="outline" className="w-full justify-start">
                         <Edit className="w-4 h-4 mr-2" />
@@ -345,14 +361,14 @@ const FormShow: React.FC<FormShowProps> = ({ form, canEdit }) => {
                       </div>
                     </div>
 
-                    {form.isPublic && (
+                    {form.is_public && (
                       <div className="text-sm text-green-600 bg-green-50 p-3 rounded-lg">
                         <Globe className="w-4 h-4 inline mr-1" />
                         此表單為公開表單，任何人都可以填寫
                       </div>
                     )}
 
-                    {!form.isPublic && (
+                    {!form.is_public && (
                       <div className="text-sm text-yellow-600 bg-yellow-50 p-3 rounded-lg">
                         <Lock className="w-4 h-4 inline mr-1" />
                         此表單為私人表單，只有認證用戶可以填寫

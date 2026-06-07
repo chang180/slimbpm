@@ -7,6 +7,18 @@
 3. Update `03-module-status.md` whenever a module changes status.
 4. Track progress against `07-roadmap.md`.
 
+## P0 Forms Designer UX (Mandatory — After 3.5E)
+
+| Item | Notes |
+|------|-------|
+| **Forms Designer UX v2** | Field designer (`/forms/{id}/design`, `FormDesigner`) is a wired-up **prototype** — canvas drag, stub layout tab, poor UX. Users cannot practically build forms; **downstream workflow / E2E work is blocked** until this is reworked. |
+
+**Task plan:** [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../.ai-dev/tasks/forms-designer-ux-v2/plan.md)
+
+**Do not** start Phase 4 product expansion or assume Forms is product-ready until this task exits.
+
+Forms module stays **Green (technical)** in `03-module-status.md` until UX v2 ships; then update status narrative.
+
 ## P1 Staging Trial (Phase 3.5E — Current Blocker)
 
 | Item | Notes |
@@ -14,6 +26,8 @@
 | Staging deployment trial | Follow `docs/08-deployment.md` to provision staging. Record manual smoke checklist in `.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`. |
 
 **Smoke checklist (pending):** login · dashboard · create form · start workflow · approve step · reports index
+
+**Record during smoke:** form field design UX is a **known P0 limitation** (see above) — smoke can verify routes/persistence, not designer usability.
 
 Phase 3.5 cannot be marked fully complete until this checklist is recorded.
 
@@ -33,11 +47,13 @@ Details in [`.ai-dev/archived/`](../.ai-dev/archived/README.md): TS errors, org 
 
 ## Accepted MVP Exceptions
 
-Documented in `03-module-status.md` — not blockers:
+Documented in `03-module-status.md` — not blockers for **3.5 technical exit**, except where noted:
 
-- `/form-builder` localStorage demo with warning banner
+- `/form-builder` localStorage demo with warning banner (superseded by `/forms/{id}/design` once UX v2 ships)
 - No dedicated workflow template edit page
 - Dashboard approve/reject navigates to workflow show
+
+**Not an acceptable long-term exception:** form field designer UX — see P0 above.
 
 ## P3 Browser E2E
 

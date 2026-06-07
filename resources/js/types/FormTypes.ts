@@ -112,16 +112,21 @@ export interface FormSubmission {
   status: 'draft' | 'submitted' | 'approved' | 'rejected';
 }
 
-// 表單模板
+// 表單模板（API 使用 Laravel snake_case）
 export interface FormTemplate {
-  id: string;
+  id: string | number;
   name: string;
   description: string;
   definition: FormDefinition;
   category: string;
   tags: string[];
-  isPublic: boolean;
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
+  is_public: boolean;
+  created_by: number;
+  created_at: string;
+  updated_at: string;
+  creator?: {
+    id: number;
+    name: string;
+  } | null;
+  creator_name?: string | null;
 }

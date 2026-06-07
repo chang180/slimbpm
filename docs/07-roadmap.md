@@ -62,8 +62,20 @@ Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/
 
 - [ ] Follow `docs/08-deployment.md` for staging setup
 - [ ] Record manual smoke checklist in `progress.md`
+- [ ] Note form designer UX as **P0 known limitation** in smoke notes (see Forms Designer UX v2 below)
 
 **Current test baseline:** 262 passed (257 Feature/Unit + 5 Browser) · TS 0 errors
+
+### Forms Designer UX v2 (Mandatory — Queue After 3.5E)
+
+**Not part of 3.5 scope** but **required before product iteration / Phase 4**. Forms is Green only on a technical basis; the field designer remains a prototype.
+
+Task plan: [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../.ai-dev/tasks/forms-designer-ux-v2/plan.md)
+
+- [ ] Rework `/forms/{id}/design` interaction (list/section-based builder preferred)
+- [ ] Finish layout + settings panels; align with Submit/DynamicForm
+- [ ] Retire or redirect `/form-builder`
+- [ ] Tests + update `03-module-status.md`
 
 ## MVP Exit Criteria
 
@@ -77,7 +89,10 @@ Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/
 
 ## Phase 4 — Product Expansion (Deferred)
 
-Do not start until Phase 3.5 exit criterion #5 (staging trial) is complete.
+Do not start until:
+
+1. Phase 3.5 exit criterion #5 (staging trial) is complete, **and**
+2. **Forms Designer UX v2** is complete (P0 — see above)
 
 - Scheduled reports and advanced export formats
 - PWA / mobile-first improvements
@@ -91,7 +106,8 @@ Do not start until Phase 3.5 exit criterion #5 (staging trial) is complete.
 3. Phase 3 quality and release prep — complete
 4. Phase 3.5A–3.5D — complete
 5. **Phase 3.5E staging trial** — current
-6. Phase 4 product expansion — deferred
+6. **Forms Designer UX v2** — mandatory gate before Phase 4
+7. Phase 4 product expansion — deferred
 
 ## Tracking
 

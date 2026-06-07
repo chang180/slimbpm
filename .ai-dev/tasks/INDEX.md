@@ -10,7 +10,15 @@
 
 進度紀錄：[`phase-3.5-mvp-convergence/progress.md`](./phase-3.5-mvp-convergence/progress.md)
 
-**僅剩 3.5E：** 依 [`docs/08-deployment.md`](../../docs/08-deployment.md) 建 staging，完成手動 smoke checklist。
+**3.5E：** 依 [`docs/08-deployment.md`](../../docs/08-deployment.md) 建 staging，完成手動 smoke checklist。
+
+## 已排隊（P0 — 3.5E 後必做）
+
+| 任務 | 狀態 | 規格 |
+|------|------|------|
+| **表單設計器 UX v2** | 未開始 | [`forms-designer-ux-v2/plan.md`](./forms-designer-ux-v2/plan.md) |
+
+欄位設計器仍為原型 UX，**卡住表單建立與工作流 E2E**；Phase 4 前必須完成。
 
 路線圖：[`docs/07-roadmap.md`](../../docs/07-roadmap.md)
 
@@ -29,4 +37,4 @@
 
 ## Phase 4（延後）
 
-產品擴充 — 待 Phase 3.5E staging 試跑完成後再規劃 plan。
+產品擴充 — 待 **Phase 3.5E staging** 與 **表單設計器 UX v2（P0）** 完成後再規劃 plan。

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
 import { FormTemplate } from '../../types/FormTypes';
+import { formCreatorName } from '@/lib/form-template';
 import formsRoutes from '@/routes/forms';
 import DynamicForm from '../../components/DynamicForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
@@ -121,7 +122,7 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
                 <span className="text-gray-600">建立者:</span>
-                <p className="font-medium">{form.createdBy}</p>
+                <p className="font-medium">{formCreatorName(form)}</p>
               </div>
               <div>
                 <span className="text-gray-600">分類:</span>

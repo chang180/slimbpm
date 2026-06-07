@@ -39,16 +39,23 @@ Exception (by design): approve/reject navigates to workflow show page, not inlin
 
 ## Forms
 
-Status: Green
+Status: Green (technical) — **P0 UX follow-up required**
 
-Phase 1B + 3.5B + 3.5C verified (2026-06-07):
+Phase 1B + 3.5B + 3.5C verified (2026-06-07). Route/persistence/org scoping pass automated checks.
 
 - `FormController::index()` scoped to org users (`whereIn('created_by', $orgUserIds)`).
 - All Forms pages use Wayfinder `@/routes/forms`.
-- Feature tests: `tests/Feature/FormPagesTest.php` (8 tests pass).
+- `/forms/{id}/design` wired to `FormDesigner` + `PUT forms.update` (2026-06-07).
+- Feature tests: `tests/Feature/FormPagesTest.php`, `FormTemplateMetadataTest.php`.
 - TypeScript: 0 errors.
 
-Exception (documented): `/form-builder` remains a localStorage demo with a clear warning banner directing users to `/forms/create`. No misleading entry points remain.
+**⚠ Mandatory follow-up — not product-ready for form authoring:**
+
+The field designer is still the **canvas prototype** (`FormDesigner`). Usability is poor; real multi-field forms are impractical to build. This **blocks meaningful workflow E2E and staging validation** beyond “route exists.”
+
+**Required task:** [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../.ai-dev/tasks/forms-designer-ux-v2/plan.md) — schedule **immediately after Phase 3.5E** (before treating Forms or Phase 4 as unblocked).
+
+Exception (documented): `/form-builder` remains a localStorage demo with a warning banner; canonical path is `/forms/create` → `/forms/{id}/design`.
 Exception (documented): `Forms/Submit.tsx` no longer exposes a draft-save button — `onSave` removed.
 
 ## Workflows

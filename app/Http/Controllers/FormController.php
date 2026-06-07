@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormSubmission;
 use App\Models\FormTemplate;
 use App\Models\User;
+use App\Support\FormTemplateMetadata;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -44,12 +45,11 @@ class FormController extends Controller
 
         $forms = $query->orderBy('updated_at', 'desc')->paginate(20);
 
-        // 取得所有分類
-        $categories = FormTemplate::distinct()->pluck('category')->filter()->sort()->values();
+        $metadata = FormTemplateMetadata::forOrganization($organization->id);
 
         return Inertia::render('Forms/Index', [
             'forms' => $forms,
-            'categories' => $categories,
+            'categories' => $metadata['categories'],
             'filters' => $request->only(['search', 'category', 'is_public']),
         ]);
     }
@@ -57,9 +57,15 @@ class FormController extends Controller
     /**
      * 顯示創建表單頁面
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Forms/Create');
+        $organization = $request->get('current_organization');
+        $metadata = FormTemplateMetadata::forOrganization($organization->id);
+
+        return Inertia::render('Forms/Create', [
+            'categories' => $metadata['categories'],
+            'suggestedTags' => $metadata['suggestedTags'],
+        ]);
     }
 
     /**
@@ -73,6 +79,7 @@ class FormController extends Controller
             'definition' => 'required|array',
             'category' => 'nullable|string|max:100',
             'tags' => 'nullable|array',
+            'tags.*' => 'string|max:100',
             'is_public' => 'boolean',
         ]);
 
@@ -82,7 +89,7 @@ class FormController extends Controller
             'definition' => $validated['definition'],
             'category' => $validated['category'] ?? '未分類',
             'tags' => $validated['tags'] ?? [],
-            'is_public' => $validated['is_public'] ?? false,
+            'is_public' => $request->boolean('is_public'),
             'created_by' => Auth::id(),
         ]);
 
@@ -104,9 +111,25 @@ class FormController extends Controller
     }
 
     /**
+     * 顯示表單欄位設計頁面
+     */
+    public function design(FormTemplate $form): Response
+    {
+        if ($form->created_by !== Auth::id()) {
+            abort(403, '無權限設計此表單');
+        }
+
+        $form->load('creator');
+
+        return Inertia::render('Forms/Design', [
+            'form' => $form,
+        ]);
+    }
+
+    /**
      * 顯示編輯表單頁面
      */
-    public function edit(FormTemplate $form): Response
+    public function edit(Request $request, FormTemplate $form): Response
     {
         // 檢查權限
         if ($form->created_by !== Auth::id()) {
@@ -115,8 +138,13 @@ class FormController extends Controller
 
         $form->load('creator');
 
+        $organization = $request->get('current_organization');
+        $metadata = FormTemplateMetadata::forOrganization($organization->id);
+
         return Inertia::render('Forms/Edit', [
             'form' => $form,
+            'categories' => $metadata['categories'],
+            'suggestedTags' => $metadata['suggestedTags'],
         ]);
     }
 
@@ -136,8 +164,13 @@ class FormController extends Controller
             'definition' => 'sometimes|array',
             'category' => 'nullable|string|max:100',
             'tags' => 'nullable|array',
+            'tags.*' => 'string|max:100',
             'is_public' => 'boolean',
         ]);
+
+        if ($request->has('is_public')) {
+            $validated['is_public'] = $request->boolean('is_public');
+        }
 
         $form->update($validated);
 
@@ -166,6 +199,8 @@ class FormController extends Controller
      */
     public function submit(FormTemplate $form): Response
     {
+        $form->load('creator');
+
         return Inertia::render('Forms/Submit', [
             'form' => $form,
         ]);
@@ -202,6 +237,8 @@ class FormController extends Controller
         if ($form->created_by !== Auth::id()) {
             abort(403, '無權限查看此表單的提交記錄');
         }
+
+        $form->load('creator');
 
         $submissions = $form->submissions()
             ->with('submitter')

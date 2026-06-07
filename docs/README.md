@@ -17,7 +17,7 @@ The `.ai-dev/` directory holds Chinese handoff notes, active task plans, and arc
 
 ## Current Operating Principle
 
-Phase 0–3 and Phase 3.5A–D are complete. All 10 core modules are Green. **Phase 3.5E** (staging trial) is the remaining gate before Phase 4 product expansion.
+Phase 0–3 and Phase 3.5A–D are complete. Core modules are **Green (technical)**. **Phase 3.5E** (staging trial) is the remaining 3.5 gate. **Forms Designer UX v2 (P0)** is queued immediately after 3.5E and **blocks Phase 4**.
 
 ## Update Rule
 

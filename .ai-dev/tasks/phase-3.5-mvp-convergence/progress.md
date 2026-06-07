@@ -107,6 +107,16 @@ Manual smoke checklist (pending staging environment):
 - [ ] Approve workflow step
 - [ ] Reports index
 
+**Smoke note:** Record form field designer (`/forms/{id}/design`) as **P0 UX limitation** — routes/persistence may pass while designer remains unusable. See [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../forms-designer-ux-v2/plan.md).
+
+---
+
+## Forms Designer UX v2 — P0 Follow-up (Queued)
+
+**Not started.** Mandatory after 3.5E; blocks meaningful form authoring and downstream E2E before Phase 4.
+
+Plan: [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](../forms-designer-ux-v2/plan.md)
+
 ---
 
 ## Exit Criteria Status

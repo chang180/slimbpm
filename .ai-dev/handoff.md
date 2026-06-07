@@ -11,7 +11,22 @@
 
 ## 一句話現況
 
-**Phase 3.5A–D 已完成；10 個核心模組均已 Green，262 tests 全過。僅剩 3.5E staging 手動試跑（需你建立 staging 環境）。**
+**Phase 3.5A–D 已完成；10 模組技術面 Green，262 tests 全過。3.5E staging 試跑待做。表單欄位設計器 UX 已標為 P0 必開任務，3.5E 後、Phase 4 前必須處理。**
+
+---
+
+## ⚠ P0：表單設計器 UX（必開任務）
+
+Forms 模組在自動化測試上為 Green，但 **`/forms/{id}/design` 仍是 canvas 原型**，實際很難建立可用表單，**會卡住工作流 E2E、staging 有意義的手動驗證、以及 Phase 4 產品擴充**。
+
+| 項目 | 說明 |
+|------|------|
+| 任務規格 | [`.ai-dev/tasks/forms-designer-ux-v2/plan.md`](./tasks/forms-designer-ux-v2/plan.md) |
+| 排程 | **3.5E 完成後立即開工**（與 Phase 4 並列時，此項優先） |
+| 路線圖 | [`docs/07-roadmap.md`](../docs/07-roadmap.md) — Forms Designer UX v2 |
+| Backlog | [`docs/04-known-issues-and-backlog.md`](../docs/04-known-issues-and-backlog.md) P0 |
+
+**Phase 4 不應在表單設計器 UX v2 完成前視為可全面推進。**
 
 ---
 
@@ -31,13 +46,16 @@
 
 | 優先 | 項目 | 說明 |
 |------|------|------|
-| P1 | **3.5E Staging 試跑** | 依 [`docs/08-deployment.md`](../docs/08-deployment.md) 建 staging，填寫 [`progress.md`](./tasks/phase-3.5-mvp-convergence/progress.md) 煙霧測試 checklist |
+| P1 | **3.5E Staging 試跑** | 依 [`docs/08-deployment.md`](../docs/08-deployment.md) 建 staging，填寫 [`progress.md`](./tasks/phase-3.5-mvp-convergence/progress.md) 煙霧測試 checklist；表單設計 UX 在 smoke 中標為已知限制 |
+| **P0** | **表單設計器 UX v2** | 必開任務 — [`forms-designer-ux-v2/plan.md`](./tasks/forms-designer-ux-v2/plan.md)；3.5E 後立即處理，Phase 4 前必完成 |
 
 已接受的 MVP 例外（見 `03-module-status.md`）：
 
-- `/form-builder` 仍為 localStorage demo，但有警告 banner，無誤導入口
+- `/form-builder` 仍為 localStorage demo（UX v2 完成後應 redirect/移除）
 - 工作流模板無獨立 edit 頁（走 designer）
 - Dashboard 審批導向 workflow show（by design）
+
+**不可長期接受：** 表單欄位設計器原型 UX — 見 P0 任務。
 
 ---
 
@@ -53,8 +71,9 @@
 | 3.5C Demo 殘留清理 | ✅ |
 | 3.5D Flaky test 修復 | ✅ |
 | 3.5E Staging 試跑 | ⏳ 待 staging 環境 |
+| **表單設計器 UX v2** | ⏳ **P0 必開** — 3.5E 後、Phase 4 前 |
 
-**3.5E 完成後** 可進入 Phase 4 產品擴充 → [`docs/07-roadmap.md`](../docs/07-roadmap.md)
+**3.5E 完成後** 優先開 **表單設計器 UX v2**，再進 Phase 4 → [`docs/07-roadmap.md`](../docs/07-roadmap.md)
 
 ---
 
@@ -65,7 +84,7 @@
 | 身份驗證 / 個人設定 | 🟢 | Fortify + 2FA + 測試齊全 |
 | 儀表板 | 🟢 | 真 API；審批導向 workflow show |
 | 組織管理 | 🟢 | Wayfinder + 持久化 + org scoping |
-| 表單 | 🟢 | CRUD 完整；FormBuilder 為標示 demo |
+| 表單 | 🟢 技術面 | CRUD + design 路由已接；**欄位設計器 UX 為 P0 必開任務** |
 | 工作流程 | 🟢 | 引擎 + 設計器 + 監控 |
 | 報表 | 🟢 | 日期 filter + export |
 | 用戶 / 部門 | 🟢 | org scoping + 跨 org 404 測試 |
@@ -110,4 +129,4 @@ php artisan test tests/Browser      # 需先 build
 
 ---
 
-*Phase 3.5E staging 試跑完成後，Phase 3.5 即結案，可規劃 Phase 4。*
+*Phase 3.5E staging 試跑完成後，**優先**開表單設計器 UX v2，再規劃 Phase 4。*
