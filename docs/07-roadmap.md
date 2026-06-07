@@ -2,7 +2,7 @@
 
 Last updated: 2026-06-07
 
-This roadmap reflects the audited ~60% completion state after Phase 3. Phase 1–3 task plans are archived under [`.ai-dev/archived/`](../.ai-dev/archived/).
+Phase 1–3 task plans are archived under [`.ai-dev/archived/`](../.ai-dev/archived/). Phase 3.5 progress log: [`.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md).
 
 ## Guiding Principle
 
@@ -18,95 +18,80 @@ Finish frontend integration and org-scoped persistence before adding new feature
 
 ## Phase 1 — Frontend Blockers (Complete)
 
-Goal: make the highest-risk areas usable without dead links, demo handlers, or missing pages.
-
-Phases 1A–1D (TypeScript baseline, Forms, Dashboard, Organization) — **complete 2026-06-06.**
-
-Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
+Phases 1A–1D — **complete 2026-06-06.** Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
 ## Phase 2 — Module Hardening (Complete)
 
-Goal: fix TypeScript errors and harden module pages with tests.
-
-Phases 2A–2E (Users, Departments, Invitations/Notifications, Workflows/Reports, misc TS → 0) — **complete 2026-06-06.**
-
-Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
+Phases 2A–2E — **complete 2026-06-06.** Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
 ## Phase 3 — Quality And Release Prep (Complete)
 
-Goal: regression coverage, UX polish, deployment readiness, optional browser smoke.
-
-Phases 3A–3H — **complete 2026-06-06.**
-
-| Item | Summary |
-|------|---------|
-| 3A–3E | Wayfinder org pages, AppLayout, department/notification/report regression tests |
-| 3F | Responsive review — DashboardHeader, WorkflowMenu, Forms/Show |
-| 3G | `docs/08-deployment.md` |
-| 3H | Pest Browser smoke — `tests/Browser/SmokeTest.php` |
-
-**Result:** 258 tests (253 Feature/Unit + 5 Browser) · TS 0 errors · deployment guide published.
+Phases 3A–3H — **complete 2026-06-06.** 258 tests · TS 0 · deployment guide · browser smoke.
 
 Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
-## Phase 3.5 — MVP Convergence (Current)
+## Phase 3.5 — MVP Convergence (Nearly Complete)
 
-Goal: reach MVP launch readiness without new product features. All core modules should meet the Quality Gate in `01-current-state.md`.
+Goal: reach MVP launch readiness without new product features.
 
 Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md)
 
-### 3.5A. Department Org Scoping
+### 3.5A. Department Org Scoping ✅ (2026-06-07)
 
-- [ ] Filter `DepartmentController` by `organization_id`
-- [ ] Feature test for cross-org isolation
+- [x] Filter `DepartmentController` by `organization_id`
+- [x] Feature tests for cross-org isolation (12 tests in `DepartmentPagesTest`)
 
-### 3.5B. Module Yellow → Green Verification
+### 3.5B. Module Yellow → Green Verification ✅ (2026-06-07)
 
-- [ ] Verify each core module against Quality Gate checklist
-- [ ] Update `docs/03-module-status.md` to Green or document exceptions
+- [x] Verify each core module against Quality Gate checklist
+- [x] Update `docs/03-module-status.md` — all 10 modules Green
+- [x] Fix `UserController::index()` and `FormController::index()` org scoping
 
-### 3.5C. Demo Residue Cleanup
+### 3.5C. Demo Residue Cleanup ✅ (2026-06-07)
 
-- [ ] FormBuilder: integrate or demote further
-- [ ] Forms Submit draft: wire API or remove misleading UI
-- [ ] Remove production-path `console.log` where applicable
+- [x] FormBuilder: warning banner retained; `console.log` removed
+- [x] Forms Submit draft: non-functional UI removed
+- [x] Production-path `console.log` cleared
 
-### 3.5D. Stabilize Flaky Test
+### 3.5D. Stabilize Flaky Test ✅ (2026-06-07)
 
-- [ ] Fix `UserManagementUITest` `can search users` flakiness
-- [ ] Verify 3 consecutive passes
+- [x] Fix `UserManagementUITest` `can search users` with deterministic names
+- [x] Verified 3 consecutive passes
 
-### 3.5E. Staging Deployment Trial
+### 3.5E. Staging Deployment Trial (Pending)
 
 - [ ] Follow `docs/08-deployment.md` for staging setup
-- [ ] Record manual smoke checklist in progress.md
+- [ ] Record manual smoke checklist in `progress.md`
+
+**Current test baseline:** 262 passed (257 Feature/Unit + 5 Browser) · TS 0 errors
 
 ## MVP Exit Criteria
 
-Phase 3.5 is complete when all of the following are true:
-
-1. Core modules in `03-module-status.md` are Green (or have documented, accepted exceptions).
-2. No P0 org-scoping gaps remain (Department scoping done).
-3. No misleading demo surfaces on primary user paths.
-4. `php artisan test` and `npm run types` still pass.
-5. Staging manual smoke checklist completed and recorded.
+| # | Criterion | Status |
+|---|-----------|--------|
+| 1 | Core modules Green (or documented exceptions) | ✅ |
+| 2 | No P0 org-scoping gaps | ✅ |
+| 3 | No misleading demo on primary paths | ✅ |
+| 4 | `php artisan test` and `npm run types` pass | ✅ 262 tests |
+| 5 | Staging manual smoke checklist recorded | ⏳ 3.5E |
 
 ## Phase 4 — Product Expansion (Deferred)
 
-Do not start until Phase 3.5 MVP exit criteria are met.
+Do not start until Phase 3.5 exit criterion #5 (staging trial) is complete.
 
 - Scheduled reports and advanced export formats
 - PWA / mobile-first improvements
-- Permissions / backup / export admin pages (removed from dashboard in Phase 1C; deferred here)
-- Additional workflow designer node types from original specs
+- Permissions / backup / export admin pages
+- Additional workflow designer node types
 
 ## Suggested Execution Order
 
 1. Phase 1A–1D — complete
 2. Phase 2 module hardening — complete
 3. Phase 3 quality and release prep — complete
-4. **Phase 3.5 MVP convergence** — current
-5. Phase 4 product expansion — deferred
+4. Phase 3.5A–3.5D — complete
+5. **Phase 3.5E staging trial** — current
+6. Phase 4 product expansion — deferred
 
 ## Tracking
 

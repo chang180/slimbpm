@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Head, router } from '@inertiajs/react';
-import { FormTemplate, FormSubmission } from '../../types/FormTypes';
+import { FormTemplate } from '../../types/FormTypes';
 import formsRoutes from '@/routes/forms';
 import DynamicForm from '../../components/DynamicForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
@@ -39,11 +39,6 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
       setSubmitError('提交失敗，請稍後再試');
       setIsSubmitting(false);
     }
-  };
-
-  const handleSaveDraft = async (data: Record<string, any>) => {
-    // 實作草稿儲存功能
-    console.log('Saving draft:', data);
   };
 
   if (submitSuccess) {
@@ -150,7 +145,7 @@ const FormSubmit: React.FC<FormSubmitProps> = ({ form }) => {
             <DynamicForm
               definition={form.definition}
               onSubmit={handleSubmit}
-              onSave={form.definition.settings.autoSave ? handleSaveDraft : undefined}
+              onSave={undefined}
               readOnly={isSubmitting}
             />
           </CardContent>

@@ -1,6 +1,6 @@
 # SlimBPM (快簽)
 
-專為中小團隊設計的輕量級 BPM / 工作流程管理系統。**專案仍在積極開發中，尚未達到可上線使用的程度。**
+專為中小團隊設計的輕量級 BPM / 工作流程管理系統。**核心 MVP 功能已就緒；staging 試跑完成後可進入 Phase 4 擴充。**
 
 ## 技術棧
 
@@ -12,14 +12,12 @@
 
 | 面向 | 說明 |
 |------|------|
-| 後端 | 已有大量 Controller、API 與 Model；**258 個測試全部通過**（253 Feature/Unit + 5 Browser） |
-| 前端 | Phase 1–3 已接線主要模組；部分頁面仍為 demo 或未完整整合；**`npm run types` 已通過（0 errors）** |
-| 品質 | Phase 0–3（文件、前端阻斷、模組強化、響應式與部署指南）**已全部驗收** |
-| 整體 | 約 **60%** 完成度 — 請勿參考舊文件宣稱的 90–100% |
+| 後端 | **262 個測試全部通過**（257 Feature/Unit + 5 Browser） |
+| 前端 | 10 個核心模組 **Green** · **`npm run types` 0 errors** |
+| 品質 | Phase 3.5A–D 已驗收（org scoping、demo 清理、flaky test 修復） |
+| 待辦 | Phase 3.5E staging 手動試跑（需建立 staging 環境） |
 
-近期里程碑：Phase 0–3 已全部驗收（2026-06-06）。
-
-**下一階段：** Phase 3.5 MVP 收斂（org scoping、模組 Green 驗收、demo 清理）→ 見 [`docs/07-roadmap.md`](docs/07-roadmap.md) 與 [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md)。
+**下一階段：** 3.5E staging 完成後 → Phase 4 產品擴充 → 見 [`docs/07-roadmap.md`](docs/07-roadmap.md)
 
 ## 開發文件
 
@@ -50,7 +48,7 @@ composer run dev   # 或分別執行 php artisan serve 與 npm run dev
 ## 測試
 
 ```bash
-php artisan test              # 258 passed（含 Browser smoke）
+php artisan test              # 262 passed（含 Browser smoke）
 npm run types                 # 0 errors
 npm run build                 # 前端建置
 ```

@@ -17,7 +17,7 @@ The `.ai-dev/` directory holds Chinese handoff notes, active task plans, and arc
 
 ## Current Operating Principle
 
-Do not assume the app is close to done because older files say 90-100% complete. The current audited estimate is roughly 60% overall. Phase 0–3 is complete; **Phase 3.5 MVP convergence** is the current goal. Phase 4 product expansion is deferred until MVP exit criteria are met.
+Phase 0–3 and Phase 3.5A–D are complete. All 10 core modules are Green. **Phase 3.5E** (staging trial) is the remaining gate before Phase 4 product expansion.
 
 ## Update Rule
 

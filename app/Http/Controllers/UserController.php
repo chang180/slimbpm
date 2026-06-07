@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Department;
 use App\Models\OrganizationSetting;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -16,14 +16,17 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::with(['organization', 'departments']);
+        $organization = $request->get('current_organization');
+
+        $query = User::with(['organization', 'departments'])
+            ->where('organization_id', $organization->id);
 
         // 搜尋功能
         if ($request->has('search') && $request->search) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -89,7 +92,7 @@ class UserController extends Controller
         ]);
 
         // 關聯部門
-        if (!empty($validated['departments'])) {
+        if (! empty($validated['departments'])) {
             $user->departments()->sync($validated['departments']);
         }
 
@@ -132,7 +135,7 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'organization_id' => 'nullable|exists:organization_settings,id',
             'role' => 'required|in:admin,manager,user',
@@ -150,7 +153,7 @@ class UserController extends Controller
         ];
 
         // 只有在提供新密碼時才更新密碼
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $updateData['password'] = Hash::make($validated['password']);
         }
 

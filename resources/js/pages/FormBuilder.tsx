@@ -34,13 +34,11 @@ export default function FormBuilder() {
     setPreviewMode(true);
   };
 
-  const handleFormSubmit = (data: Record<string, any>) => {
-    console.log('表單提交資料:', data);
+  const handleFormSubmit = (_data: Record<string, any>) => {
     alert('表單提交成功！');
   };
 
-  const handleFormSave = (data: Record<string, any>) => {
-    console.log('表單草稿儲存:', data);
+  const handleFormSave = (_data: Record<string, any>) => {
     alert('草稿已儲存！');
   };
 

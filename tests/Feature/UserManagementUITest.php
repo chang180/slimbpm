@@ -163,9 +163,22 @@ class UserManagementUITest extends TestCase
     public function test_can_search_users(): void
     {
         $organization = OrganizationSetting::factory()->create();
-        $admin = User::factory()->create(['role' => 'admin', 'organization_id' => $organization->id]);
-        User::factory()->create(['name' => 'John Doe', 'email' => 'john@example.com', 'organization_id' => $organization->id]);
-        User::factory()->create(['name' => 'Jane Smith', 'email' => 'jane@example.com', 'organization_id' => $organization->id]);
+        $admin = User::factory()->create([
+            'name' => 'Admin User',
+            'email' => 'admin@example.com',
+            'role' => 'admin',
+            'organization_id' => $organization->id,
+        ]);
+        User::factory()->create([
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'organization_id' => $organization->id,
+        ]);
+        User::factory()->create([
+            'name' => 'Jane Smith',
+            'email' => 'jane@example.com',
+            'organization_id' => $organization->id,
+        ]);
 
         $response = $this->actingAs($admin)->get('/users?search=John');
 

@@ -67,7 +67,7 @@ For phased development, see `.ai-dev/tasks/` (active) and `.ai-dev/archived/` (c
 3. Coordinator reviews against exit criteria in the plan.
 4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
 
-Current active task: **Phase 3.5 MVP convergence**. See `.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md` and `docs/07-roadmap.md`.
+Current active task: **Phase 3.5E staging trial** (3.5A–D complete). See `.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md` and `docs/07-roadmap.md`.
 
 ## Documentation Updates
 

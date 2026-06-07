@@ -7,36 +7,41 @@
 3. Update `03-module-status.md` whenever a module changes status.
 4. Track progress against `07-roadmap.md`.
 
-## P1 Phase 3.5 MVP (Current)
+## P1 Staging Trial (Phase 3.5E — Current Blocker)
 
 | Item | Notes |
 |------|-------|
-| Department org scoping | `DepartmentController` web routes — see plan 3.5A |
-| Module Yellow → Green | Quality Gate verification per module — see plan 3.5B |
-| Demo residue | FormBuilder localStorage demo; Forms Submit draft `console.log` — see plan 3.5C |
-| Flaky test | `UserManagementUITest` `can search users` — see plan 3.5D |
-| Staging trial | Manual smoke on staging per `08-deployment.md` — see plan 3.5E |
+| Staging deployment trial | Follow `docs/08-deployment.md` to provision staging. Record manual smoke checklist in `.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`. |
 
-Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md)
+**Smoke checklist (pending):** login · dashboard · create form · start workflow · approve step · reports index
+
+Phase 3.5 cannot be marked fully complete until this checklist is recorded.
+
+## Resolved (Phase 3.5A–D, 2026-06-07)
+
+- Department org scoping — `DepartmentController` + 4 cross-org tests in `DepartmentPagesTest`
+- Module Yellow → Green — all 10 modules Green in `03-module-status.md`
+- Demo residue — `console.log` removed; Submit draft UI removed; FormBuilder banner retained
+- Flaky test — `UserManagementUITest can search users` uses deterministic names
+- User/Form index org scoping — `UserController::index()`, `FormController::index()`
+
+Details: [`.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md)
 
 ## Resolved (Phase 1–3)
 
-The following were active blockers and are now complete. Details in [`.ai-dev/archived/`](../.ai-dev/archived/README.md):
+Details in [`.ai-dev/archived/`](../.ai-dev/archived/README.md): TS errors, org routes, persistence, reports, notifications, browser smoke, layout polish, etc.
 
-- Frontend TypeScript errors (176 → 0, Phase 2E)
-- Organization broken `@/lib/route.ts` links (Phase 3A)
-- Organization scoping and persistence (Phase 1D)
-- Reports export and date filters (Phase 2D/3E)
-- Notifications mark-read tests (Phase 3D)
-- Deployment documentation (Phase 3G)
-- Browser smoke tests (Phase 3H)
-- Users/Departments AppLayout (Phase 3B)
+## Accepted MVP Exceptions
+
+Documented in `03-module-status.md` — not blockers:
+
+- `/form-builder` localStorage demo with warning banner
+- No dedicated workflow template edit page
+- Dashboard approve/reject navigates to workflow show
 
 ## P3 Browser E2E
 
 **Done (Phase 3H).** See `tests/Browser/SmokeTest.php` and `docs/06-development-workflow.md`.
-
-Current testing strategy: Feature + Inertia endpoint tests, plus browser smoke for JS-heavy UI checks.
 
 ## Documentation Debt
 

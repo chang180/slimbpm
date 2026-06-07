@@ -58,14 +58,14 @@ Dashboard approve/reject navigating to workflow show is acceptable by design.
 
 ## Exit Criteria
 
-- [ ] `DepartmentController` org scoping + Feature test passing
-- [ ] Core modules in `03-module-status.md` are Green or have documented exceptions
-- [ ] FormBuilder and Submit draft no longer mislead users
-- [ ] `UserManagementUITest` stable across 3 consecutive runs
+- [x] `DepartmentController` org scoping + Feature test passing
+- [x] Core modules in `03-module-status.md` are Green or have documented exceptions
+- [x] FormBuilder and Submit draft no longer mislead users
+- [x] `UserManagementUITest` stable across 3 consecutive runs
 - [ ] Staging trial checklist recorded in `progress.md`
-- [ ] `php artisan test` still passes (258+ tests)
-- [ ] `npm run types` still 0 errors
-- [ ] `docs/04-known-issues-and-backlog.md` and `.ai-dev/handoff.md` updated
+- [x] `php artisan test` still passes (262 tests)
+- [x] `npm run types` still 0 errors
+- [x] `docs/04-known-issues-and-backlog.md` and `.ai-dev/handoff.md` updated
 
 ## Before Starting
 

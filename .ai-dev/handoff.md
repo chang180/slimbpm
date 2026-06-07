@@ -5,20 +5,21 @@
 
 ---
 
-## 最後更新：2026-06-07
+## 最後更新：2026-06-07（Phase 3.5A–D 驗收）
 
 ---
 
 ## 一句話現況
 
-**Phase 0–3 已全部驗收；核心 BPM 閉環可跑，但 8 個模組仍為 Yellow，整體約 60%，尚未達 MVP 上線標準。**
+**Phase 3.5A–D 已完成；10 個核心模組均已 Green，262 tests 全過。僅剩 3.5E staging 手動試跑（需你建立 staging 環境）。**
 
 ---
 
 ## 已具備的核心能力
 
 - E2E 工作流：建表單 → 啟流程 → 審批（`EndToEndWorkflowFeatureTest`）
-- **258 tests** 全過（253 Feature/Unit + 5 Browser）· TS 0 errors
+- **262 tests** 全過（257 Feature/Unit + 5 Browser）· TS 0 errors
+- 多租戶 org scoping：Department、User、Form index 等已補齊
 - 部署指南：[`docs/08-deployment.md`](../docs/08-deployment.md)
 - Browser smoke：[`tests/Browser/SmokeTest.php`](../tests/Browser/SmokeTest.php)
 
@@ -26,42 +27,34 @@
 
 ---
 
-## MVP 前必補缺口
+## 僅剩待辦
 
 | 優先 | 項目 | 說明 |
 |------|------|------|
-| P0 | Department org scoping | `DepartmentController` 尚未依 organization 過濾 |
-| P0 | 模組 Yellow → Green | 依 Quality Gate 逐模組驗收（見 Phase 3.5B） |
-| P1 | Demo 殘留 | `/form-builder` localStorage demo；Forms Submit 草稿僅 `console.log` |
-| P1 | Flaky test | `UserManagementUITest` 偶發 `can search users` 失敗 |
-| P1 | Staging 試跑 | 依部署指南建 staging，手動驗收核心流程 |
+| P1 | **3.5E Staging 試跑** | 依 [`docs/08-deployment.md`](../docs/08-deployment.md) 建 staging，填寫 [`progress.md`](./tasks/phase-3.5-mvp-convergence/progress.md) 煙霧測試 checklist |
 
-完整待辦見 [`docs/04-known-issues-and-backlog.md`](../docs/04-known-issues-and-backlog.md)。
+已接受的 MVP 例外（見 `03-module-status.md`）：
+
+- `/form-builder` 仍為 localStorage demo，但有警告 banner，無誤導入口
+- 工作流模板無獨立 edit 頁（走 designer）
+- Dashboard 審批導向 workflow show（by design）
 
 ---
 
-## 下一步：Phase 3.5 MVP 收斂
+## Phase 3.5 進度
 
-**現行任務規格：** [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](./tasks/phase-3.5-mvp-convergence/plan.md)  
-**路線圖：** [`docs/07-roadmap.md`](../docs/07-roadmap.md)
+**規格：** [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](./tasks/phase-3.5-mvp-convergence/plan.md)  
+**執行紀錄：** [`.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`](./tasks/phase-3.5-mvp-convergence/progress.md)
 
-| 子項 | 內容 |
+| 子項 | 狀態 |
 |------|------|
-| 3.5A | Department org scoping + Feature test |
-| 3.5B | 核心模組 Yellow → Green 驗收 |
-| 3.5C | FormBuilder / Submit 草稿 demo 清理 |
-| 3.5D | 穩定 flaky UserManagementUITest |
-| 3.5E | Staging 部署試跑 |
+| 3.5A Department org scoping | ✅ |
+| 3.5B 模組 Yellow → Green | ✅ |
+| 3.5C Demo 殘留清理 | ✅ |
+| 3.5D Flaky test 修復 | ✅ |
+| 3.5E Staging 試跑 | ⏳ 待 staging 環境 |
 
-Phase 4（排程報表、PWA、權限頁、設計器節點）**延後**，待 Phase 3.5 MVP exit criteria 達成後再開。
-
-### 派工指令範本
-
-```text
-請依 .ai-dev/tasks/phase-3.5-mvp-convergence/plan.md 執行。
-開工前先讀 docs/01-current-state.md 與 docs/03-module-status.md。
-完成後填寫同目錄 progress.md，交回協調者 review。
-```
+**3.5E 完成後** 可進入 Phase 4 產品擴充 → [`docs/07-roadmap.md`](../docs/07-roadmap.md)
 
 ---
 
@@ -69,16 +62,16 @@ Phase 4（排程報表、PWA、權限頁、設計器節點）**延後**，待 Ph
 
 | 模組 | 判定 | 摘要 |
 |------|------|------|
-| 身份驗證 / 個人設定 | 🟡 | Fortify + 2FA 頁面與測試齊全 |
-| 儀表板 | 🟡 | 主要操作已接真 API；審批導向 workflow show |
-| 組織管理 | 🟡 | Wayfinder + settings/preferences 持久化 |
-| 表單 | 🟡 | CRUD 完整；FormBuilder 仍為 demo |
-| 工作流程 | 🟡 | 引擎 + 設計器 + 監控；缺獨立 template edit 頁 |
-| 報表 | 🟡 | 日期 filter + export 已接 |
-| 用戶 / 部門 | 🟡 | Layout 統一；Department 缺 org scoping |
-| 邀請 / 通知 | 🟡 | 分頁 + mark-read 測試覆蓋 |
+| 身份驗證 / 個人設定 | 🟢 | Fortify + 2FA + 測試齊全 |
+| 儀表板 | 🟢 | 真 API；審批導向 workflow show |
+| 組織管理 | 🟢 | Wayfinder + 持久化 + org scoping |
+| 表單 | 🟢 | CRUD 完整；FormBuilder 為標示 demo |
+| 工作流程 | 🟢 | 引擎 + 設計器 + 監控 |
+| 報表 | 🟢 | 日期 filter + export |
+| 用戶 / 部門 | 🟢 | org scoping + 跨 org 404 測試 |
+| 邀請 / 通知 | 🟢 | 分頁 + mark-read 測試 |
 
-詳細表格見 [`docs/03-module-status.md`](../docs/03-module-status.md)。
+詳情見 [`docs/03-module-status.md`](../docs/03-module-status.md)。
 
 ---
 
@@ -89,8 +82,7 @@ Phase 4（排程報表、PWA、權限頁、設計器節點）**延後**，待 Ph
 3. 執行者填 `progress.md` 交回
 4. 協調者 review → 更新本文件與 `docs/`
 
-詳見 [`.ai-dev/README.md`](./README.md) 與 [`.ai-dev/tasks/INDEX.md`](./tasks/INDEX.md)。  
-Phase 1–3 已完成任務封存於 [`.ai-dev/archived/`](./archived/)。
+Phase 1–3 封存於 [`.ai-dev/archived/`](./archived/)。
 
 ---
 
@@ -104,14 +96,13 @@ Phase 1–3 已完成任務封存於 [`.ai-dev/archived/`](./archived/)。
 | 待辦與 blocker | [`docs/04-known-issues-and-backlog.md`](../docs/04-known-issues-and-backlog.md) |
 | 路線圖 | [`docs/07-roadmap.md`](../docs/07-roadmap.md) |
 | 部署 | [`docs/08-deployment.md`](../docs/08-deployment.md) |
-| 已完成任務封存 | [`.ai-dev/archived/`](./archived/) |
 
 ---
 
 ## 驗證指令
 
 ```bash
-php artisan test                    # 258 passed (253 Feature/Unit + 5 Browser)
+php artisan test                    # 262 passed (257 Feature/Unit + 5 Browser)
 npm run types                       # 0 errors
 npm run build                       # 前端建置
 php artisan test tests/Browser      # 需先 build
@@ -119,4 +110,4 @@ php artisan test tests/Browser      # 需先 build
 
 ---
 
-*Phase 3.5 MVP 收斂進行中。Phase 1–3 詳情見 `.ai-dev/archived/`。*
+*Phase 3.5E staging 試跑完成後，Phase 3.5 即結案，可規劃 Phase 4。*

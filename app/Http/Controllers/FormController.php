@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FormTemplate;
 use App\Models\FormSubmission;
+use App\Models\FormTemplate;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -16,36 +17,40 @@ class FormController extends Controller
      */
     public function index(Request $request): Response
     {
-        $query = FormTemplate::with('creator');
-        
+        $organization = $request->get('current_organization');
+        $orgUserIds = User::where('organization_id', $organization->id)->pluck('id');
+
+        $query = FormTemplate::with('creator')
+            ->whereIn('created_by', $orgUserIds);
+
         // 搜尋功能
         if ($request->has('search')) {
             $search = $request->get('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
-        
+
         // 分類篩選
         if ($request->has('category')) {
             $query->where('category', $request->get('category'));
         }
-        
+
         // 公開/私人篩選
         if ($request->has('is_public')) {
             $query->where('is_public', $request->boolean('is_public'));
         }
-        
+
         $forms = $query->orderBy('updated_at', 'desc')->paginate(20);
-        
+
         // 取得所有分類
         $categories = FormTemplate::distinct()->pluck('category')->filter()->sort()->values();
-        
+
         return Inertia::render('Forms/Index', [
             'forms' => $forms,
             'categories' => $categories,
-            'filters' => $request->only(['search', 'category', 'is_public'])
+            'filters' => $request->only(['search', 'category', 'is_public']),
         ]);
     }
 
@@ -70,7 +75,7 @@ class FormController extends Controller
             'tags' => 'nullable|array',
             'is_public' => 'boolean',
         ]);
-        
+
         $form = FormTemplate::create([
             'name' => $validated['name'],
             'description' => $validated['description'],
@@ -80,7 +85,7 @@ class FormController extends Controller
             'is_public' => $validated['is_public'] ?? false,
             'created_by' => Auth::id(),
         ]);
-        
+
         return redirect()->route('forms.show', $form)
             ->with('success', '表單創建成功');
     }
@@ -91,7 +96,7 @@ class FormController extends Controller
     public function show(FormTemplate $form): Response
     {
         $form->load('creator');
-        
+
         return Inertia::render('Forms/Show', [
             'form' => $form,
             'canEdit' => $form->created_by === Auth::id(),
@@ -107,9 +112,9 @@ class FormController extends Controller
         if ($form->created_by !== Auth::id()) {
             abort(403, '無權限修改此表單');
         }
-        
+
         $form->load('creator');
-        
+
         return Inertia::render('Forms/Edit', [
             'form' => $form,
         ]);
@@ -124,7 +129,7 @@ class FormController extends Controller
         if ($form->created_by !== Auth::id()) {
             abort(403, '無權限修改此表單');
         }
-        
+
         $validated = $request->validate([
             'name' => 'sometimes|string|max:255',
             'description' => 'nullable|string|max:1000',
@@ -133,9 +138,9 @@ class FormController extends Controller
             'tags' => 'nullable|array',
             'is_public' => 'boolean',
         ]);
-        
+
         $form->update($validated);
-        
+
         return redirect()->route('forms.show', $form)
             ->with('success', '表單更新成功');
     }
@@ -149,9 +154,9 @@ class FormController extends Controller
         if ($form->created_by !== Auth::id()) {
             abort(403, '無權限刪除此表單');
         }
-        
+
         $form->delete();
-        
+
         return redirect()->route('forms.index')
             ->with('success', '表單已刪除');
     }
@@ -174,7 +179,7 @@ class FormController extends Controller
         // 驗證表單資料
         $validationRules = $this->buildValidationRules($form->definition);
         $validated = $request->validate($validationRules);
-        
+
         // 建立表單提交記錄
         $submission = FormSubmission::create([
             'form_template_id' => $form->id,
@@ -183,7 +188,7 @@ class FormController extends Controller
             'status' => 'submitted',
             'submitted_at' => now(),
         ]);
-        
+
         return redirect()->route('forms.submit', $form)
             ->with('success', '表單提交成功');
     }
@@ -197,12 +202,12 @@ class FormController extends Controller
         if ($form->created_by !== Auth::id()) {
             abort(403, '無權限查看此表單的提交記錄');
         }
-        
+
         $submissions = $form->submissions()
             ->with('submitter')
             ->orderBy('created_at', 'desc')
             ->paginate(20);
-        
+
         // 計算統計資料
         $statistics = [
             'total_submissions' => $submissions->total(),
@@ -210,7 +215,7 @@ class FormController extends Controller
             'submissions_this_week' => $form->submissions()->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->count(),
             'submissions_this_month' => $form->submissions()->whereMonth('created_at', now()->month)->count(),
         ];
-        
+
         return Inertia::render('Forms/Results', [
             'form' => $form,
             'submissions' => $submissions,
@@ -224,11 +229,11 @@ class FormController extends Controller
     public function duplicate(FormTemplate $form)
     {
         $newForm = $form->replicate();
-        $newForm->name = $form->name . ' (複製)';
+        $newForm->name = $form->name.' (複製)';
         $newForm->created_by = Auth::id();
         $newForm->is_public = false;
         $newForm->save();
-        
+
         return redirect()->route('forms.show', $newForm)
             ->with('success', '表單複製成功');
     }
@@ -239,21 +244,21 @@ class FormController extends Controller
     private function buildValidationRules(array $definition): array
     {
         $rules = [];
-        
-        if (!isset($definition['fields'])) {
+
+        if (! isset($definition['fields'])) {
             return $rules;
         }
-        
+
         foreach ($definition['fields'] as $field) {
             $fieldRules = [];
-            
+
             // 必填驗證
             if ($field['required'] ?? false) {
                 $fieldRules[] = 'required';
             } else {
                 $fieldRules[] = 'nullable';
             }
-            
+
             // 類型驗證
             switch ($field['type']) {
                 case 'email':
@@ -269,31 +274,31 @@ class FormController extends Controller
                     $fieldRules[] = 'url';
                     break;
             }
-            
+
             // 長度驗證
             if (isset($field['validation']['minLength'])) {
-                $fieldRules[] = 'min:' . $field['validation']['minLength'];
+                $fieldRules[] = 'min:'.$field['validation']['minLength'];
             }
             if (isset($field['validation']['maxLength'])) {
-                $fieldRules[] = 'max:' . $field['validation']['maxLength'];
+                $fieldRules[] = 'max:'.$field['validation']['maxLength'];
             }
-            
+
             // 數值範圍驗證
             if (isset($field['validation']['min'])) {
-                $fieldRules[] = 'min:' . $field['validation']['min'];
+                $fieldRules[] = 'min:'.$field['validation']['min'];
             }
             if (isset($field['validation']['max'])) {
-                $fieldRules[] = 'max:' . $field['validation']['max'];
+                $fieldRules[] = 'max:'.$field['validation']['max'];
             }
-            
+
             // 正則表達式驗證
             if (isset($field['validation']['pattern'])) {
-                $fieldRules[] = 'regex:' . $field['validation']['pattern'];
+                $fieldRules[] = 'regex:'.$field['validation']['pattern'];
             }
-            
+
             $rules[$field['id']] = $fieldRules;
         }
-        
+
         return $rules;
     }
 }

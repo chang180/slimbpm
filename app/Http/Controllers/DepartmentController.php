@@ -15,7 +15,10 @@ class DepartmentController extends Controller
      */
     public function index(Request $request): Response
     {
+        $organization = $request->get('current_organization');
+
         $query = Department::query()
+            ->where('organization_id', $organization->id)
             ->with(['parent', 'children'])
             ->withCount('users');
 
@@ -53,9 +56,12 @@ class DepartmentController extends Controller
     /**
      * 顯示新增部門頁面
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        $departments = Department::where('is_active', true)
+        $organization = $request->get('current_organization');
+
+        $departments = Department::where('organization_id', $organization->id)
+            ->where('is_active', true)
             ->whereNull('parent_id')
             ->with('children')
             ->orderBy('name', 'asc')
@@ -71,7 +77,11 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentRequest $request)
     {
-        Department::create($request->validated());
+        $organization = $request->get('current_organization');
+
+        Department::create(array_merge($request->validated(), [
+            'organization_id' => $organization->id,
+        ]));
 
         return redirect()->route('departments.index')
             ->with('success', '部門建立成功！');
@@ -80,8 +90,12 @@ class DepartmentController extends Controller
     /**
      * 顯示部門詳情
      */
-    public function show(Department $department): Response
+    public function show(Request $request, Department $department): Response
     {
+        $organization = $request->get('current_organization');
+
+        abort_if($department->organization_id !== $organization->id, 404);
+
         $department->load(['parent', 'children', 'users'])
             ->loadCount('users');
 
@@ -93,12 +107,17 @@ class DepartmentController extends Controller
     /**
      * 顯示編輯部門頁面
      */
-    public function edit(Department $department): Response
+    public function edit(Request $request, Department $department): Response
     {
+        $organization = $request->get('current_organization');
+
+        abort_if($department->organization_id !== $organization->id, 404);
+
         $department->load(['parent', 'children']);
 
-        // 獲取所有部門，但排除當前部門及其子部門（防止循環引用）
-        $departments = Department::where('is_active', true)
+        // 獲取同組織的部門，排除當前部門及其子部門（防止循環引用）
+        $departments = Department::where('organization_id', $organization->id)
+            ->where('is_active', true)
             ->where('id', '!=', $department->id)
             ->whereNull('parent_id')
             ->with('children')
@@ -120,6 +139,10 @@ class DepartmentController extends Controller
      */
     public function update(DepartmentRequest $request, Department $department)
     {
+        $organization = $request->get('current_organization');
+
+        abort_if($department->organization_id !== $organization->id, 404);
+
         // 檢查是否會造成循環引用
         if ($request->parent_id) {
             $parentDepartment = Department::find($request->parent_id);
@@ -138,8 +161,12 @@ class DepartmentController extends Controller
     /**
      * 刪除部門
      */
-    public function destroy(Department $department)
+    public function destroy(Request $request, Department $department)
     {
+        $organization = $request->get('current_organization');
+
+        abort_if($department->organization_id !== $organization->id, 404);
+
         // 檢查是否有子部門
         if ($department->children()->count() > 0) {
             return redirect()->back()

@@ -19,6 +19,8 @@ Important controllers:
 
 - `app/Http/Controllers/DashboardController.php`
 - `app/Http/Controllers/FormController.php`
+- `app/Http/Controllers/DepartmentController.php` — web routes scoped by `organization_id` (Phase 3.5A)
+- `app/Http/Controllers/UserController.php` — `index()` scoped by `organization_id` (Phase 3.5B)
 - `app/Http/Controllers/WorkflowInstanceController.php`
 - `app/Http/Controllers/WorkflowMonitorController.php`
 - `app/Http/Controllers/ReportsController.php`
@@ -50,10 +52,9 @@ Important directories:
 - `resources/js/hooks/`: custom hooks.
 - `resources/js/lib/route.ts`: small hand-written route helper. It is not complete.
 
-Important incomplete-risk files (Phase 3.5C):
+## Accepted MVP demo (Phase 3.5C)
 
-- `resources/js/pages/FormBuilder.tsx` — localStorage demo, not persisted form system
-- `resources/js/pages/Forms/Submit.tsx` — draft save logs to console only
+- `resources/js/pages/FormBuilder.tsx` — localStorage demo with warning banner; primary form flow uses `/forms/create`
 
 ## Routes
 

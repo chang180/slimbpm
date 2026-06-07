@@ -2,7 +2,7 @@
 
 This guide describes a conventional staging or production deployment for SlimBPM. It assumes a Linux server or managed Laravel host running PHP-FPM, a web server, a production database, Node.js for asset builds, and a process monitor for queues.
 
-SlimBPM is still an actively developed application, currently audited at roughly 60% overall completion. Phase 3.5 MVP convergence is in progress. Use this guide for staging and controlled production trials, but do not treat the product as fully production-ready until Phase 3.5 exit criteria are met.
+SlimBPM core MVP modules are Green and 262 automated tests pass. **Phase 3.5E** requires a staging deployment using this guide and a manual smoke checklist recorded in [`.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/progress.md). Do not skip staging validation before Phase 4 expansion.
 
 ## 1. Prerequisites
 
@@ -307,8 +307,7 @@ Keep rollback practical:
 
 ## 13. Known Limitations
 
-- The app is not audited as fully production-ready. Current docs estimate about 60% overall completion.
-- Backend tests are strong relative to frontend coverage, but visible UI flows still need more manual and browser-level validation.
-- Some frontend pages and interactions remain incomplete or recently repaired; verify the exact workflows needed for your deployment.
-- Department web routes still have documented organization scoping limitations.
+- Phase 3.5E staging manual smoke checklist must be completed before treating MVP as validated for go-live.
+- `/form-builder` is a localStorage demo with a warning banner; use `/forms/create` for persisted forms.
+- No dedicated workflow template edit page — use designer/create flow.
 - Pest Browser smoke tests are available (`tests/Browser/SmokeTest.php`); run `npm run build` then `php artisan test tests/Browser` on staging before go-live.
