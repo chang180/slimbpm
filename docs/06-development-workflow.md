@@ -60,14 +60,14 @@ Important: `npm run build` can pass while `npm run types` fails.
 
 ## Coordinator Task Workflow
 
-For phased development, see `.ai-dev/tasks/`:
+For phased development, see `.ai-dev/tasks/` (active) and `.ai-dev/archived/` (completed Phase 1–3):
 
 1. Coordinator writes `plan.md` for each phase.
 2. Executor AI implements and fills `progress.md`.
 3. Coordinator reviews against exit criteria in the plan.
 4. Update `docs/03-module-status.md` and `.ai-dev/handoff.md` after acceptance.
 
-Current active tasks: Phase 3 complete (including optional 3H Browser smoke). See `docs/07-roadmap.md` Phase 4.
+Current active task: **Phase 3.5 MVP convergence**. See `.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md` and `docs/07-roadmap.md`.
 
 ## Documentation Updates
 

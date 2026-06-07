@@ -7,61 +7,40 @@
 3. Update `03-module-status.md` whenever a module changes status.
 4. Track progress against `07-roadmap.md`.
 
-## P1 Frontend Typecheck ✅ (Phase 2E complete)
+## P1 Phase 3.5 MVP (Current)
 
-Command:
+| Item | Notes |
+|------|-------|
+| Department org scoping | `DepartmentController` web routes — see plan 3.5A |
+| Module Yellow → Green | Quality Gate verification per module — see plan 3.5B |
+| Demo residue | FormBuilder localStorage demo; Forms Submit draft `console.log` — see plan 3.5C |
+| Flaky test | `UserManagementUITest` `can search users` — see plan 3.5D |
+| Staging trial | Manual smoke on staging per `08-deployment.md` — see plan 3.5E |
 
-```bash
-npm run types
-```
+Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md)
 
-Current status: **0 errors** (176 → 0 across Phase 1–2).
+## Resolved (Phase 1–3)
 
-Resolved in Phase 2:
+The following were active blockers and are now complete. Details in [`.ai-dev/archived/`](../.ai-dev/archived/README.md):
 
-- Users create/edit Select and form typing (2A)
-- Departments JSX namespace (2B)
-- Invitations paginator types (2C)
-- Workflows Monitor + Reports Index (2D)
-- app-header, DynamicForm, enhanced-select (2E)
-
-## P2 Department Org Scoping
-
-`DepartmentController` web routes do not filter by `organization_id` yet. Documented in Phase 3C progress; add scoping in a future phase if required.
-
-## P1 Organization Frontend Routes ✅ (Phase 3A complete)
-
-Organization pages previously called `route('organization.*')` via `@/lib/route.ts`, which returned `#`. Migrated to Wayfinder in Phase 3A.
-
-## P1 Organization Scoping And Persistence ✅ (Phase 1D complete)
-
-See `OrganizationController.php` and updated `OrganizationManagementTest.php`.
-
-## P2 Reports Verification ✅ (Phase 3E complete)
-
-Completed:
-
-- Reports Index export buttons wired to POST routes.
-- UserActivity and SystemStats Inertia page tests.
-- **Phase 3E:** `date_from`/`date_to` filter props + Feature tests; workflows Index pagination labels.
-
-Remaining:
-
-- Broader manual responsive pass on report subpages → covered partially by 3F static audit
-
-## P2 Deployment Documentation ✅ (Phase 3G complete)
-
-See `docs/08-deployment.md` for staging/production deployment steps.
-
-## P2 Notifications Verification ✅ (Phase 3D complete)
-
-Completed:
-
-- InvitationsPageTest + NotificationsPageTest (2C).
-- **Phase 3D:** `NotificationMarkReadTest.php` (mark single/all, 401, 403); pagination labels on notifications Index.
+- Frontend TypeScript errors (176 → 0, Phase 2E)
+- Organization broken `@/lib/route.ts` links (Phase 3A)
+- Organization scoping and persistence (Phase 1D)
+- Reports export and date filters (Phase 2D/3E)
+- Notifications mark-read tests (Phase 3D)
+- Deployment documentation (Phase 3G)
+- Browser smoke tests (Phase 3H)
+- Users/Departments AppLayout (Phase 3B)
 
 ## P3 Browser E2E
 
-**Done (Phase 3H, 2026-06-06).** See `tests/Browser/SmokeTest.php` and `docs/06-development-workflow.md`.
+**Done (Phase 3H).** See `tests/Browser/SmokeTest.php` and `docs/06-development-workflow.md`.
 
-Current testing strategy: Feature + Inertia endpoint tests, plus optional browser smoke for JS-heavy UI checks.
+Current testing strategy: Feature + Inertia endpoint tests, plus browser smoke for JS-heavy UI checks.
+
+## Documentation Debt
+
+Medium priority:
+
+- Add a route map once route name collisions are cleaned up.
+- Expand architecture doc if multi-tenancy grows beyond user-based org scoping.

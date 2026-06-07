@@ -1,8 +1,8 @@
 # Development Roadmap
 
-Last updated: 2026-06-06
+Last updated: 2026-06-07
 
-This roadmap reflects the audited ~60% completion state after the Laravel 13 / Inertia 3 upgrade. It replaces stale phase documents that previously lived under `.ai-dev/`.
+This roadmap reflects the audited ~60% completion state after Phase 3. Phase 1–3 task plans are archived under [`.ai-dev/archived/`](../.ai-dev/archived/).
 
 ## Guiding Principle
 
@@ -13,157 +13,100 @@ Finish frontend integration and org-scoped persistence before adding new feature
 - [x] Create canonical `docs/` library
 - [x] Audit module status against code and tests
 - [x] Rewrite root `README.md` to stop overstating completion
-- [x] Trim `.ai-dev/` to handoff-only
+- [x] Trim `.ai-dev/` to handoff + tasks + archived
 - [x] Publish this roadmap
 
-## Phase 1 — Frontend Blockers ✅ (Complete)
+## Phase 1 — Frontend Blockers (Complete)
 
-Goal: make the three highest-risk areas usable without dead links, demo handlers, or missing pages.
+Goal: make the highest-risk areas usable without dead links, demo handlers, or missing pages.
 
-### 1A. TypeScript Baseline ✅ (2026-06-06)
+Phases 1A–1D (TypeScript baseline, Forms, Dashboard, Organization) — **complete 2026-06-06.**
 
-- [x] Resolve Wayfinder route name collisions for `forms.*` and `workflows.*`
-- [x] Fix Fortify/Wayfinder `.form()` helper typing in auth and 2FA pages
-- [x] API routes prefixed with `api.*`; Wayfinder regenerated
+Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
-**Result:** TS errors 176 → 164; 209 tests pass.
+## Phase 2 — Module Hardening (Complete)
 
-### 1B. Forms Module ✅ (2026-06-06)
+Goal: fix TypeScript errors and harden module pages with tests.
 
-- [x] Wire Forms pages to Wayfinder `@/routes/forms`
-- [x] Add `Forms/Edit.tsx`
-- [x] Demote `/form-builder` demo
-- [x] Add `FormPagesTest.php` (8 tests)
+Phases 2A–2E (Users, Departments, Invitations/Notifications, Workflows/Reports, misc TS → 0) — **complete 2026-06-06.**
 
-**Result:** Forms TS errors 0; total TS 164 → 131; 217 tests pass.
+Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
-### 1C. Dashboard Module ✅ (2026-06-06)
+## Phase 3 — Quality And Release Prep (Complete)
 
-- [x] Wire dashboard actions to invitation API and Wayfinder routes
-- [x] Fix prop mapping and QuickActions/WorkflowMenu links
-- [x] Add `DashboardPageTest.php`
+Goal: regression coverage, UX polish, deployment readiness, optional browser smoke.
 
-**Result:** Dashboard TS errors 0; total TS 131 → 128; 221 tests pass.
+Phases 3A–3H — **complete 2026-06-06.**
 
-### 1D. Organization Module ✅ (2026-06-06)
+| Item | Summary |
+|------|---------|
+| 3A–3E | Wayfinder org pages, AppLayout, department/notification/report regression tests |
+| 3F | Responsive review — DashboardHeader, WorkflowMenu, Forms/Show |
+| 3G | `docs/08-deployment.md` |
+| 3H | Pest Browser smoke — `tests/Browser/SmokeTest.php` |
 
-- [x] Use `current_organization`; persist settings/preferences
-- [x] Org-scoped camelCase stats; remove fake reports data
-- [x] Update `OrganizationManagementTest.php`
+**Result:** 258 tests (253 Feature/Unit + 5 Browser) · TS 0 errors · deployment guide published.
 
-**Result:** Organization TS errors 0; total TS 128 → 38; 223 tests pass.
+Details: [`.ai-dev/archived/`](../.ai-dev/archived/README.md)
 
-**Phase 1 complete.**
+## Phase 3.5 — MVP Convergence (Current)
 
-## Phase 2 — Module Hardening ✅ (Complete)
+Goal: reach MVP launch readiness without new product features. All core modules should meet the Quality Gate in `01-current-state.md`.
 
-Goal: raise Yellow modules to Green with tests and manual verification.
+Task plan: [`.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`](../.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md)
 
-### 2A. Users Module ✅ (2026-06-06)
+### 3.5A. Department Org Scoping
 
-- [x] Fix Select imports and Inertia form typing in create/edit
-- Users TS 30 → 0；全專案 TS 38 → 9
+- [ ] Filter `DepartmentController` by `organization_id`
+- [ ] Feature test for cross-org isolation
 
-### 2B. Departments Module ✅ (2026-06-06)
+### 3.5B. Module Yellow → Green Verification
 
-- [x] Fix JSX namespace errors; AppLayout on create/edit
-- Departments TS 4 → 0；全專案 TS 9 → 5
+- [ ] Verify each core module against Quality Gate checklist
+- [ ] Update `docs/03-module-status.md` to Green or document exceptions
 
-### 2C. Invitations & Notifications ✅ (2026-06-06)
+### 3.5C. Demo Residue Cleanup
 
-- [x] Invitations paginator types + Wayfinder API
-- [x] InvitationsPageTest + NotificationsPageTest
-- TS 5 → 4；tests 224 → **234**
+- [ ] FormBuilder: integrate or demote further
+- [ ] Forms Submit draft: wire API or remove misleading UI
+- [ ] Remove production-path `console.log` where applicable
 
-### 2D. Workflows & Reports ✅ (2026-06-06)
+### 3.5D. Stabilize Flaky Test
 
-- [x] Monitor credentials + error banner + pagination labels
-- [x] Reports Index export buttons wired
-- Tests 234 → **236**
+- [ ] Fix `UserManagementUITest` `can search users` flakiness
+- [ ] Verify 3 consecutive passes
 
-### 2E. Misc TypeScript ✅ (2026-06-06)
+### 3.5E. Staging Deployment Trial
 
-- [x] `app-header`: nullish slug + `dashboard(slug)` parameter
-- [x] `DynamicForm`: conditional field guard
-- [x] `enhanced-select`: wrap Select in div for className
-- TS 4 → **0**；236 tests pass
+- [ ] Follow `docs/08-deployment.md` for staging setup
+- [ ] Record manual smoke checklist in progress.md
 
-**Phase 2 complete.**
+## MVP Exit Criteria
 
-## Phase 3 — Quality And Release Prep (Current)
+Phase 3.5 is complete when all of the following are true:
 
-Goal: regression coverage, UX polish, deployment readiness. Task plans live under `.ai-dev/tasks/phase-3*/`.
+1. Core modules in `03-module-status.md` are Green (or have documented, accepted exceptions).
+2. No P0 org-scoping gaps remain (Department scoping done).
+3. No misleading demo surfaces on primary user paths.
+4. `php artisan test` and `npm run types` still pass.
+5. Staging manual smoke checklist completed and recorded.
 
-### 3A. Organization Wayfinder ✅ (2026-06-06)
+## Phase 4 — Product Expansion (Deferred)
 
-- [x] Migrate `Organization/*.tsx` from broken `@/lib/route.ts` to Wayfinder
-- [x] OrganizationManagementTest 12 tests pass (existing coverage sufficient)
-
-### 3B. Users/Departments Layout ✅ (2026-06-06)
-
-- [x] Migrate Index/Show pages to `AppLayout` + breadcrumbs
-- UserManagementUITest 13/13 pass
-
-### 3C. Department Regression Tests ✅ (2026-06-06)
-
-- [x] Add `DepartmentPagesTest.php` (8 tests)
-- Tests 236 → **244**
-
-### 3D. Notifications Verification ✅ (2026-06-06)
-
-- [x] `NotificationMarkReadTest.php` (7 tests)
-- [x] `formatPaginationLabel` on notifications Index
-- Tests 244 → **253**
-
-### 3E. Reports Filters And Pagination ✅ (2026-06-06)
-
-- [x] `date_from` / `date_to` on userActivity & workflowPerformance
-- [x] Date filter Feature tests in ReportsPagesTest
-- [x] `formatPaginationLabel` on workflows Index
-
-## Phase 3 — Quality And Release Prep ✅ (Complete)
-
-Goal: regression coverage, UX polish, deployment readiness.
-
-### 3A–3E ✅ (2026-06-06)
-
-See prior sections in git history / task progress files.
-
-### 3F. Responsive Review ✅ (2026-06-06)
-
-- [x] Audit dashboard, forms, workflows at 375px / 768px
-- [x] Fix DashboardHeader, WorkflowMenu, Forms/Show overflow/wrap issues
-
-### 3G. Deployment Guide ✅ (2026-06-06)
-
-- [x] Add `docs/08-deployment.md`; link from docs README and inventory
-
-**Phase 3 complete.** 258 tests (253 Feature/Unit + 5 Browser) · TS 0 errors · deployment guide published.
-
-### 3H. Browser Smoke ✅ (2026-06-06)
-
-- [x] Pest Browser + Playwright installed
-- [x] `tests/Browser/SmokeTest.php` — login, dashboard, forms, workflows, notification bell
-- [x] `docs/06-development-workflow.md` updated
-
-## Phase 4 — Product Expansion (Current — optional)
-
-Phase 1–3 exit criteria met (including optional 3H Browser smoke).
+Do not start until Phase 3.5 MVP exit criteria are met.
 
 - Scheduled reports and advanced export formats
 - PWA / mobile-first improvements
-- Permissions/backup/export pages currently linked from dashboard but not implemented
+- Permissions / backup / export admin pages (removed from dashboard in Phase 1C; deferred here)
 - Additional workflow designer node types from original specs
 
 ## Suggested Execution Order
 
-1. Phase 1A (types/route collisions) — unblocks everything else
-2. Phase 1B (Forms) — highest user-visible breakage
-3. Phase 1C (Dashboard) — most misleading UX
-4. Phase 1D (Organization) — data integrity risk
-5. Phase 2 module hardening — parallelizable by module
-6. Phase 3 quality and release prep — see `.ai-dev/tasks/INDEX.md` (3A–3G)
-7. Phase 4 product expansion (deferred)
+1. Phase 1A–1D — complete
+2. Phase 2 module hardening — complete
+3. Phase 3 quality and release prep — complete
+4. **Phase 3.5 MVP convergence** — current
+5. Phase 4 product expansion — deferred
 
 ## Tracking
 
@@ -171,4 +114,4 @@ When completing a roadmap item:
 
 1. Update the matching section in `docs/03-module-status.md`.
 2. Remove or downgrade the blocker in `docs/04-known-issues-and-backlog.md`.
-3. Add a short note to `.ai-dev/handoff.md` (Chinese) for the next session.
+3. Update `.ai-dev/handoff.md` with short-term handoff notes (Chinese).

@@ -1,58 +1,46 @@
 # Current Development State
 
-Last audited: 2026-06-06
+Last audited: 2026-06-07
 
 ## Summary
 
-SlimBPM is a Laravel 13 + React 19 + Inertia 3 application for lightweight BPM/workflow management. The project has many backend models, controllers, API endpoints, and feature tests. However, the frontend is not consistently wired to those backend capabilities.
+SlimBPM is a Laravel 13 + React 19 + Inertia 3 application for lightweight BPM/workflow management. The project has many backend models, controllers, API endpoints, and feature tests.
 
-The previous documentation overstated completion. Treat the app as approximately 60% overall. Phase 1–3 quality/release prep is complete (253 tests, TS 0 errors, deployment guide published); product expansion remains in Phase 4.
+Phase 0–3 (documentation, frontend blockers, module hardening, quality/release prep) is complete. Treat the app as approximately **60% overall**. All eight tracked modules remain Yellow; Phase 3.5 MVP convergence is the current priority before Phase 4 product expansion.
 
 ## Verified Facts
 
-- `php artisan test` passes with 253 tests / 1420 assertions after Phase 3 completion.
+- `php artisan test` passes with **258 tests / 1436 assertions** (253 Feature/Unit + 5 Browser).
 - Recent targeted tests pass:
   - `tests/Feature/EndToEndWorkflowFeatureTest.php`
   - `tests/Feature/ReportsPagesTest.php`
   - `tests/Feature/ReportsExportTest.php`
   - `tests/Feature/WorkflowInstanceApiTest.php`
   - `tests/Feature/WorkflowDesignerPageTest.php`
+  - `tests/Browser/SmokeTest.php`
 - `npm run build` passes.
 - `npm run build:ssr` passes.
 - `composer validate --strict` passes.
-- `php vendor/bin/pint --dirty` passes.
-- `npm audit --audit-level=moderate` reports 0 vulnerabilities.
-- `npm run types` passes with 0 TypeScript errors (Phase 2E complete).
-- Composer and npm dependencies were upgraded on 2026-06-06:
-  - `laravel/framework` 13.14.0
-  - `laravel/boost` 2.4.9
-  - `laravel/tinker` 3.0.2
-  - `inertiajs/inertia-laravel` 3.1.0
-  - `@inertiajs/react` 3.3.1
-  - `@inertiajs/vite` 3.3.1
-  - `pestphp/pest` 4.7.2
-  - `phpunit/phpunit` 12.5.28
-- Remaining `npm outdated --depth=0` entries are major-version jumps outside the current semver constraints, plus platform-specific optional packages that are not installed on Windows.
-- Laravel 13 upgrade review:
-  - No direct matches were found for old CSRF middleware references, old queue event properties, old pagination view names, `array_first`, or `array_last`.
-  - `config/cache.php` explicitly sets `serializable_classes` to `false`.
-- Inertia 3 upgrade review:
-  - `config/inertia.php` was republished from Inertia Laravel 3.
-  - `<title inertia>` was changed to `<title data-inertia>`.
-  - `resources/js/app.tsx` and `resources/js/ssr.tsx` now use a typed `resolvePage` helper compatible with Inertia React 3.
-  - No direct usage was found for the scanned v3 breaking points: Axios imports from Inertia, `router.cancel()`, old `invalid` / `exception` events, `Inertia::lazy()`, old Inertia testing traits, or React arrow-function layout assignments.
+- `npm run types` passes with 0 TypeScript errors.
+- Stack (2026-06-06 upgrade): Laravel 13.14.0, Inertia Laravel 3.1.0, `@inertiajs/react` 3.3.1, Pest 4.7.2, PHP 8.4.12.
 
 ## Critical Interpretation
 
-Passing PHP tests prove many backend routes and Inertia props work. They do not prove all visible frontend interactions are usable.
+Passing PHP tests prove many backend routes and Inertia props work. They do not prove every module meets MVP readiness.
 
-Several UI surfaces are currently misleading:
+Remaining gaps that affect user trust:
 
-- Dashboard quick actions look interactive but many handlers only `console.log`.
-- Some links route to pages that do not exist.
-- Some pages use a hand-written route helper that does not contain the requested route names.
 - `/form-builder` is a localStorage demo, not the persisted form template system.
-- Organization settings/preferences validate payloads but do not persist them.
+- `Forms/Submit.tsx` draft save logs to console instead of persisting.
+- `DepartmentController` web routes do not filter by `organization_id` yet.
+- No module in `03-module-status.md` is Green; Phase 2's "raise Yellow to Green" goal was not fully achieved.
+- `UserManagementUITest` can flake on `can search users`.
+
+Resolved in Phase 1–3 (no longer accurate to claim):
+
+- Dashboard quick actions using fake `console.log` handlers — wired in Phase 1C.
+- Organization settings/preferences not persisting — fixed in Phase 1D.
+- Organization pages using broken `@/lib/route.ts` links — migrated to Wayfinder in Phase 3A.
 
 ## Current Quality Gate
 
@@ -66,8 +54,14 @@ Before calling a module complete, require all of:
 
 ## Current Next Priority
 
-Phases 0–3 are complete. See `07-roadmap.md` Phase 4 for product expansion, or address known follow-ups:
+**Phase 3.5 — MVP Convergence.** See `07-roadmap.md` and `.ai-dev/tasks/phase-3.5-mvp-convergence/plan.md`.
 
-1. Department org scoping on web routes.
-2. Stabilize flaky `UserManagementUITest` search assertion.
-3. Staging deployment trial using `08-deployment.md`.
+Ordered focus:
+
+1. Department org scoping on web routes (3.5A).
+2. Stabilize flaky `UserManagementUITest` (3.5D).
+3. Demo residue cleanup — FormBuilder, Submit draft (3.5C).
+4. Module Yellow → Green verification (3.5B).
+5. Staging deployment trial using `08-deployment.md` (3.5E).
+
+Phase 4 product expansion is deferred until MVP exit criteria are met.

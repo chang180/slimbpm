@@ -6,11 +6,13 @@ Legend:
 - `Yellow`: partially implemented or needs verification.
 - `Red`: visible gaps, demo behavior, or broken integration.
 
+**Path to Green:** Each module must pass the Quality Gate in `01-current-state.md`. Phase 3.5B verifies modules one by one and updates this file.
+
 ## Authentication And Settings
 
 Status: Yellow
 
-Backend Fortify/Inertia pages exist. Feature tests exist for authentication, password, profile, and 2FA flows. `npm run types` reports Wayfinder `.form()` helper typing errors in 2FA and auth components.
+Backend Fortify/Inertia pages exist. Feature tests cover authentication, password, profile, and 2FA flows. TypeScript errors in auth/2FA components resolved in Phase 1A.
 
 Known files:
 
@@ -21,126 +23,74 @@ Known files:
 
 ## Dashboard
 
-Status: Yellow (was Red)
+Status: Yellow
 
 Phase 1C complete (2026-06-06):
 
 - `useDashboardActions.ts` uses real invitation API and Wayfinder workflow navigation.
-- `dashboard.tsx` maps `on*` props correctly; `UserDashboard` receives `organizationSlug`.
-- QuickActions/WorkflowMenu broken links fixed or removed.
-- `tests/Feature/DashboardPageTest.php` added (4 tests).
+- QuickActions/WorkflowMenu links fixed or removed.
+- `tests/Feature/DashboardPageTest.php` (4 tests).
 
 Remaining:
 
-- Dashboard does not inline approve/reject; navigates to workflow show page (by design).
-
-Important files:
-
-- `resources/js/hooks/useDashboardActions.ts`
-- `resources/js/pages/dashboard.tsx`
-- `resources/js/components/dashboard/*`
-- `tests/Feature/DashboardPageTest.php`
+- Approve/reject navigates to workflow show page (by design, not inline).
 
 ## Forms
 
-Status: Yellow (was Red)
+Status: Yellow
 
 Phase 1B complete (2026-06-06):
 
-- All Forms pages use Wayfinder `@/routes/forms` as `formsRoutes`.
-- `Forms/Edit.tsx` added; web routes reachable without 500.
-- Pages use `AppLayout` consistently.
-- `/form-builder` demoted (demo banner; QuickActions links to `/forms/create`).
-- `tests/Feature/FormPagesTest.php` covers index/create/show/edit/submit/results.
+- All Forms pages use Wayfinder `@/routes/forms`.
+- `Forms/Edit.tsx` added; `FormPagesTest.php` covers index/create/show/edit/submit/results.
 
 Remaining:
 
-- `/form-builder` still localStorage demo (Phase 4 integration).
-- Form definition editing UX may need designer integration later.
-
-Important files:
-
-- `resources/js/pages/Forms/*`
-- `app/Http/Controllers/FormController.php`
-- `tests/Feature/FormPagesTest.php`
+- `/form-builder` still localStorage demo — Phase 3.5C.
+- `Forms/Submit.tsx` draft save not wired to API — Phase 3.5C.
 
 ## Workflows
 
 Status: Yellow
 
-Workflow templates, instances, engine, start page, show page, and monitor page have meaningful implementation and tests. Main workflow execution is better covered than many modules.
+Workflow templates, instances, engine, start/show/monitor pages have meaningful implementation and tests.
 
-Known issues:
+Remaining:
 
-- No dedicated workflow template edit page route exists beyond create/designer behavior.
-
-Phase 2D/3E: Monitor UX improved; workflows Index uses `formatPaginationLabel` for pagination.
-
-Important files:
-
-- `app/Services/Workflow/WorkflowEngine.php`
-- `app/Http/Controllers/WorkflowInstanceController.php`
-- `app/Http/Controllers/Api/WorkflowController.php`
-- `resources/js/pages/workflows/*`
-- `resources/js/components/workflow-designer.tsx`
+- No dedicated workflow template edit page beyond create/designer behavior (acceptable for MVP or Phase 4).
 
 ## Reports
 
 Status: Yellow
 
-Phase 2D/3E complete (2026-06-06):
-
-- Index export buttons wired; UserActivity/SystemStats Inertia tests.
-- `ReportsController` supports `date_from`/`date_to` on userActivity and workflowPerformance with Feature tests.
-- Export subpages verified against `ReportsExportTest`.
-
-Important files:
-
-- `app/Http/Controllers/ReportsController.php`
-- `app/Services/ExportService.php`
-- `resources/js/pages/reports/*`
-- `tests/Feature/ReportsPagesTest.php`
-- `tests/Feature/ReportsExportTest.php`
+Phase 2D/3E complete: export buttons, date filters, Feature tests, pagination labels.
 
 ## Organization
 
-Status: Yellow (was Red)
+Status: Yellow
 
-Phase 1D complete (2026-06-06); Phase 3A (2026-06-06):
-
-- All methods use `current_organization` from `org.access`.
-- Settings and preferences persist in `organization.settings` JSON.
-- Stats are org-scoped with camelCase keys; `recentActivity` from real WorkflowHistory/FormSubmission.
-- Organization pages use `AppLayout`; TS errors cleared.
-- `Organization/Reports` shows real summary + link to `/reports` (no fake metrics).
-- **Phase 3A:** All Organization pages use Wayfinder (`@/routes/organization`, `@/routes/reports`); no `@/lib/route.ts` for org navigation or PUT targets.
-
-Important files:
-
-- `app/Http/Controllers/OrganizationController.php`
-- `resources/js/pages/Organization/*`
-- `tests/Feature/OrganizationManagementTest.php`
+Phase 1D + 3A complete: `current_organization`, settings/preferences persistence, org-scoped stats, Wayfinder navigation.
 
 ## Users
 
 Status: Yellow
 
-Create/edit and index/show pages use `AppLayout` (Phase 2A, **3B**). `UserManagementUITest` covers Inertia paths.
+AppLayout on all pages (Phase 2A, 3B). `UserManagementUITest` covers Inertia paths. Flaky search test — Phase 3.5D.
 
 ## Departments
 
 Status: Yellow
 
-Create/edit and index/show use `AppLayout` (Phase 2B, **3B**). **Phase 3C:** `DepartmentPagesTest.php` (8 Inertia tests). Controller does not yet scope by `organization_id` — documented in 3C progress.
+AppLayout on all pages (Phase 2B, 3B). `DepartmentPagesTest.php` (8 tests). **Controller does not scope by `organization_id`** — Phase 3.5A.
 
 ## Invitations
 
 Status: Yellow
 
-Phase 2C: Wayfinder integration and page tests. Dashboard invitation widget wired in Phase 1C.
+Phase 2C: Wayfinder integration, page tests, dashboard widget wired in Phase 1C.
 
 ## Notifications
 
 Status: Yellow
 
-Phase 2C + **3D** (2026-06-06): InvitationsPageTest, NotificationsPageTest, `NotificationMarkReadTest` (7 tests). Pagination uses `formatPaginationLabel`.
+Phase 2C + 3D: page tests, `NotificationMarkReadTest`, pagination labels.

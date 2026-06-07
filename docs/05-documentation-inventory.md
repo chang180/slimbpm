@@ -16,19 +16,27 @@ Use these first:
 | `docs/08-deployment.md` | Staging and production deployment guide |
 | `.ai-dev/handoff.md` | Short-term Chinese handoff for the human owner |
 
-## Removed Historical Documents (2026-06-06)
+## `.ai-dev/` Layout
 
-The following `.ai-dev/` files were deleted after their useful content was migrated into `docs/`:
+| Path | Purpose |
+|------|---------|
+| `.ai-dev/handoff.md` | Chinese handoff — current state and next steps |
+| `.ai-dev/README.md` | Coordinator workflow |
+| `.ai-dev/tasks/INDEX.md` | Active task index |
+| `.ai-dev/tasks/phase-3.5-*/` | Current phase plan and progress |
+| `.ai-dev/archived/README.md` | Index of completed Phase 1–3 task plans |
+| `.ai-dev/archived/phase-*/` | Archived plan.md and progress.md |
+| `.ai-dev/archived/historical/` | Pre-2026 planning snapshots (archaeology only) |
 
-- `.ai-dev/README.md` — overstated 100% phase completion
+## Archived Historical Documents
+
+The following were removed from the active tree or never migrated to `docs/`. If needed, use git history or `.ai-dev/archived/historical/`:
+
 - `.ai-dev/UPDATE-2025-10-12.md` — outdated status snapshot
-- `.ai-dev/development/dev-50-dashboard-refactor.md` — dashboard still has fake handlers
-- `.ai-dev/development/phase7-integration-instructions.md` — testing sketch, not implemented state
+- `.ai-dev/development/dev-50-dashboard-refactor.md` — superseded by Phase 1C
+- `.ai-dev/development/phase7-integration-instructions.md` — testing sketch
 - `.ai-dev/features/workflow-designer.md` — original spec, partially implemented
-- `.ai-dev/scratch/project-structure.md` — superseded by `docs/02-project-structure.md`
-- `.ai-dev/scratch/sparkle.md` — product concept notes only
-
-If you need historical context, use git history.
+- `.ai-dev/scratch/*` — superseded by `docs/02-project-structure.md`
 
 ## Documentation Debt
 

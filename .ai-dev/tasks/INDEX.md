@@ -1,36 +1,31 @@
 # 開發任務總覽
 
-最後更新：2026-06-06（**Phase 3 全部驗收完成，含 3H Browser smoke**）
+最後更新：2026-06-07
 
-## Phase 1–3 ✅
+## 進行中
 
-| 階段 | 狀態 |
-|------|------|
-| Phase 1A–1D | ✅ 已驗收 |
-| Phase 2A–2E | ✅ 已驗收 |
-| Phase 3A–3H | ✅ 已驗收 |
+| 階段 | 狀態 | 規格 |
+|------|------|------|
+| **Phase 3.5** MVP 收斂 | 待開工 | [`phase-3.5-mvp-convergence/plan.md`](./phase-3.5-mvp-convergence/plan.md) |
 
-**基線：** **258 tests**（253 Feature/Unit + 5 Browser）· TS 0 errors · [`docs/08-deployment.md`](../../docs/08-deployment.md)
-
-| 3F | 響應式審查 — DashboardHeader、WorkflowMenu、Forms/Show |
-| 3G | 部署指南 — `docs/08-deployment.md` |
-| 3H | Pest Browser smoke — `tests/Browser/SmokeTest.php` |
+路線圖：[`docs/07-roadmap.md`](../../docs/07-roadmap.md)
 
 ---
 
-## 下一階段
+## 已封存（Phase 1–3）
 
-| 項目 | 說明 |
-|------|------|
-| **Phase 4** | 產品擴充 → [`docs/07-roadmap.md`](../../docs/07-roadmap.md) |
+Phase 1A–3H 已全部驗收。plan/progress 見 [`.ai-dev/archived/`](../archived/README.md)。
 
-### 已知後續項（非 Phase 3 阻擋）
+**基線（Phase 3 完成時）：** 258 tests · TS 0 errors · [`docs/08-deployment.md`](../../docs/08-deployment.md)
 
-- Department org scoping（Controller 層）
-- UserManagementUITest 偶發 flaky（`can search users`）
+| Phase | 摘要 |
+|-------|------|
+| 1A–1D | 前端阻斷 — TS baseline、Forms、Dashboard、Organization |
+| 2A–2E | 模組強化 — Users、Departments、Invitations、Workflows/Reports、TS → 0 |
+| 3A–3H | 品質與發布 — Wayfinder、Layout、回歸測試、響應式、部署指南、Browser smoke |
 
 ---
 
-## 路線圖
+## Phase 4（延後）
 
-[`docs/07-roadmap.md`](../../docs/07-roadmap.md)
+產品擴充 — 排程報表、PWA、權限頁、設計器節點。待 Phase 3.5 MVP exit criteria 達成後再規劃 plan。

@@ -14,13 +14,17 @@
 
 ```
 .ai-dev/
-├── handoff.md          # 協調者維護：整體狀態、驗收紀錄（中文）
-├── README.md           # 本文件
+├── handoff.md              # 協調者維護：整體狀態（中文）
+├── README.md               # 本文件
+├── archived/               # Phase 1–3 已完成任務（plan + progress）
+│   ├── README.md
+│   ├── historical/         # 更早期的規劃快照（僅供考古）
+│   └── phase-*/
 └── tasks/
-    ├── INDEX.md        # 各階段狀態總覽
-    └── phase-1a-*/
-        ├── plan.md     # 協調者撰寫：開工規格
-        └── progress.md # 執行者撰寫：完成回報
+    ├── INDEX.md            # 任務總覽
+    └── phase-3.5-*/        # 進行中
+        ├── plan.md
+        └── progress.md     # 執行者填寫
 ```
 
 ## 標準流程
@@ -40,8 +44,8 @@
 ## 派工時請給執行 AI 的指令範本
 
 ```text
-請依 .ai-dev/tasks/phase-1a-typescript-baseline/plan.md 執行開發。
-開工前先讀 docs/01-current-state.md 與 docs/02-project-structure.md。
+請依 .ai-dev/tasks/phase-3.5-mvp-convergence/plan.md 執行。
+開工前先讀 docs/01-current-state.md 與 docs/03-module-status.md。
 完成後填寫同目錄的 progress.md，不要自行宣稱驗收通過。
 ```
 

@@ -2,7 +2,7 @@
 
 This directory is the canonical development documentation for the current codebase.
 
-The older `.ai-dev/` directory now contains only `handoff.md` (Chinese short-term notes for the human owner). When the two disagree, prefer this `docs/` directory.
+The `.ai-dev/` directory holds Chinese handoff notes, active task plans, and archived Phase 1–3 progress. When the two disagree, prefer this `docs/` directory.
 
 ## Read Order For AI Agents
 
@@ -17,7 +17,7 @@ The older `.ai-dev/` directory now contains only `handoff.md` (Chinese short-ter
 
 ## Current Operating Principle
 
-Do not assume the app is close to done because older files say 90-100% complete. The current audited estimate is roughly 60% overall. Backend skeletons and tests exist for many areas, but several frontend surfaces are incomplete, demo-only, or wired to missing routes.
+Do not assume the app is close to done because older files say 90-100% complete. The current audited estimate is roughly 60% overall. Phase 0–3 is complete; **Phase 3.5 MVP convergence** is the current goal. Phase 4 product expansion is deferred until MVP exit criteria are met.
 
 ## Update Rule
 

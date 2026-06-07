@@ -2,7 +2,7 @@
 
 This guide describes a conventional staging or production deployment for SlimBPM. It assumes a Linux server or managed Laravel host running PHP-FPM, a web server, a production database, Node.js for asset builds, and a process monitor for queues.
 
-SlimBPM is still an actively developed application, currently audited at roughly 60% overall completion. Use this guide for staging and controlled production trials, but do not treat the product as fully production-ready until the remaining frontend integration and release-readiness work is complete.
+SlimBPM is still an actively developed application, currently audited at roughly 60% overall completion. Phase 3.5 MVP convergence is in progress. Use this guide for staging and controlled production trials, but do not treat the product as fully production-ready until Phase 3.5 exit criteria are met.
 
 ## 1. Prerequisites
 

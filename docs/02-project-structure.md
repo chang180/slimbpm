@@ -10,7 +10,7 @@
 - `resources/css/`: Tailwind CSS entrypoint.
 - `routes/`: web, API, auth, console routes.
 - `tests/`: Pest tests.
-- `.ai-dev/`: historical planning, handoff, scratch notes.
+- `.ai-dev/`: handoff, active tasks, archived phase plans.
 - `docs/`: current canonical development documentation.
 
 ## Backend Structure
@@ -50,18 +50,10 @@ Important directories:
 - `resources/js/hooks/`: custom hooks.
 - `resources/js/lib/route.ts`: small hand-written route helper. It is not complete.
 
-Important incomplete-risk files:
+Important incomplete-risk files (Phase 3.5C):
 
-- `resources/js/hooks/useDashboardActions.ts`
-- `resources/js/components/dashboard/QuickActions.tsx`
-- `resources/js/components/dashboard/WorkflowMenu.tsx`
-- `resources/js/pages/FormBuilder.tsx`
-- `resources/js/pages/Organization/Reports.tsx`
-- `resources/js/pages/Organization/Settings.tsx`
-- `resources/js/pages/Organization/Preferences.tsx`
-- `resources/js/pages/Forms/Create.tsx`
-- `resources/js/pages/Forms/Show.tsx`
-- `resources/js/pages/Forms/Submit.tsx`
+- `resources/js/pages/FormBuilder.tsx` — localStorage demo, not persisted form system
+- `resources/js/pages/Forms/Submit.tsx` — draft save logs to console only
 
 ## Routes
 
